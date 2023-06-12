@@ -1,15 +1,11 @@
-import CoursePage from "./components/CoursePage"
-
-
 
 function App() {
 
   return (
     <>
-      <CoursePage></CoursePage>
-
+    <h1>App</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
