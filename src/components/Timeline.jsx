@@ -22,10 +22,11 @@ export default function Timeline() {
       <Grid>
         <div style={{ display:'flex', justifyContent:'center' }} >
         <Card variant="outlined"> 
-          <div style={{ width: "1280px", height: "400px", justifyContent:'center' }}>
+          <div style={{ width: "800px", height: "400px", justifyContent:'center' }}>
           <Chrono mode="HORIZONTAL" items={items} hideControls={true} cardHeight={100} lineWidth={10} borderLessCards={true} timelinePointShape="circle" timelinePointDimension={50} cardPositionHorizontal="Bottom">
             <div className="chrono-icons">
-              <img src="5705144.png" alt="quiz" />
+              <img src="Quiz.png" alt="quiz" />
+              <img src="Quiz.png" alt="quiz" />
             </div>
           </Chrono>
           </div>
