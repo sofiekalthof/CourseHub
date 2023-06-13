@@ -32,7 +32,7 @@ app.listen(port, () => {
 // });
 
 // Get a specific user
-app.route("/").get(async (req, res) => {
+app.route("/:email").get(async (req, res) => {
     console.log(req);
     console.log(req.body);
     console.log(req.params);

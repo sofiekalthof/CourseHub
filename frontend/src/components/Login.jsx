@@ -18,12 +18,10 @@ export default function Login() {
     event.preventDefault();
 
     try {
+      console.log(`${API_URL}/${email}`);
       // send get request to REST API
-      let res = await fetch(API_URL, {
+      let res = await fetch(`${API_URL}/${email}`, {
         method: "GET",
-        body: JSON.stringify({
-          email: email,
-        }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
