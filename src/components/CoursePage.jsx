@@ -1,6 +1,5 @@
 import Navbar from './Navbar'
-import Timeline from './Timeline';
-import Typography from '@mui/material/Typography';
+import GeneralView from './GeneralView';
 
 
 function CoursePage() {
@@ -8,11 +7,9 @@ function CoursePage() {
   return (
     <>
       <Navbar></Navbar> 
-      <Typography>
-        Test
+      <GeneralView></GeneralView>
 
-      </Typography>
-        <Timeline></Timeline>
+
 
     </>
   )
