@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const API_URL = "...";
+const API_URL = "http://localhost:3600";
 
 export default function Register() {
   // define states
@@ -27,13 +27,16 @@ export default function Register() {
         let res = await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({
-            userName: userName,
+            username: userName,
             email: email,
             password: password,
           }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
         });
         // uncomment below to see returned document from backend
-        // let resJson = await res.json();
+        let resJson = await res.json();
 
         // if response is successful, reset states
         if (res.status === 200) {
@@ -42,8 +45,10 @@ export default function Register() {
           setPassword("");
           // debug
           console.log("Form done.");
+          alert("User added");
         } else {
           console.log("Form returned error from backend.");
+          console.log(resJson);
         }
       } catch (err) {
         console.log(

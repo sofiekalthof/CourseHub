@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const API_URL = "...";
+const API_URL = "http://localhost:3600";
 
 export default function Login() {
   // define states
@@ -18,25 +18,29 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      // send post request to REST API
+      // send get request to REST API
       let res = await fetch(API_URL, {
-        method: "POST",
+        method: "GET",
         body: JSON.stringify({
           email: email,
-          password: password,
         }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
       });
-      // uncomment below to see returned document from backend
-      // let resJson = await res.json();
+      let resJson = await res.json();
 
       // if response is successful, reset states
       if (res.status === 200) {
-        setName("");
         setEmail("");
+        setPassword("");
         // debug
         console.log("Form done.");
+        alert("User is logged in.");
+        console.log(resJson);
       } else {
         console.log("Form returned error from backend.");
+        console.log(resJson);
       }
     } catch (err) {
       console.log("Frontend error. Post request could not be sent. Check API!");
