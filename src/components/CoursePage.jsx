@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Navbar from './Navbar'
 import GeneralView from './GeneralView';
+import HomePage from './HomePage'
 import { Box, Tabs, Tab, Grid, Typography } from '@mui/material';
 import { TabPanel, TabContext } from "@mui/lab";
 
