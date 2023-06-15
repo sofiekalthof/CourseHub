@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Navbar from './Navbar'
 import GeneralView from './GeneralView';
-import { Box, Tabs, Tab, Grid } from '@mui/material';
+import { Box, Tabs, Tab, Grid, Typography } from '@mui/material';
 import { TabPanel, TabContext } from "@mui/lab";
 
 
@@ -18,9 +18,12 @@ function CoursePage() {
   return (
     <>
     <Navbar></Navbar>
+    <Typography>
+      Course name
+    </Typography>
     <Grid container sx={{justifyContent:'center'}}>
-        <Grid item sx={{justifyContent:'center'}}>
-          <TabContext value={value} sx={{justifyContent:'center'}}>
+        <Grid item>
+          <TabContext value={value} >
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab value='one' label='Assignments and Quizzes'>
                 </Tab>
@@ -31,7 +34,7 @@ function CoursePage() {
                 <GeneralView></GeneralView>
             </TabPanel>
             <TabPanel value="two">
-              test
+              
             </TabPanel>
           </TabContext>
         </Grid>
