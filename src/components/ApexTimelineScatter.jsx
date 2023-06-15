@@ -8,28 +8,28 @@ export default function ApexTimelineScatter(){
               name: 'Quiz',
               data: [
                 [new Date('2023-03-12').getTime(),
-                2]
-              ]
-            },
-            {
-              name: 'Lecture',
-              data: [
-                [new Date('2023-05-12').getTime(),
-                3]
+                -1]
               ]
             },
             {
               name: 'Assignment',
               data: [
+                [new Date('2023-05-12').getTime(),
+                -2]
+              ]
+            },
+            {
+              name: 'Lecture',
+              data: [
                 [new Date('2023-03-12').getTime(),
-                4]
+                1]
               ]
             },
             {
               name: 'Exam',
               data: [
-                [new Date('2023-04-12').getTime(),
-                5]
+                [new Date('2023-07-12').getTime(),
+                2]
               ]
             }
       ],
@@ -39,17 +39,15 @@ export default function ApexTimelineScatter(){
         width: 1200,
         type: 'scatter'
       },
-      plotOptions: {
-        
-      },
       xaxis: {
         type: 'datetime',
         tickAmount: 5,
-        max: new Date('2023-06-01').getTime(),
+        max: new Date('2023-08-01').getTime(),
         min: new Date('2023-03-01').getTime(),
       },
       yaxis: {
         show: false,
+        forceNiceScale: false
       },
       grid:{
         xaxis: {
@@ -60,12 +58,32 @@ export default function ApexTimelineScatter(){
         yaxis: {
             lines: {
                 show: false
-            }
+            },
+            max: 4
         },  
       },
       tooltip: {
         enabled: true
-      }
+      },
+      annotations:{
+        yaxis: [{
+          y: 0
+        }]
+      },
+      markers:{
+        shape: 'circle',
+        size: 10
+      },
+      fill: {
+      //  type: 'image',
+      //  opacity: 1,
+        //image:{
+            //src: ['../src/assets/Quiz.png', '../src/assets/Assignment.png', '../src/assets/Lecture.jpg', '../src/assets/Exam.png'],
+          //  width: 17.5,
+           // height: 17.5
+        //}
+      },
+      
     }
     };
 

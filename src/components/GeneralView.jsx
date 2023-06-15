@@ -3,14 +3,21 @@ import Typography from '@mui/material/Typography';
 import ApexTimeline from "./ApexTimeline";
 import ApexTimelineScatter from './ApexTimelineScatter';
 import Card from '@mui/material/Card';
+import { Grid } from '@mui/material';
 
 function GeneralView() {
     return (
         <>
-          Timeline
+        <Grid container sx={{justifyContent:'center'}}>
+          <Grid item >
+            <Typography>
+              Timeline
+            </Typography>
           <Card variant="outlined" sx={{justifyContent: 'center', display: 'flex', width:1200}}> 
-            <Timeline></Timeline>
+            <ApexTimelineScatter></ApexTimelineScatter>
           </Card>
+          </Grid>
+        </Grid>
     
     
     
