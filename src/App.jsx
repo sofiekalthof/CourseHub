@@ -1,5 +1,5 @@
 import CoursePage from "./components/CoursePage"
-import CoursePage from "./components/HomePage"
+import HomePage from "./components/HomePage"
 
 
 
