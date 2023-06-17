@@ -18,15 +18,15 @@ function CoursePage() {
 
   return (
     <>
-    <Grid container spacing={2} sx={{justifyContent:'center'}}>
+    <Grid container xs={12} spacing={2} sx={{justifyContent:'center'}}>
       <Grid item xs={12}>
         <Navbar></Navbar>
       </Grid>
-      <Grid item>
+      <Grid item xs={10}>
         <Typography>
           Course name
         </Typography>
-        <Grid item>
+        <Grid item xs={12}>
           <TabContext value={value} >
               <Tabs value={value} onChange={handleChange} centered>
                   <Tab value='one' label='Assignments and Quizzes'>
