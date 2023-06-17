@@ -12,7 +12,6 @@ export default function Navbar(){
                     <Toolbar>
                         <Box component="img" src={courseHubLogo} sx={{ height: 60 }} />  
                         <Box sx={{ flexGrow: 1 }} />
-                        <SearchIcon/>
                         <Avatar/>
 
                     </Toolbar>

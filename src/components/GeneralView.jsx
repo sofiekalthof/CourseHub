@@ -9,7 +9,7 @@ import AssignmentList from "./AssignmentList"
 function GeneralView() {
     return (
         <>
-        <Grid container sx={{justifyContent:'center'}} xs={12}>
+        <Grid container sx={{justifyContent:'center'}} xs={12} spacing={2}>
           <Grid item xs={12}>
             <Typography>
               Timeline
