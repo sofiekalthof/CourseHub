@@ -4,7 +4,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import CourseHubLogo from "../assets/CourseHubLogo.png";
+import { useContext } from "react";
+import { CompToLoad } from "../App";
 
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";
@@ -13,11 +15,11 @@ export default function Login() {
   // define states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const compProvider = useContext(CompToLoad);
 
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
       // send get request to REST API
       let res = await fetch(`${API_URL}/${email}`, {
@@ -50,7 +52,7 @@ export default function Login() {
 
   return (
     <>
-      {/* log-in form based-on Shoeb's material ui lecture */}
+      {/* initial grid to align logo and form */}
       <Grid
         container
         spacing={0}
@@ -58,52 +60,104 @@ export default function Login() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh" }}
+        sx={{ minHeight: "100vh", minWidth: "50vw" }}
       >
+        {/* logo */}
+        <Grid item xs={12}>
+          <img src={CourseHubLogo} width="200vw" height="200vh" />
+        </Grid>
+        {/* register form */}
         <Box
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 1, p: 3, bgcolor: "#ffffff" }}
+          sx={{ mt: 1, p: 2, bgcolor: "#ffffff", minWidth: "65vw" }}
         >
-          <Typography
-            component="h1"
-            variant="h5"
-            sx={{ textAlign: "right", fontWeight: "bold" }}
+          {/* grid for navigation to Register and LogIn component */}
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ minHeight: "5vh" }}
           >
-            Sign In
-          </Typography>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{
+                  fontWeight: "bold",
+                  color: "primary",
+                  borderRadius: 0,
+                  border: "1px solid",
+                  "& .MuiButton-startIcon": { margin: 0 },
+                }}
+                onClick={compProvider.toRegister}
+              >
+                Register
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primaryLight"
+                disableElevation
+                sx={{
+                  fontWeight: "bold",
+                  color: "primary",
+                  borderRadius: 0,
+                  border: "1px solid",
+                  "& .MuiButton-startIcon": { margin: 0 },
+                }}
+                onClick={compProvider.toLogIn}
+              >
+                Sign In
+              </Button>
+            </Grid>
+          </Grid>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ minHeight: "10vh" }}
           >
-            Sign In
-          </Button>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, color: "secondary", fontWeight: "bold" }}
+            >
+              Sign In
+            </Button>
+          </Grid>
         </Box>
       </Grid>
     </>

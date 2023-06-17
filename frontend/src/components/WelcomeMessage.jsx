@@ -41,7 +41,7 @@ export default function WelcomeMessage() {
             color="secondary"
             onClick={compProvider.toRegister}
           >
-            Get Started
+            Get started
           </Button>
         </Grid>
       </Grid>
