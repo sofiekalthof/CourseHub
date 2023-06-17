@@ -14,12 +14,19 @@ const themeDarkGreen = createTheme({
     },
     text: {
       primary: "#05386B",
+      secondary: "05386B",
     },
     primary: {
       main: "#5CDB95",
     },
+    primaryLight: {
+      main: "#8EE4AF",
+    },
     secondary: {
       main: "#05386B",
+    },
+    secondaryLight: {
+      main: "#379683",
     },
   },
 });
