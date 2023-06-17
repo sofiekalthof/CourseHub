@@ -9,12 +9,12 @@ import AssignmentList from "./AssignmentList"
 function GeneralView() {
     return (
         <>
-        <Grid container sx={{justifyContent:'center'}}>
+        <Grid container sx={{justifyContent:'center', width:1200}}>
           <Grid item >
             <Typography>
               Timeline
             </Typography>
-          <Card variant="outlined" sx={{justifyContent: 'center', display: 'flex', width:1200}}> 
+          <Card variant="outlined" sx={{justifyContent: 'center', display: 'flex'}}> 
             <ApexTimelineScatter></ApexTimelineScatter>
           </Card>
           </Grid>
