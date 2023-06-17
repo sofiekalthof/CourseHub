@@ -40,7 +40,7 @@ function Courses(){
         <Grid container xs={12} direction='row' rowSpacing={5} columnSpacing={3} sx={{flexGrow:1}}>
             {courses.map((course)=>(
                     <Grid item xs={4}>
-                            <Paper key={course.id} sx={{height: 350, width: 350, textAlign:'center'}}>
+                            <Paper key={course.id} sx={{minHeight:300, textAlign:'center'}}>
                                 <Typography>
                                     {course.name}
                                 </Typography>
