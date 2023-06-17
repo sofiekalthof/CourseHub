@@ -33,9 +33,6 @@ app.listen(port, () => {
 
 // Get a specific user
 app.route("/:email").get(async (req, res) => {
-    console.log(req);
-    console.log(req.body);
-    console.log(req.params);
     const email = req.params.email;
 
     try{
