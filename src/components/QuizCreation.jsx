@@ -15,6 +15,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 function QuizCreation({ onQuizCreated }) {
+  // State variables
   const [open, setOpen] = useState(false);
   const [quizTitle, setQuizTitle] = useState('');
   const [questions, setQuestions] = useState([
@@ -22,19 +23,24 @@ function QuizCreation({ onQuizCreated }) {
   ]);
   const [error, setError] = useState('');
 
+  // Function to open the dialog
   const handleOpen = () => {
     setOpen(true);
   };
 
+  // Function to close the dialog
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Function to handle quiz title change
   const handleQuizTitleChange = (event) => {
     setQuizTitle(event.target.value);
   };
 
+  // Function to handle question text change
   const handleQuestionTextChange = (value, questionId) => {
+    // Update the text of the specific question
     const updatedQuestions = questions.map((question) => {
       if (question.id === questionId) {
         return { ...question, text: value };
@@ -44,7 +50,9 @@ function QuizCreation({ onQuizCreated }) {
     setQuestions(updatedQuestions);
   };
 
+  // Function to handle answer text change
   const handleAnswerTextChange = (event, questionId, answerIndex) => {
+    // Update the answer text of the specific question
     const updatedQuestions = questions.map((question) => {
       if (question.id === questionId) {
         const updatedAnswers = [...question.answers];
@@ -56,7 +64,9 @@ function QuizCreation({ onQuizCreated }) {
     setQuestions(updatedQuestions);
   };
 
+  // Function to handle correct answer change
   const handleCorrectAnswerChange = (event, questionId, answerIndex) => {
+    // Update the correct answer indices of the specific question
     const updatedQuestions = questions.map((question) => {
       if (question.id === questionId) {
         let updatedIndices = [...question.correctAnswerIndices];
@@ -72,7 +82,9 @@ function QuizCreation({ onQuizCreated }) {
     setQuestions(updatedQuestions);
   };
 
+  // Function to handle question file change
   const handleQuestionFileChange = (event, questionId) => {
+    // Read and update the image file of the specific question
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -87,6 +99,7 @@ function QuizCreation({ onQuizCreated }) {
     reader.readAsDataURL(file);
   };
 
+  // Function to add a new question
   const addQuestion = () => {
     const newQuestion = {
       id: uuidv4(),
@@ -98,12 +111,16 @@ function QuizCreation({ onQuizCreated }) {
     setQuestions([...questions, newQuestion]);
   };
 
+  // Function to remove a question
   const removeQuestion = (questionId) => {
+    // Filter out the question with the specified ID
     const updatedQuestions = questions.filter((question) => question.id !== questionId);
     setQuestions(updatedQuestions);
   };
 
+  // Function to handle quiz creation
   const handleCreateQuiz = () => {
+    // Validate quiz data before creating
     if (quizTitle.trim() === '') {
       setError('Please enter a quiz title');
       return;
@@ -120,6 +137,7 @@ function QuizCreation({ onQuizCreated }) {
       }
     }
 
+    // Create the quiz object
     const quiz = {
       title: quizTitle,
       questions: questions.map(({ id, text, answers, correctAnswerIndices, image }) => ({
@@ -131,13 +149,19 @@ function QuizCreation({ onQuizCreated }) {
       })),
     };
 
+    // Pass the created quiz to the parent component
     onQuizCreated(quiz);
+
+    // Reset form fields and error
     setQuizTitle('');
     setQuestions([{ id: uuidv4(), text: '', answers: ['', '', '', ''], correctAnswerIndices: [], image: null }]);
     setError('');
+
+    // Close the dialog
     handleClose();
   };
 
+  // JSX components for the dialog and form
   return (
     <div>
       <Button variant="contained" color="primary" onClick={handleOpen}>
