@@ -79,7 +79,7 @@ export default function Register() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh" }}
+        sx={{ minHeight: "100vh", backgroundColor:"#5CDB95" }}
       >
         {/* logo */}
         <Grid item xs={12}>

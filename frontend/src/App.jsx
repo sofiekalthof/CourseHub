@@ -12,8 +12,7 @@ import { Route, Routes } from "react-router-dom";
 const themeDarkGreen = createTheme({
   palette: {
     background: {
-      default: "#5CDB95",
-      // default: "#ffffff",
+      default: "#ffffff",
     },
     text: {
       primary: "#05386B",
