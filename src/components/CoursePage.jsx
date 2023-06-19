@@ -18,7 +18,7 @@ function CoursePage() {
 
   return (
     <>
-    <Grid container xs={12} spacing={2} sx={{justifyContent:'center'}}>
+    <Grid container spacing={2} sx={{justifyContent:'center'}}>
       <Grid item xs={12}>
         <Navbar></Navbar>
       </Grid>
@@ -26,6 +26,7 @@ function CoursePage() {
         <Typography>
           Course name
         </Typography>
+      </Grid>
         <Grid item xs={12}>
           <TabContext value={value} >
               <Tabs value={value} onChange={handleChange} centered>
@@ -42,7 +43,6 @@ function CoursePage() {
               </TabPanel>
             </TabContext>
         </Grid>
-      </Grid>
 
     </Grid>
   </>
