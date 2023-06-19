@@ -1,6 +1,8 @@
 import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import HomePage from "./components/HomePage";
+import CoursePage from "./components/CoursePage";
 import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
@@ -39,6 +41,8 @@ export default function App() {
       <ThemeProvider theme={themeDarkGreen}>
         <CssBaseline />
         <Routes>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/course" element={<CoursePage />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
