@@ -5,8 +5,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
-import { useContext } from "react";
-import { CompToLoad } from "../App";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:3600";
 
@@ -16,9 +15,10 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // using context
-  const compProvider = useContext(CompToLoad);
-
+  const navigate = useNavigate();
+  const handleLogIn = () => {
+    navigate("/login");
+  };
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -55,7 +55,7 @@ export default function Register() {
           console.log("Form done.");
           alert("User added");
           // navigate to Log-In component
-          compProvider.toLogIn();
+          handleLogIn();
         } else {
           // some debug commands
           console.log("Form returned error from backend.");
@@ -114,8 +114,6 @@ export default function Register() {
                   border: "1px solid",
                   "& .MuiButton-startIcon": { margin: 0 },
                 }}
-                // navigation through global context
-                onClick={compProvider.toRegister}
               >
                 Register
               </Button>
@@ -132,7 +130,7 @@ export default function Register() {
                   border: "1px solid",
                   "& .MuiButton-startIcon": { margin: 0 },
                 }}
-                onClick={compProvider.toLogIn}
+                onClick={handleLogIn}
               >
                 Sign In
               </Button>

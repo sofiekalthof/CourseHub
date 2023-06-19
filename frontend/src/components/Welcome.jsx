@@ -2,15 +2,16 @@
 import React from "react";
 import { Button, Grid, Typography, Box } from "@mui/material";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
-import { useContext } from "react";
-import { CompToLoad } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export default function Welcome() {
   // states/variables
   const slogan =
     "Bring Structure to Your Learning,\nBring Success to Your Studies";
-  const compProvider = useContext(CompToLoad);
-
+  const navigate = useNavigate();
+  const handleRegister = () => {
+    navigate("/register");
+  };
   // styling
   return (
     <>
@@ -41,8 +42,7 @@ export default function Welcome() {
           <Button
             variant="contained"
             color="secondary"
-            // navigation with context
-            onClick={compProvider.toRegister}
+            onClick={handleRegister}
           >
             Get started
           </Button>

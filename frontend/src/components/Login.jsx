@@ -5,8 +5,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
-import { useContext } from "react";
-import { CompToLoad } from "../App";
+import { useNavigate } from "react-router-dom";
 
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";
@@ -16,8 +15,13 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // using context
-  const compProvider = useContext(CompToLoad);
+  const navigate = useNavigate();
+  const handleRegister = () => {
+    navigate("/register");
+  };
+  const handleHome = () => {
+    navigate("/home");
+  };
 
   // function to handle submitting the form
   const handleSubmit = async (event) => {
@@ -42,6 +46,8 @@ export default function Login() {
         console.log("Form done.");
         alert("User is logged in.");
         console.log(resJson);
+        // route to homepage
+        handleHome();
       } else {
         // some debug commands
         console.log("Form returned error from backend.");
@@ -97,7 +103,7 @@ export default function Login() {
                   "& .MuiButton-startIcon": { margin: 0 },
                 }}
                 // navigation through global context
-                onClick={compProvider.toRegister}
+                onClick={handleRegister}
               >
                 Register
               </Button>
@@ -115,7 +121,6 @@ export default function Login() {
                   border: "1px solid",
                   "& .MuiButton-startIcon": { margin: 0 },
                 }}
-                onClick={compProvider.toLogIn}
               >
                 Sign In
               </Button>
