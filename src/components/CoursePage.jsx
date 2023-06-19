@@ -2,7 +2,7 @@ import * as React from 'react';
 import Navbar from './Navbar'
 import GeneralView from './GeneralView';
 import HomePage from './HomePage'
-import { Box, Tabs, Tab, Grid, Typography } from '@mui/material';
+import { Box, Tabs, Tab, Grid, Typography, Button } from '@mui/material';
 import { TabPanel, TabContext } from "@mui/lab";
 
 
@@ -22,10 +22,13 @@ function CoursePage() {
       <Grid item xs={12}>
         <Navbar></Navbar>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={8.75}>
         <Typography>
           Course name
         </Typography>
+      </Grid>
+      <Grid item xs={1.5}>
+            <Button variant='outlined'>Take Course    </Button>
       </Grid>
         <Grid item xs={12}>
           <TabContext value={value} >
