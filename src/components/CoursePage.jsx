@@ -18,32 +18,34 @@ function CoursePage() {
 
   return (
     <>
-    <Navbar></Navbar>
-    <Typography>
-      Course name
-    </Typography>
-    <Grid container sx={{justifyContent:'center'}}>
-        <Grid item>
+    <Grid container xs={12} spacing={2} sx={{justifyContent:'center'}}>
+      <Grid item xs={12}>
+        <Navbar></Navbar>
+      </Grid>
+      <Grid item xs={10}>
+        <Typography>
+          Course name
+        </Typography>
+        <Grid item xs={12}>
           <TabContext value={value} >
-            <Tabs value={value} onChange={handleChange} centered>
-                <Tab value='one' label='Assignments and Quizzes'>
-                </Tab>
-                <Tab value='two' label='Analytics'>
-                </Tab>
-            </Tabs>
-            <TabPanel value="one">
-                <GeneralView></GeneralView>
-            </TabPanel>
-            <TabPanel value="two">
-              
-            </TabPanel>
-          </TabContext>
+              <Tabs value={value} onChange={handleChange} centered>
+                  <Tab value='one' label='Assignments and Quizzes'>
+                  </Tab>
+                  <Tab value='two' label='Analytics'>
+                  </Tab>
+              </Tabs>
+              <TabPanel value="one">
+                  <GeneralView></GeneralView>
+              </TabPanel>
+              <TabPanel value="two">
+                
+              </TabPanel>
+            </TabContext>
         </Grid>
-    </Grid> 
+      </Grid>
 
-
-
-    </>
+    </Grid>
+  </>
   )
 }
 

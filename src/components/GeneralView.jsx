@@ -9,21 +9,25 @@ import AssignmentList from "./AssignmentList"
 function GeneralView() {
     return (
         <>
-        <Grid container sx={{justifyContent:'center', width:1200}}>
-          <Grid item >
+        <Grid container sx={{justifyContent:'center'}} xs={12} spacing={2}>
+          <Grid item xs={12}>
             <Typography>
               Timeline
             </Typography>
-          <Card variant="outlined" sx={{justifyContent: 'center', display: 'flex'}}> 
-            <ApexTimelineScatter></ApexTimelineScatter>
-          </Card>
           </Grid>
-          <Grid item>
+          <Grid item xs={12}>
+            <Card variant="outlined" sx={{justifyContent: 'center'}}> 
+              <ApexTimelineScatter></ApexTimelineScatter>
+            </Card>
+          </Grid> 
+          <Grid item xs={12}>
             <Typography>
               Assignments and Quizzes
             </Typography>
-            <Card variant="outlined" sx={{justifyContent: 'center', display: 'flex', width:1200}}> 
-            <AssignmentList/>
+          </Grid>
+          <Grid item xs={12}>
+            <Card variant="outlined" sx={{justifyContent: 'center'}}> 
+              <AssignmentList/>
             </Card>
           </Grid>
         </Grid>
