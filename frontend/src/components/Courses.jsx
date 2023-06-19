@@ -43,10 +43,10 @@ function Courses(){
 
     return(
         <>
-        <Grid container xs={12} direction='row' rowSpacing={5} columnSpacing={3} sx={{flexGrow:1}}>
+        <Grid container direction='row' rowSpacing={5} columnSpacing={3} sx={{flexGrow:1}}>
             {courses.map((course)=>(
-                    <Grid item xs={4}>
-                            <Card key={course.id} sx={{minHeight:300, textAlign:'center'}} onClick={handleOnClick}>
+                    <Grid item xs={4} key={course.id}>
+                            <Card sx={{minHeight:300, textAlign:'center'}} onClick={handleOnClick}>
                                 <Typography>
                                     {course.name}
                                 </Typography>
