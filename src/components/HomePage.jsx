@@ -8,7 +8,7 @@ function HomePage(){
     return(
         <>
         <Grid container spacing={2} sx={{justifyContent:'center'}}>
-            <Grid container item xs={12}> 
+            <Grid item xs={12}> 
                 <Navbar/>
             </Grid>
             <Grid item xs={10}>

@@ -35,8 +35,6 @@ export default function ApexTimelineScatter(){
       ],
       options:{
         chart: {
-        height: 350,
-        width: 1200,
         type: 'scatter'
       },
       xaxis: {
@@ -94,7 +92,6 @@ export default function ApexTimelineScatter(){
                   options={state.options}
                   series={state.series}
                   type="scatter"
-                  width="1200"
                   height="200"
                 />
             </>
