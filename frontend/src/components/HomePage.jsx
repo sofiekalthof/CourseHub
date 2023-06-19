@@ -11,7 +11,7 @@ function HomePage(){
 
     return(
         <>
-        <Grid container spacing={2} sx={{justifyContent:'center', bgcolor: '#ffffff'}}>
+        <Grid container spacing={2} sx={{justifyContent:'center'}}>
             <Grid item xs={12}> 
                 <Navbar/>
             </Grid>
