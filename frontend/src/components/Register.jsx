@@ -15,12 +15,15 @@ export default function Register() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // using context
   const compProvider = useContext(CompToLoad);
 
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // check if repear password is same with normal password
     if (password !== event.target.repeatpassword.value) {
       alert("Passwords don't match! API call will not be made.");
     } else {
@@ -29,28 +32,32 @@ export default function Register() {
         // send post request to REST API
         let res = await fetch(API_URL, {
           method: "POST",
+          // all information being sent
           body: JSON.stringify({
             username: userName,
             email: email,
             password: password,
           }),
+          // header neccessary for correct sending of information
           headers: {
             "Content-type": "application/json; charset=UTF-8",
           },
         });
-        // uncomment below to see returned document from backend
+        // parse return statement from backend
         let resJson = await res.json();
 
-        // if response is successful, reset states
         if (res.status === 200) {
+          // if response is successful, reset states
           setUserName("");
           setEmail("");
           setPassword("");
-          // debug
+          // some debug commands
           console.log("Form done.");
           alert("User added");
+          // navigate to Log-In component
           compProvider.toLogIn();
         } else {
+          // some debug commands
           console.log("Form returned error from backend.");
           console.log(resJson);
         }
@@ -72,7 +79,7 @@ export default function Register() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh", minWidth: "50vw" }}
+        sx={{ minHeight: "100vh" }}
       >
         {/* logo */}
         <Grid item xs={12}>
@@ -83,7 +90,7 @@ export default function Register() {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 1, p: 2, bgcolor: "#ffffff", minWidth: "65vw" }}
+          sx={{ mt: 1, p: 2, bgcolor: "#ffffff", minWidth: "40vw" }}
         >
           {/* grid for navigation to Register and LogIn component */}
           <Grid
@@ -102,10 +109,12 @@ export default function Register() {
                 sx={{
                   fontWeight: "bold",
                   color: "primary",
+                  // disable default button features of MUI
                   borderRadius: 0,
                   border: "1px solid",
                   "& .MuiButton-startIcon": { margin: 0 },
                 }}
+                // navigation through global context
                 onClick={compProvider.toRegister}
               >
                 Register
@@ -129,7 +138,7 @@ export default function Register() {
               </Button>
             </Grid>
           </Grid>
-
+          {/* grid for the Register form fields and buttons */}
           <Grid
             container
             spacing={0}

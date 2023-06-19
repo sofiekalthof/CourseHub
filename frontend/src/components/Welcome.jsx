@@ -1,10 +1,11 @@
+// Welcome Page
 import React from "react";
 import { Button, Grid, Typography, Box } from "@mui/material";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
 import { useContext } from "react";
 import { CompToLoad } from "../App";
 
-export default function WelcomeMessage() {
+export default function Welcome() {
   // states/variables
   const slogan =
     "Bring Structure to Your Learning,\nBring Success to Your Studies";
@@ -13,6 +14,7 @@ export default function WelcomeMessage() {
   // styling
   return (
     <>
+      {/* grid to align logo, slogan and next button */}
       <Grid
         container
         direction="column"
@@ -39,6 +41,7 @@ export default function WelcomeMessage() {
           <Button
             variant="contained"
             color="secondary"
+            // navigation with context
             onClick={compProvider.toRegister}
           >
             Get started

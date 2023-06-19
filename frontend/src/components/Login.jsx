@@ -15,13 +15,15 @@ export default function Login() {
   // define states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // using context
   const compProvider = useContext(CompToLoad);
 
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // send get request to REST API
+      // send GET request to REST API with email
       let res = await fetch(`${API_URL}/${email}`, {
         method: "GET",
         // header neccessary for correct sending of information
@@ -29,7 +31,7 @@ export default function Login() {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      // parse return statement
+      // parse return statement from backend
       let resJson = await res.json();
 
       if (res.status === 200) {
@@ -71,7 +73,7 @@ export default function Login() {
           component="form"
           noValidate
           onSubmit={handleSubmit}
-          sx={{ mt: 1, p: 2, bgcolor: "#ffffff", minWidth: "65vw" }}
+          sx={{ mt: 1, p: 2, bgcolor: "#ffffff", minWidth: "40vw" }}
         >
           {/* grid for navigation to Register and LogIn component */}
           <Grid
@@ -89,10 +91,12 @@ export default function Login() {
                 sx={{
                   fontWeight: "bold",
                   color: "primary",
+                  // disable default button features of MUI
                   borderRadius: 0,
                   border: "1px solid",
                   "& .MuiButton-startIcon": { margin: 0 },
                 }}
+                // navigation through global context
                 onClick={compProvider.toRegister}
               >
                 Register
@@ -117,7 +121,7 @@ export default function Login() {
               </Button>
             </Grid>
           </Grid>
-
+          {/* grid for the Log-In form fields and buttons */}
           <Grid
             container
             spacing={0}
