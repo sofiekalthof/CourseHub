@@ -50,6 +50,7 @@ app.route("/:email").get(async (req, res) => {
 
 // Create a new user
 app.route("/").post(async (req, res) => {
+    // TODO: check if email already exists in db(utils) and return an appropriate message back
     const doc = new UserModel(req.body);
 
     try {
