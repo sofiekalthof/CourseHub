@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import ApexTimeline from "./ApexTimeline";
 import ApexTimelineScatter from './ApexTimelineScatter';
 import Card from '@mui/material/Card';
-import { Grid } from '@mui/material';
+import { Grid, Button } from '@mui/material';
 import AssignmentList from "./AssignmentList"
 
 function GeneralView() {
@@ -20,10 +20,13 @@ function GeneralView() {
               <ApexTimelineScatter></ApexTimelineScatter>
             </Card>
           </Grid> 
-          <Grid item xs={10}>
+          <Grid item xs={8.75}>
             <Typography>
               Assignments and Quizzes
             </Typography>
+          </Grid>
+          <Grid item xs={1.25}>
+            <Button variant='outlined'>Create New</Button>
           </Grid>
           <Grid item xs={10}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
