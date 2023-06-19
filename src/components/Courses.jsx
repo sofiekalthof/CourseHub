@@ -1,4 +1,5 @@
 import { Card, CardContent, Grid, Typography, Paper, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Courses(){
     const courses= [
@@ -34,20 +35,25 @@ function Courses(){
         }
     ];
 
+    const navigate = useNavigate();
+    const handleOnClick =() => {
+        navigate('/course')
+    }
+
 
     return(
         <>
         <Grid container xs={12} direction='row' rowSpacing={5} columnSpacing={3} sx={{flexGrow:1}}>
             {courses.map((course)=>(
                     <Grid item xs={4}>
-                            <Paper key={course.id} sx={{minHeight:300, textAlign:'center'}}>
+                            <Card key={course.id} sx={{minHeight:300, textAlign:'center'}} onClick={handleOnClick}>
                                 <Typography>
                                     {course.name}
                                 </Typography>
                                 <Typography>
                                     {course.description}
                                 </Typography>
-                            </Paper>
+                            </Card>
                     </Grid>
             ))}
         </Grid>
