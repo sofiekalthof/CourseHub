@@ -68,7 +68,7 @@ export default function Login() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh", minWidth: "50vw" }}
+        sx={{ minHeight: "100vh", minWidth: "50vw", backgroundColor:"#5CDB95" }}
       >
         {/* logo */}
         <Grid item xs={12}>

@@ -13,7 +13,7 @@ function CoursePage() {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ justifyContent: "center" }}>
+      <Grid container spacing={2} sx={{ justifyContent: "center", bgcolor:'#ffffff' }}>
         <Grid item xs={12}>
           <Navbar></Navbar>
         </Grid>
