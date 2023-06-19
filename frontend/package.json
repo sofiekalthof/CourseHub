@@ -15,7 +15,11 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.0",
+<<<<<<< HEAD:package.json
     "apexcharts": "^3.41.0",
+=======
+    "axios": "^1.4.0",
+>>>>>>> LandingPage:frontend/package.json
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-chrono": "^2.2.0",
