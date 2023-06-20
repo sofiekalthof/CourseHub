@@ -17,18 +17,15 @@ function HomePage(){
             </Grid>
             <Grid item xs={10}>
                 <Grid container>
-                    <Grid item xs={10.5}>
+                    <Grid item xs={10.7}>
                         <Typography>
                             My Courses
                         </Typography>
                     </Grid>
-                    <Grid item xs={1.5}>
-                        <Button variant='outlined'>Create New</Button>
+                    <Grid item xs={1.3}>
+                        <Button variant='contained'>Create New</Button>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item xs={10}> 
-                <SearchBar/>
             </Grid>
             <Grid item xs={10}>
                 <Courses></Courses>

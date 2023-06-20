@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="inherit" color="inherit">
+        <AppBar position="static" color="inherit">
           <Toolbar>
             <Box
               component="img"

@@ -1,52 +1,41 @@
-import { Card, CardContent, Grid, Typography, Paper, Box } from "@mui/material";
+import { Card, CardContent, Grid, Typography, Paper, Box, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import CoursePage from "./CoursePage";
+import {courses} from '../data/courses'
 
 function Courses(){
-    const courses= [
-        {
-            "id": 0,
-            "name": "Advanced Web Technologies",
-            "description": "Test Description"
-        },
-        {
-            "id": 1,
-            "name": "Compilerbau",
-            "description": "Test Description"
-        },
-        {
-            "id": 2,
-            "name": "IDEA Lab",
-            "description": "Test Description"
-        },
-        {
-            "id": 3,
-            "name": " Bioinformatics",
-            "description": "Test Description"
-        },
-        {
-            "id": 4,
-            "name": "Kommunikationspsychologie",
-            "description": "Test Description"
-        },
-        {
-            "id": 5,
-            "name": "Digital Games Research",
-            "description": "Test Description"
-        }
-    ];
-
     const navigate = useNavigate();
-    const handleOnClick =() => {
-        navigate('/course')
+    const handleOnClick =(course) => {
+        navigate(`/course/${course.id}`);
     }
+
+    const [searchInput, setSearchInput] = useState("");
+    const handleChange = (e) => {
+        setSearchInput(e.target.value);
+    }
+
+    const filteredData = courses.filter((el) => {
+        //if no input the return the original
+        if (searchInput === '') {
+            return el;
+        }
+        //return the item which contains the user input
+        else {
+            return el.name.includes(searchInput)
+        }
+    })
 
 
     return(
         <>
         <Grid container direction='row' rowSpacing={5} columnSpacing={3} sx={{flexGrow:1}}>
-            {courses.map((course)=>(
+            <Grid item xs={12}>
+            <TextField fullWidth label="Search for course" variant="outlined" sx={{flexGrow:1}} onChange={handleChange} value={searchInput}/>
+            </Grid>
+            {filteredData.map((course)=>(
                     <Grid item xs={4} key={course.id}>
-                            <Card sx={{minHeight:300, textAlign:'center'}} onClick={handleOnClick}>
+                            <Card sx={{minHeight:300, textAlign:'center'}} onClick={() => handleOnClick(course)}>
                                 <Typography>
                                     {course.name}
                                 </Typography>

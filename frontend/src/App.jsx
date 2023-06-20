@@ -41,7 +41,7 @@ export default function App() {
         <CssBaseline />
         <Routes>
           <Route path="/home" element={<HomePage />} />
-          <Route path="/course" element={<CoursePage />} />
+          <Route path="/course/:id" element={<CoursePage />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
