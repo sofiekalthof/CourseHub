@@ -28,11 +28,11 @@ export default function Navbar() {
             <Box
               component="img"
               src={courseHubLogo}
-              sx={{ height: 60 }}
+              sx={{ height: 60, cursor:'pointer' }}
               onClick={handleOnClick}
             />
             <Box sx={{ flexGrow: 1 }} />
-            <Avatar />
+            <Avatar sx={{cursor:'pointer'}} />
           </Toolbar>
         </AppBar>
       </Box>

@@ -29,13 +29,13 @@ function Courses(){
 
     return(
         <>
-        <Grid container direction='row' rowSpacing={5} columnSpacing={3} sx={{flexGrow:1}}>
+        <Grid container direction='row' rowSpacing={7} columnSpacing={7} sx={{flexGrow:1}}>
             <Grid item xs={12}>
             <TextField fullWidth label="Search for course" variant="outlined" sx={{flexGrow:1}} onChange={handleChange} value={searchInput}/>
             </Grid>
             {filteredData.map((course)=>(
                     <Grid item xs={4} key={course.id}>
-                            <Card sx={{minHeight:300, textAlign:'center'}} onClick={() => handleOnClick(course)}>
+                            <Card sx={{minHeight:200, minWidth:250, textAlign:'center', cursor: 'pointer'}} onClick={() => handleOnClick(course)}>
                                 <Typography>
                                     {course.name}
                                 </Typography>

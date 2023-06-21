@@ -36,20 +36,7 @@ export const courses= [
         "id": 1,
         "name": "Compilerbau",
         "description": "Test Description",
-        "dates": [{
-            type: 'Quiz',
-            id: 0,
-            data: [new Date('2023-03-12')]
-            
-          },
-          {
-            type: 'Assignment',
-            id: 1,
-            data: 
-              [new Date('2023-05-12'),
-              new Date('2023-06-12')]
-            
-          },
+        "dates": [
           {
             type: 'Lecture',
             id: 2,
@@ -81,18 +68,6 @@ export const courses= [
               [new Date('2023-05-12'),
               new Date('2023-06-12')]
             
-          },
-          {
-            type: 'Lecture',
-            id: 2,
-            data: 
-              [new Date('2023-03-12')]
-          },
-          {
-            type: 'Exam',
-            id: 3,
-            data: 
-              [new Date('2023-07-12')]
           }
         ]
     },
@@ -100,12 +75,7 @@ export const courses= [
         "id": 3,
         "name": " Bioinformatics",
         "description": "Test Description",
-        "dates": [{
-            type: 'Quiz',
-            id: 0,
-            data: [new Date('2023-03-12')]
-            
-          },
+        "dates": [
           {
             type: 'Assignment',
             id: 1,
@@ -119,12 +89,6 @@ export const courses= [
             id: 2,
             data: 
               [new Date('2023-03-12')]
-          },
-          {
-            type: 'Exam',
-            id: 3,
-            data: 
-              [new Date('2023-07-12')]
           }
         ]
     },
@@ -136,14 +100,6 @@ export const courses= [
             type: 'Quiz',
             id: 0,
             data: [new Date('2023-03-12')]
-            
-          },
-          {
-            type: 'Assignment',
-            id: 1,
-            data: 
-              [new Date('2023-05-12'),
-              new Date('2023-06-12')]
             
           },
           {
@@ -164,12 +120,7 @@ export const courses= [
         "id": 5,
         "name": "Digital Games Research",
         "description": "Test Description",
-        "dates": [{
-            type: 'Quiz',
-            id: 0,
-            data: [new Date('2023-03-12')]
-            
-          },
+        "dates": [
           {
             type: 'Assignment',
             id: 1,

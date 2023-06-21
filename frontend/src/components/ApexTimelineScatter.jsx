@@ -25,6 +25,8 @@ export default function ApexTimelineScatter(props){
     })
     dataForChart.push({name: dates.type, id: dates.id, data: datesWithValuesForCharts})
   })
+
+
     const state = {
       options:{
         chart: {
@@ -74,7 +76,13 @@ export default function ApexTimelineScatter(props){
       },
       markers:{
         shape: 'circle',
-        size: 10
+        size: 10,
+        colors: []
+      },
+      legend:{
+        markers: {
+          fillColors: []
+        }
       },
       fill: {
       //  type: 'image',

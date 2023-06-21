@@ -23,10 +23,15 @@ function GeneralView(props) {
     return (
         <>
         <Grid container sx={{justifyContent:'center'}} spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={10.25}>
             <Typography>
               Timeline
             </Typography>
+          </Grid>
+          <Grid item xs={1.75}>
+            <Button variant='outlined'>
+              Add Milestone
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
