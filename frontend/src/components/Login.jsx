@@ -16,9 +16,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const handleRegister = () => {
-    navigate("/register");
-  };
   const handleHome = () => {
     navigate("/home");
   };
@@ -26,6 +23,15 @@ export default function Login() {
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // RegEx for checking a valid e-mail format
+    let re = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+
+    // check if email is valid
+    if (!re.test(email)) {
+      alert("Invalid E-mail! Please enter a valid e-mail.");
+      return;
+    }
+
     try {
       // send GET request to REST API with email
       let res = await fetch(`${API_URL}/${email}`, {
@@ -60,115 +66,54 @@ export default function Login() {
 
   return (
     <>
-      {/* initial grid to align logo and form */}
-      <Grid
-        container
-        spacing={0}
-        // self centering grid props
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        sx={{ minHeight: "100vh", minWidth: "50vw", backgroundColor:"#5CDB95" }}
+      <Box
+        component="form"
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ bgcolor: "#ffffff", minWidth: "40vw" }}
       >
-        {/* logo */}
-        <Grid item xs={12}>
-          <img src={CourseHubLogo} width="200vw" height="200vh" />
-        </Grid>
-        {/* register form */}
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          sx={{ mt: 1, p: 2, bgcolor: "#ffffff", minWidth: "40vw" }}
+        {/* grid for the Log-In form fields and buttons */}
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ minHeight: "10vh" }}
         >
-          {/* grid for navigation to Register and LogIn component */}
-          <Grid
-            container
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            sx={{ minHeight: "5vh" }}
-          >
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={{
-                  fontWeight: "bold",
-                  color: "primary",
-                  // disable default button features of MUI
-                  borderRadius: 0,
-                  border: "1px solid",
-                  "& .MuiButton-startIcon": { margin: 0 },
-                }}
-                // navigation through global context
-                onClick={handleRegister}
-              >
-                Register
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primaryLight"
-                disableElevation
-                sx={{
-                  fontWeight: "bold",
-                  color: "primary",
-                  borderRadius: 0,
-                  border: "1px solid",
-                  "& .MuiButton-startIcon": { margin: 0 },
-                }}
-              >
-                Sign In
-              </Button>
-            </Grid>
-          </Grid>
-          {/* grid for the Log-In form fields and buttons */}
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            sx={{ minHeight: "10vh" }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, color: "secondary", fontWeight: "bold" }}
-            >
-              Sign In
-            </Button>
-          </Grid>
-        </Box>
-      </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2, color: "secondary", fontWeight: "bold" }}
+          >
+            Sign In
+          </Button>
+        </Grid>
+      </Box>
     </>
   );
 }

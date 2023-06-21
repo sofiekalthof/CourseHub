@@ -10,7 +10,7 @@ export default function Welcome() {
     "Bring Structure to Your Learning,\nBring Success to Your Studies";
   const navigate = useNavigate();
   const handleRegister = () => {
-    navigate("/register");
+    navigate("/registerlogin");
   };
   // styling
   return (
@@ -21,7 +21,7 @@ export default function Welcome() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "100vh", backgroundColor:"#5CDB95" }}
+        style={{ minHeight: "100vh", backgroundColor: "#5CDB95" }}
       >
         <Grid item xs={12} sx={{ mb: 5 }}>
           <img src={CourseHubLogo} width="300vw" height="300vh" />
