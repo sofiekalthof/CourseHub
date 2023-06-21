@@ -16,9 +16,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const handleRegister = () => {
-    navigate("/register");
-  };
   const handleHome = () => {
     navigate("/home");
   };
@@ -26,6 +23,15 @@ export default function Login() {
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // RegEx for checking a valid e-mail format
+    let re = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+
+    // check if email is valid
+    if (!re.test(email)) {
+      alert("Invalid E-mail! Please enter a valid e-mail.");
+      return;
+    }
+
     try {
       // send GET request to REST API with email
       let res = await fetch(`${API_URL}/${email}`, {

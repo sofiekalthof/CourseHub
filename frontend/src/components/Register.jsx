@@ -14,51 +14,58 @@ export default function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // check if repear password is same with normal password
+    // check if repeated password is same with normal password
     if (password !== event.target.repeatpassword.value) {
       alert("Passwords don't match! API call will not be made.");
-    } else {
-      // make API call
-      try {
-        // send post request to REST API
-        let res = await fetch(API_URL, {
-          method: "POST",
-          // all information being sent
-          body: JSON.stringify({
-            username: userName,
-            email: email,
-            password: password,
-          }),
-          // header neccessary for correct sending of information
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-        // parse return statement from backend
-        let resJson = await res.json();
+      return;
+    }
+    // RegEx for checking a valid e-mail format
+    let re = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
 
-        if (res.status === 200) {
-          // if response is successful, reset states
-          setUserName("");
-          setEmail("");
-          setPassword("");
-          // some debug commands
-          console.log("Form done.");
-          alert("User added");
-          // navigate to Log-In component
-          handleLogIn();
-        } else if (res.status === 400) {
-          alert(resJson.error);
-        } else {
-          // some debug commands
-          console.log("Form returned error from backend.");
-          console.log(resJson);
-        }
-      } catch (err) {
-        console.log(
-          "Frontend error. Post request could not be sent. Check API!"
-        );
+    // check if email is valid
+    if (!re.test(email)) {
+      alert("Invalid E-mail! Please enter a valid e-mail.");
+      return;
+    }
+
+    // make API call
+    try {
+      // send post request to REST API
+      let res = await fetch(API_URL, {
+        method: "POST",
+        // all information being sent
+        body: JSON.stringify({
+          username: userName,
+          email: email,
+          password: password,
+        }),
+        // header neccessary for correct sending of information
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      // parse return statement from backend
+      let resJson = await res.json();
+
+      if (res.status === 200) {
+        // if response is successful, reset states
+        setUserName("");
+        setEmail("");
+        setPassword("");
+        // some debug commands
+        console.log("Form done.");
+        alert("User added");
+        // navigate to Log-In component
+        handleLogIn();
+      } else if (res.status === 400) {
+        alert(resJson.error);
+      } else {
+        // some debug commands
+        console.log("Form returned error from backend.");
+        console.log(resJson);
       }
+    } catch (err) {
+      console.log("Frontend error. Post request could not be sent. Check API!");
     }
   };
 
