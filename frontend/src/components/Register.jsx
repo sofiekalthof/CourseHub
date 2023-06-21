@@ -47,6 +47,8 @@ export default function Register() {
           alert("User added");
           // navigate to Log-In component
           handleLogIn();
+        } else if (res.status === 400) {
+          alert(resJson.error);
         } else {
           // some debug commands
           console.log("Form returned error from backend.");
