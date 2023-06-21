@@ -18,7 +18,7 @@ function GeneralView(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(props.selectedCourse);
+  console.log(props.selectedCourse.timeline.tasks);
 
     return (
         <>
@@ -35,7 +35,7 @@ function GeneralView(props) {
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <ApexTimelineScatter courseDates={props.selectedCourse.dates}></ApexTimelineScatter>
+              <ApexTimelineScatter tasks={props.selectedCourse.timeline.tasks} milestones={props.selectedCourse.timeline.milestones}></ApexTimelineScatter>
             </Card>
           </Grid> 
           <Grid item xs={10.25}>
@@ -68,7 +68,7 @@ function GeneralView(props) {
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <AssignmentList courseDates={props.selectedCourse.dates}/>
+              <AssignmentList tasks={props.selectedCourse.timeline.tasks}/>
             </Card>
           </Grid>
         </Grid>

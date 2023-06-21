@@ -14,11 +14,8 @@ function CoursePage() {
   };
 
   let {id} = useParams();
-  console.log(id);
 
-  let selectedCourse = courses.filter((course) => course.id == id
-  )
-  console.log(selectedCourse[0].id);
+  let selectedCourse = courses.filter((course) => course.id == id);
 
 
   return (

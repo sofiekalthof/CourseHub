@@ -2,29 +2,44 @@ import React, { Component } from "react";
 import Chart from "react-apexcharts";
   
 export default function ApexTimelineScatter(props){
-  const courseDates = props.courseDates;
+  const tasks = props.tasks;
+  const milestones = props.milestones;
+  console.log(tasks);
+  console.log(milestones);
 
     // Convert dates from database into values for the chart
   let dataForChart = []
-  courseDates.map((dates) => {
-    let datesWithValuesForCharts = [];
-    dates.data.map((date) => {
-        if(dates.type == 'Quiz'){
-          datesWithValuesForCharts.push([date.getTime(), -1]);
+  tasks.map((tasks) => {
+    let tasksWithValuesForCharts = [];
+    tasks.data.map((taskDate) => {
+        if(tasks.type == 'Quiz'){
+          tasksWithValuesForCharts.push([taskDate.getTime(), -1]);
         }
-        if(dates.type == 'Assignment'){
-          datesWithValuesForCharts.push([date.getTime(), -2]);
-        }
-        if(dates.type == 'Lecture'){
-          datesWithValuesForCharts.push([date.getTime(), 1]);
-        }
-        if(dates.type == 'Exam'){
-          datesWithValuesForCharts.push([date.getTime(), 2]);
+        if(tasks.type == 'Assignment'){
+          tasksWithValuesForCharts.push([taskDate.getTime(), -2]);
         }
         
     })
-    dataForChart.push({name: dates.type, id: dates.id, data: datesWithValuesForCharts})
+    dataForChart.push({name: tasks.type, id: tasks.id, data: tasksWithValuesForCharts})
   })
+
+  milestones.map((milestone) => {
+    console.log(milestone)
+    let milestonesWithValuesForCharts = [];
+    milestone.data.map((milestoneDate) => {
+      if(milestone.type == 'Lecture'){
+        milestonesWithValuesForCharts.push([milestoneDate.getTime(), 1]);
+      }
+      if(milestone.type == 'Exam'){
+        milestonesWithValuesForCharts.push([milestoneDate.getTime(), 2]);
+      }
+      if(milestone.type == 'Exercise'){
+        milestonesWithValuesForCharts.push([milestoneDate.getTime(), 3]);
+      }
+    })
+    dataForChart.push({name: milestone.type, id: milestone.id, data: milestonesWithValuesForCharts});
+  })
+  console.log(dataForChart)
 
 
     const state = {

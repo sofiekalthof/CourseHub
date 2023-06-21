@@ -2,19 +2,16 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid}
 
 function AssignmentList(props){
     // get CourseDates as a prop from GeneralView
-    const courseDates = props.courseDates;
+    const tasks = props.tasks;
 
-    // filter courseDates to have only Assignments and Quizzes in it
-    let filteredDates = courseDates.filter((date) => date.type.includes("Quiz") | date.type.includes("Assignment"));
-    
     // convert the Dates from a DateObject into a String for the AssignmentList
     let filteredDatesWithConvertedDates = []; 
-    filteredDates.map((dates) => {
+    tasks.map((task) => {
         let convertedDates = []
-        dates.data.map((date) => {
-            convertedDates.push(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`);
+        task.data.map((taskDate) => {
+            convertedDates.push(`${taskDate.getDate()}/${taskDate.getMonth()+1}/${taskDate.getFullYear()}`);
         })
-        filteredDatesWithConvertedDates.push({type: dates.type, id: dates.id, data: convertedDates});
+        filteredDatesWithConvertedDates.push({type: task.type, id: task.id, data: convertedDates});
     })
 
     return (
