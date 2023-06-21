@@ -1,38 +1,31 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
   
-export default function ApexTimelineScatter(){
+export default function ApexTimelineScatter(props){
+  const courseDates = props.courseDates;
+
+    // Convert dates from database into values for the chart
+  let dataForChart = []
+  courseDates.map((dates) => {
+    let datesWithValuesForCharts = [];
+    dates.data.map((date) => {
+        if(dates.type == 'Quiz'){
+          datesWithValuesForCharts.push([date.getTime(), -1]);
+        }
+        if(dates.type == 'Assignment'){
+          datesWithValuesForCharts.push([date.getTime(), -2]);
+        }
+        if(dates.type == 'Lecture'){
+          datesWithValuesForCharts.push([date.getTime(), 1]);
+        }
+        if(dates.type == 'Exam'){
+          datesWithValuesForCharts.push([date.getTime(), 2]);
+        }
+        
+    })
+    dataForChart.push({name: dates.type, id: dates.id, data: datesWithValuesForCharts})
+  })
     const state = {
-        series: [
-            {
-              name: 'Quiz',
-              data: [
-                [new Date('2023-03-12').getTime(),
-                -1]
-              ]
-            },
-            {
-              name: 'Assignment',
-              data: [
-                [new Date('2023-05-12').getTime(),
-                -2]
-              ]
-            },
-            {
-              name: 'Lecture',
-              data: [
-                [new Date('2023-03-12').getTime(),
-                1]
-              ]
-            },
-            {
-              name: 'Exam',
-              data: [
-                [new Date('2023-07-12').getTime(),
-                2]
-              ]
-            }
-      ],
       options:{
         chart: {
         type: 'scatter'
@@ -45,7 +38,9 @@ export default function ApexTimelineScatter(){
       },
       yaxis: {
         show: false,
-        forceNiceScale: false
+        forceNiceScale: false,
+        min: -3,
+        max: 3
       },
       grid:{
         xaxis: {
@@ -61,7 +56,16 @@ export default function ApexTimelineScatter(){
         },  
       },
       tooltip: {
-        enabled: true
+        enabled: true,
+        x:{
+          show: false
+        },
+        y: {
+          formatter: (y) => "",
+          title:{
+            formatter: (seriesName) => seriesName
+          }
+        }
       },
       annotations:{
         yaxis: [{
@@ -90,7 +94,7 @@ export default function ApexTimelineScatter(){
             <>
                 <Chart
                   options={state.options}
-                  series={state.series}
+                  series={dataForChart}
                   type="scatter"
                   height="200"
                 />

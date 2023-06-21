@@ -1,16 +1,21 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid} from "@mui/material";
 
-function AssignmentList(){
-    const tasks = [{
-        id: 0, 
-        type: "Assignment", 
-        date: "June 17"
-        },
-        {
-        id: 1, 
-        type: "Quiz", 
-        date: "June 18"
-        }]
+function AssignmentList(props){
+    // get CourseDates as a prop from GeneralView
+    const courseDates = props.courseDates;
+
+    // filter courseDates to have only Assignments and Quizzes in it
+    let filteredDates = courseDates.filter((date) => date.type.includes("Quiz") | date.type.includes("Assignment"));
+    
+    // convert the Dates from a DateObject into a String for the AssignmentList
+    let filteredDatesWithConvertedDates = []; 
+    filteredDates.map((dates) => {
+        let convertedDates = []
+        dates.data.map((date) => {
+            convertedDates.push(`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`);
+        })
+        filteredDatesWithConvertedDates.push({type: dates.type, id: dates.id, data: convertedDates});
+    })
 
     return (
         <>
@@ -31,10 +36,11 @@ function AssignmentList(){
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tasks.map((task) => (
-                                <TableRow key={task.id}>
+                            {filteredDatesWithConvertedDates.map((task) => (
+                                task.data.map((date) => (
+                                <TableRow key={date}>
                                     <TableCell>
-                                        {task.date}
+                                        {date}
                                     </TableCell>
                                     <TableCell>
                                         {task.type}
@@ -43,6 +49,7 @@ function AssignmentList(){
 
                                     </TableCell>
                                 </TableRow>
+                                ))
                                         
                             ))}
                         </TableBody>

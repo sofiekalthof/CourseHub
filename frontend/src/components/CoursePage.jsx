@@ -41,7 +41,7 @@ function CoursePage() {
               <Tab value="two" label="Analytics"></Tab>
             </Tabs>
             <TabPanel value="one">
-              <GeneralView></GeneralView>
+              <GeneralView selectedCourse={selectedCourse[0]}></GeneralView>
             </TabPanel>
             <TabPanel value="two"></TabPanel>
           </TabContext>
