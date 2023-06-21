@@ -1,15 +1,12 @@
-import CoursePage from "./components/CoursePage"
-
-
+import React from 'react';
+import QuizApp from './components/QuizApp';
 
 function App() {
-
   return (
-    <>
-      <CoursePage></CoursePage>
-
-    </>
-  )
+    <div>
+      <QuizApp />
+    </div>
+  );
 }
 
-export default App
+export default App;
