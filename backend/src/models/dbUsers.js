@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   }
-  // TODO: user-analytics -> milestones/timeline for a user with done/due etc. + 
+  // TODO: other user-analytics?
 });
 
 // create model from schema
