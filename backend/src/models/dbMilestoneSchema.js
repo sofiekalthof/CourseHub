@@ -1,3 +1,5 @@
+const mongoose = require("../dbConnection.js");
+
 // create mongoose schema
 const MilestoneSchema = new mongoose.Schema({
   type: {
@@ -17,5 +19,8 @@ const MilestoneSchema = new mongoose.Schema({
   }
 });
 
+// define model
+const MilestoneModel = mongoose.model(collectionName, schema=MilestoneSchema);
+
 // export model
-module.exports = MilestoneSchema;
+module.exports = MilestoneModel;

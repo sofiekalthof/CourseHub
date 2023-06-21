@@ -1,9 +1,9 @@
 const mongoose = require("../dbConnection.js");
-const Task = require("../schemas/dbTasks.js");
-const Milestone = require("../schemas/dbMilestones.js");
+const TaskModel = require("./dbTasks.js");
+const MilestoneModel = require("./dbMilestones.js");
 
-// Initialize parameters
-const collectionName = process.env.DB_COLLECTION_COURSES;
+// initialize parameters
+const collectionName = process.env.DB_COLLECTION_TIMELINES;
 
 // create mongoose schema
 const TimelineSchema = new mongoose.Schema({
@@ -11,22 +11,15 @@ const TimelineSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  desc: {
-    type: String,
-    required: true
-  },
   // list of tasks
   tasks: [{
-    type: Task
+    type: mongoose.Types.ObjectId,
+    ref: "TaskModel"
   }],
   // list of other milestones
   milestones: [{
-    type: Milestone
-  }],
-  // owner of the course
-  owner: [{
-    type: mongoose.Types.ObjectId, 
-    ref: "UserModel"
+    type: mongoose.Types.ObjectId,
+    ref: "MilestoneModel"
   }]
 });
 

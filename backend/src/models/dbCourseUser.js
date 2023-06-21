@@ -2,7 +2,7 @@
 const mongoose = require("../dbConnection.js");
 const CourseModel = require("./dbCourses.js");
 const UserModel = require("./dbUsers.js");
-const TimelineModel = require("./dbTimeline.js");
+const TimelineUserModel = require("./dbTimelineUser.js");
 
 // Initialize parameters
 const collectionName = process.env.DB_COLLECTION_COURSEUSERS;
@@ -19,9 +19,10 @@ const CourseUserSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId, 
     ref: "CourseModel"
   },
-  // timeline for each subscriber of any course
+  // reduced timeline for each subscriber of any course with information on scores, completion status etc.
   timeline: {
-    type: TimelineModel
+    type: mongoose.Types.ObjectId,
+    ref: "TimelineUserModel"
   },
 });
 
