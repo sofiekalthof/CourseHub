@@ -38,6 +38,11 @@ const TaskSchema = new mongoose.Schema({
   // for any images 
   files: {
     type: File
+  },
+  // belonging timeline
+  timeline: {
+    type: mongoose.Types.ObjectId,
+    ref: "TimelineModel"
   }
 });
 

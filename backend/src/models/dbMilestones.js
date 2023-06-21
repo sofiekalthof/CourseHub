@@ -1,5 +1,8 @@
 const mongoose = require("../dbConnection.js");
 
+// initialize parameters
+const collectionName = process.env.DB_COLLECTION_MILESTONES;
+
 // create mongoose schema
 const MilestoneSchema = new mongoose.Schema({
   type: {
@@ -16,6 +19,11 @@ const MilestoneSchema = new mongoose.Schema({
   due: {
     type: Date,
     required: true
+  },
+  // belonging timeline
+  timeline: {
+    type: mongoose.Types.ObjectId,
+    ref: "TimelineModel"
   }
 });
 

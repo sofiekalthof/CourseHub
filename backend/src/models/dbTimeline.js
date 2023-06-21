@@ -1,6 +1,4 @@
 const mongoose = require("../dbConnection.js");
-const TaskModel = require("./dbTasks.js");
-const MilestoneModel = require("./dbMilestones.js");
 
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_TIMELINES;

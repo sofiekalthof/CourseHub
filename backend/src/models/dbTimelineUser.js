@@ -1,5 +1,4 @@
 const mongoose = require("../dbConnection.js");
-const TimelineModel = require("./dbTimeline.js");
 
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_TIMELINEUSERS;
