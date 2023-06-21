@@ -4,10 +4,12 @@ import { useState } from 'react';
 import CoursePage from "./CoursePage";
 import {courses} from '../data/courses'
 
-function Courses(){
+function Courses(props){
+    console.log(props)
+    const userData = props.user;
     const navigate = useNavigate();
     const handleOnClick =(course) => {
-        navigate(`/course/${course.id}`);
+        navigate(`/course/${course.id}`, {state:{user: userData}, replace: true});
     }
 
     const [searchInput, setSearchInput] = useState("");

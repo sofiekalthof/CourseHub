@@ -5,6 +5,7 @@ import HomePage from "./HomePage";
 import { Box, Tabs, Tab, Grid, Typography, Button, Card } from "@mui/material";
 import { TabPanel, TabContext } from "@mui/lab";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { courses } from "../data/courses";
 
 function TakeCourse({isOwner}){
@@ -14,15 +15,27 @@ function TakeCourse({isOwner}){
 }
 
 function CoursePage() {
-  const [value, setValue] = React.useState("one");
-  const [isOwner, setIsOwner] = React.useState(false);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const [tabValue, setTabValue] = React.useState("one");
 
+  // get user from route parameters
+  const location = useLocation();
+  const user = location.state.user;
+
+  // get id from route
   let {id} = useParams();
 
+  // Get selected course
   let selectedCourse = courses.filter((course) => course.id == id);
+
+  const [isOwner, setIsOwner] = React.useState(user.id == selectedCourse[0].owner.id ? true : false);
+  console.log(isOwner)
+
+  //handleChange function for tabContext
+  const handleChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  console.log(user.id == selectedCourse[0].owner.id)
 
 
   return (
@@ -39,8 +52,8 @@ function CoursePage() {
         </Grid>
         <Grid item xs={10}>
         <Card variant='outlined'>
-          <TabContext value={value}>
-            <Tabs value={value} onChange={handleChange} centered variant="fullWidth">
+          <TabContext value={tabValue}>
+            <Tabs value={tabValue} onChange={handleChange} centered variant="fullWidth">
               <Tab value="one" label="Assignments and Quizzes"></Tab>
               <Tab value="two" label="Analytics"></Tab>
             </Tabs>

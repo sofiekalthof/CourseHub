@@ -8,6 +8,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function HomePage(){
+    const user = {
+        id: 0,
+        username: "Test",
+        email: "test@user",
+        password: "Test123"
+    }
 
     return(
         <>
@@ -19,7 +25,7 @@ function HomePage(){
                 <Grid container>
                     <Grid item xs={10.7}>
                         <Typography>
-                            My Courses
+                            All Courses
                         </Typography>
                     </Grid>
                     <Grid item xs={1.3}>
@@ -28,7 +34,7 @@ function HomePage(){
                 </Grid>
             </Grid>
             <Grid item xs={10}>
-                <Courses></Courses>
+                <Courses user={user}></Courses>
             </Grid>
             
         </Grid>

@@ -3,7 +3,7 @@ export const courseUser= [
         subscriber: {
             id: 0,
             username: "Test",
-            email: "test@user"
+            email: "test@user",
             password: "Test123"
         },
         course: {

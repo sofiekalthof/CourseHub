@@ -27,8 +27,13 @@ export const courses= [
             type: "Exam",
             data: [new Date('2023-07-28')]
         }]
-
-        }
+        },
+        owner: {
+          id: 0,
+          username: "Test",
+          email: "test@user",
+          password: "Test123"
+      }
     },
     {
         "id": 1,
