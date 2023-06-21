@@ -11,14 +11,14 @@ const MilestoneSchema = new mongoose.Schema({
     default: 'Lecture',
     required: true
   },
+  data: {
+    type: Date,
+    required: true
+  },
   status: {
     type: String, 
     enum: ['due', 'missed', 'done'], 
     default: 'due'
-  },
-  due: {
-    type: Date,
-    required: true
   },
   // belonging timeline
   timeline: {

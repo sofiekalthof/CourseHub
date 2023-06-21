@@ -11,7 +11,7 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  desc: {
+  description: {
     type: String,
     required: true
   },
@@ -21,15 +21,15 @@ const CourseSchema = new mongoose.Schema({
     ref: "TimelineModel"
   },
   // owner of the course
-  owner: [{
+  owner: {
     type: mongoose.Types.ObjectId, 
     ref: "UserModel"
-  }]
+  }
 });
 
 
-// define index to allow full-text search over name and description fields
-CourseSchema.index({name: "text", desc: "text"});
+// // define index to allow full-text search over name and description fields
+// CourseSchema.index({name: "text", desc: "text"});
 
 // create model from schema
 let CourseModel = mongoose.model(collectionName, schema=CourseSchema);

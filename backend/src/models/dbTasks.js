@@ -8,7 +8,7 @@ collectionName = process.env.DB_COLLECTION_TASKS;
 const TaskSchema = new mongoose.Schema({
   type: {
     type: String, 
-    enum: ['Quizz', 'Assignment'], 
+    enum: ['Quiz', 'Assignment'], 
     default: 'Quizz',
     required: true
   },
@@ -16,14 +16,14 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  data: {
+    type: Date,
+    required: true
+  },
   status: {
     type: String, 
     enum: ['due', 'missed', 'done'], 
     default: 'due'
-  },
-  due: {
-    type: Date,
-    required: true
   },
   questions: {
     type: [String]

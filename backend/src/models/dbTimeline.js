@@ -5,10 +5,6 @@ const collectionName = process.env.DB_COLLECTION_TIMELINES;
 
 // create mongoose schema
 const TimelineSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
   // list of tasks
   tasks: [{
     type: mongoose.Types.ObjectId,

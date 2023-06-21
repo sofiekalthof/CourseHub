@@ -24,11 +24,11 @@ app.listen(port, () => {
   }); 
 
 // Get all courses
-app.route("/courses/:name").get(async (req, res) => {
+app.route("/courses").get(async (req, res) => {
     let courses = [];
     try{
       // full text search
-      courses = await CourseModel.find({ $text: {$search: req.params.name}});
+      courses = await CourseModel.find({});
       res.status(200).json(courses);
     } catch(err) {
       res.status(500).send("Server error. Request could not be fulfilled.");
