@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors")
 require('dotenv').config();
-const UserModel = require("./models/dbUserSchema.js");
+const UserModel = require("./models/dbUsers.js");
+const CourseModel = require("./models/dbCourses.js");
+const TaskModel = require("./models/dbTasks.js");
+const CourseUserModel = require("./models/dbCourseUserModel.js");
 
 // Define port
 const port = 3600;
