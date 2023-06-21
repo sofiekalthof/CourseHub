@@ -1,10 +1,9 @@
 // Register Form component
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
+import Login from "./Login";
+import { Box, Tabs, Tab, Grid, TextField, Button } from "@mui/material";
+import { TabPanel, TabContext } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:3600";
@@ -14,6 +13,12 @@ export default function Register() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // state related to using Tabs
+  const [value, setValue] = useState("Register");
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const navigate = useNavigate();
   const handleLogIn = () => {
@@ -79,7 +84,7 @@ export default function Register() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh", backgroundColor:"#5CDB95" }}
+        sx={{ minHeight: "100vh", backgroundColor: "#5CDB95" }}
       >
         {/* logo */}
         <Grid item xs={12}>
@@ -100,6 +105,19 @@ export default function Register() {
             justifyContent="center"
             sx={{ minHeight: "5vh" }}
           >
+            {/* currently using Tabs causes issues with the component loading */}
+            {/* <TabContext value={value}>
+              <Tabs value={value} onChange={handleChange} centered>
+                <Tab value="Register" label="Register"></Tab>
+                <Tab value="SignIn" label="Sign-In"></Tab>
+              </Tabs>
+              <TabPanel value="Register">
+                <Register></Register>
+              </TabPanel>
+              <TabPanel value="SignIn">
+                <Login></Login>
+              </TabPanel>
+            </TabContext> */}
             <Grid item xs={6}>
               <Button
                 fullWidth
