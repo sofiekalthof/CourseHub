@@ -23,16 +23,17 @@ app.listen(port, () => {
     console.log("Listening on " + port + ".");
   }); 
 
-// Get a all users
-// app.route("/").get(async (req, res) => {
-//     let users = [];
-//     try{
-//         users = await UserModel.find({});
-//       res.status(200).json(users);
-//     } catch(err) {
-//       res.status(500).send("Server error. Request could not be fulfilled.");
-//     }
-// });
+// Get all courses
+app.route("/courses/:name").get(async (req, res) => {
+    let courses = [];
+    try{
+      // full text search
+      courses = await CourseModel.find({ $text: {$search: req.params.name}});
+      res.status(200).json(courses);
+    } catch(err) {
+      res.status(500).send("Server error. Request could not be fulfilled.");
+    }
+});
 
 // Get a specific user
 app.route("/:email").get(async (req, res) => {

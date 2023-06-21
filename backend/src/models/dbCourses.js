@@ -27,6 +27,10 @@ const CourseSchema = new mongoose.Schema({
   }]
 });
 
+
+// define index to allow full-text search over name and description fields
+CourseSchema.index({name: "text", desc: "text"});
+
 // create model from schema
 let CourseModel = mongoose.model(collectionName, schema=CourseSchema);
 
