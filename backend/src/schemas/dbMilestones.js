@@ -8,6 +8,11 @@ const MilestoneSchema = new mongoose.Schema({
     default: 'Lecture',
     required: true
   },
+  status: {
+    type: String, 
+    enum: ['due', 'missed', 'done'], 
+    default: 'due'
+  },
   due: {
     type: Date,
     required: true
