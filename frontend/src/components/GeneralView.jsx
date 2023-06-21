@@ -9,15 +9,49 @@ import AssignmentList from "./AssignmentList";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from 'react';
 
-function GeneralView(props) {
+function CreateNew({isOwner}){
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  if(isOwner){
+    return (<><Button 
+    variant='contained' 
+    endIcon={<KeyboardArrowDownIcon />}
+    aria-controls={open ? 'basic-menu' : undefined}
+    aria-haspopup="true"
+    aria-expanded={open ? 'true' : undefined}
+    onClick={handleClick}>
+      Create New
+  </Button>
+  <Menu
+    id="basic-menu"
+    anchorEl={anchorEl}
+    open={open}
+    onClose={handleClose}
+    MenuListProps={{
+      'aria-labelledby': 'basic-button',
+    }}
+  >
+    <MenuItem onClick={handleClose}>Quiz</MenuItem>
+    <MenuItem onClick={handleClose}>Assignment</MenuItem>
+  </Menu></>)
+  }
+}
+
+function AddMileStone({isOwner}){
+  if(isOwner){
+    return <Button variant='outlined'>Add Milestone</Button>
+  }
+}
+
+function GeneralView(props) {
+  const [isOwner, setIsOwner] = useState(props.isOwner);
+
   console.log(props.selectedCourse.timeline.tasks);
 
     return (
@@ -29,9 +63,7 @@ function GeneralView(props) {
             </Typography>
           </Grid>
           <Grid item xs={1.75}>
-            <Button variant='outlined'>
-              Add Milestone
-            </Button>
+            <AddMileStone isOwner={isOwner}></AddMileStone>
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
@@ -44,27 +76,7 @@ function GeneralView(props) {
             </Typography>
           </Grid>
           <Grid item xs={1.75}>
-            <Button 
-              variant='contained' 
-              endIcon={<KeyboardArrowDownIcon />}
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}>
-                Create New
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={handleClose}>Quiz</MenuItem>
-              <MenuItem onClick={handleClose}>Assignment</MenuItem>
-            </Menu>
+            <CreateNew isOwner={isOwner}></CreateNew>
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 

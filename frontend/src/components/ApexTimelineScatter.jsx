@@ -39,6 +39,8 @@ export default function ApexTimelineScatter(props){
     })
     dataForChart.push({name: milestone.type, id: milestone.id, data: milestonesWithValuesForCharts});
   })
+  // add a point for today to chart
+  dataForChart.push({name: "Today", id: -1, data: [[new Date().getTime(), 0]]})
   console.log(dataForChart)
 
 

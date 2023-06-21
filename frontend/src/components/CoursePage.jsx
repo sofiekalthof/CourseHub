@@ -7,8 +7,15 @@ import { TabPanel, TabContext } from "@mui/lab";
 import { useParams } from "react-router-dom";
 import { courses } from "../data/courses";
 
+function TakeCourse({isOwner}){
+  if(!isOwner){
+    return <Button variant="contained">Take Course </Button>
+  }
+}
+
 function CoursePage() {
   const [value, setValue] = React.useState("one");
+  const [isOwner, setIsOwner] = React.useState(false);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -28,7 +35,7 @@ function CoursePage() {
           <Typography>{selectedCourse[0].name}</Typography>
         </Grid>
         <Grid item xs={1.5}>
-          <Button variant="contained">Take Course </Button>
+          <TakeCourse isOwner={isOwner}/>
         </Grid>
         <Grid item xs={10}>
         <Card variant='outlined'>
@@ -38,7 +45,7 @@ function CoursePage() {
               <Tab value="two" label="Analytics"></Tab>
             </Tabs>
             <TabPanel value="one">
-              <GeneralView selectedCourse={selectedCourse[0]}></GeneralView>
+              <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner}></GeneralView>
             </TabPanel>
             <TabPanel value="two"></TabPanel>
           </TabContext>
