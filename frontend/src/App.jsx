@@ -1,6 +1,7 @@
 import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import RegisterLogInPage from "./components/RegisterLogInPage";
 import HomePage from "./components/HomePage";
 import CoursePage from "./components/CoursePage";
 import React from "react";
@@ -43,8 +44,7 @@ export default function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/course" element={<CoursePage />} />
           <Route path="/" element={<LandingPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/registerlogin" element={<RegisterLogInPage />} />
           {/* <Route path="/welcome" element={<Welcome />} /> */}
         </Routes>
       </ThemeProvider>
