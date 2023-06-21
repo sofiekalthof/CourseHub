@@ -1,5 +1,3 @@
-const mongoose = require("../dbConnection.js");
-
 // create mongoose schema
 const MilestoneSchema = new mongoose.Schema({
   type: {

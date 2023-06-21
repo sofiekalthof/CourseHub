@@ -1,8 +1,4 @@
-const mongoose = require("../dbConnection.js");
 const File = require("../schemas/dbFileUploadSchema.js")
-
-// Initialize parameters
-const collectionName = "tasks";
 
 // create mongoose schema
 const TaskSchema = new mongoose.Schema({
@@ -41,8 +37,5 @@ const TaskSchema = new mongoose.Schema({
   }
 });
 
-// create model from schema
-let TaskModel = mongoose.model(collectionName, schema=TaskSchema);
-
 // export model
-module.exports = TaskModel;
+module.exports = TaskSchema;

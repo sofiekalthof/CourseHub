@@ -2,6 +2,7 @@
 const mongoose = require("../dbConnection.js");
 const CourseModel = require("./dbCourses.js");
 const UserModel = require("./dbUsers.js");
+const TimelineModel = require("./dbTimeline.js");
 
 // Initialize parameters
 const collectionName = process.env.DB_COLLECTION_COURSEUSERS;
@@ -17,6 +18,10 @@ const CourseUserSchema = new mongoose.Schema({
   course: {
     type: mongoose.Types.ObjectId, 
     ref: "CourseModel"
+  },
+  // timeline for each subscriber of any course
+  timeline: {
+    type: TimelineModel
   },
 });
 
