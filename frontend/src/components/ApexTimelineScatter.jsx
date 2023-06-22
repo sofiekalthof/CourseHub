@@ -1,21 +1,29 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
 import { courseUser } from "../data/coursesMongoose";
+import l from '../assets/L.svg';
   
 export default function ApexTimelineScatter(props){
   const tasks = props.tasks;
   const milestones = props.milestones;
 
   // Convert dates from database into values for the chart
+  const today = new Date();
   let dataForChart = []
   tasks.map((tasks) => {
     let tasksWithValuesForCharts = [];
     tasks.data.map((taskDate) => {
-        if(tasks.type == 'Quiz'){
+        if(tasks.type == 'Quiz' && taskDate.getTime()>today.getTime()){
+          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -1, fillColor:'#D3D3D3'});
+        }
+        if(tasks.type == 'Quiz' && taskDate.getTime()<=today.getTime()){
           tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -1});
         }
-        if(tasks.type == 'Assignment'){
-          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -2});
+        if(tasks.type == 'Assignment' && taskDate.getTime()>today.getTime()){
+          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -2,fillColor:'#D3D3D3' });
+        }
+        if(tasks.type == 'Assignment' && taskDate.getTime()<=today.getTime()){
+          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -2 });
         }
         
     })
@@ -23,23 +31,31 @@ export default function ApexTimelineScatter(props){
   })
 
   milestones.map((milestone) => {
-    console.log(milestone)
     let milestonesWithValuesForCharts = [];
     milestone.data.map((milestoneDate) => {
-      if(milestone.type == 'Lecture'){
+      if(milestone.type == 'Lecture' && milestoneDate.getTime()<=today.getTime()){
         milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 1});
       }
-      if(milestone.type == 'Exam'){
+      if(milestone.type == 'Lecture' && milestoneDate.getTime()>today.getTime()){
+        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 1, fillColor:'#D3D3D3'});
+      }
+      if(milestone.type == 'Exam' && milestoneDate.getTime()>today.getTime()){
+        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 2, fillColor:'#D3D3D3'});
+      }
+      if(milestone.type == 'Exam' && milestoneDate.getTime()<=today.getTime()){
         milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 2});
       }
-      if(milestone.type == 'Exercise'){
+      if(milestone.type == 'Exercise' && milestoneDate.getTime()<=today.getTime()){
         milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 3});
+      }
+      if(milestone.type == 'Exercise' && milestoneDate.getTime()>today.getTime()){
+        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 3, fillColor:'#D3D3D3'});
       }
     })
     dataForChart.push({name: milestone.type, id: milestone.id, data: milestonesWithValuesForCharts});
   })
   // add a point for today to chart
-  dataForChart.push({name: "Today", id: -1, data: [{x: new Date().getTime(), y: 0, fillColor: '#111'}]})
+ // dataForChart.push({name: "Today", id: -1, data: [{x: today.getTime(), y: 0, fillColor:'#000000' }]})
 
 
     const state = {
@@ -48,14 +64,11 @@ export default function ApexTimelineScatter(props){
         type: 'scatter'
       },
       xaxis: {
-        type: 'datetime',
-        tickAmount: 5,
-        max: new Date('2023-08-01').getTime(),
-        min: new Date('2023-03-01').getTime(),
+        type: 'datetime'
       },
       yaxis: {
         show: false,
-        forceNiceScale: false,
+        forceNiceScale: true,
         min: -3,
         max: 3
       },
@@ -90,24 +103,27 @@ export default function ApexTimelineScatter(props){
         }]
       },
       markers:{
+        colors: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B'],
         shape: 'circle',
         size: 10,
-        colors: []
+        strokeColor: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B'],
+        strokeWidth: 3,
+        strokeOpacity: 1,
       },
       legend:{
         markers: {
-          fillColors: []
+          fillColors: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B', 'black']
         }
       },
-      fill: {
-      //  type: 'image',
-      //  opacity: 1,
-        //image:{
-            //src: ['../src/assets/Quiz.png', '../src/assets/Assignment.png', '../src/assets/Lecture.jpg', '../src/assets/Exam.png'],
-          //  width: 17.5,
-           // height: 17.5
-        //}
+      /*fill: {
+       type: 'image',
+       image:{
+           src: [l],
+           width: 20,
+           height: 20
+        }
       },
+      */
       
     }
     };

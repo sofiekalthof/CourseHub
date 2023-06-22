@@ -52,8 +52,6 @@ function AddMileStone({isOwner}){
 function GeneralView(props) {
   const [isOwner, setIsOwner] = useState(props.isOwner);
 
-  console.log(props.selectedCourse.timeline.tasks);
-
     return (
         <>
         <Grid container sx={{justifyContent:'center'}} spacing={2}>

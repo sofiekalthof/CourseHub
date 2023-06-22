@@ -8,7 +8,8 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { courses } from "../data/courses";
 import { courseUser } from "../data/coursesMongoose";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import Analytics from "./Analytics";
 
 function TakeCourse({isOwner, isSubscriber}){
   console.log(isSubscriber)
@@ -72,7 +73,7 @@ function CoursePage() {
             <TabPanel value="one">
               <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner} user={user}></GeneralView>
             </TabPanel>
-            <TabPanel value="two"></TabPanel>
+            <TabPanel value="two"><Analytics></Analytics></TabPanel>
           </TabContext>
           </Card>
         </Grid>

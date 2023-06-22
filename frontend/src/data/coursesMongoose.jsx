@@ -7,7 +7,7 @@ export const courseUser= [
             password: "Test123"
         },
         course: {
-            id: 2,
+            id: 1,
             name: "Advanced Web Technologies",
             description: "Test Description"
         },

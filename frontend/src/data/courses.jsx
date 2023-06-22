@@ -7,11 +7,11 @@ export const courses= [
           tasks: [{
             id: 0,
             type: 'Assignment',
-            data: [new Date('2023-03-12')]
+            data: [new Date('2023-5-12')]
         },{
             id: 1,
             type: "Quiz",
-            data: [new Date('2023-05-12'),
+            data: [new Date('2023-07-12'),
             new Date('2023-06-12')]
         }],
         milestones: [{

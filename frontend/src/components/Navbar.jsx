@@ -14,6 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import courseHubLogo from "../assets/CourseHubLogo.png";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Navbar() {
   const navigate = useNavigate();
   const handleOnClick = () => {
