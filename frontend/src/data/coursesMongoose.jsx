@@ -7,14 +7,14 @@ export const courseUser= [
             password: "Test123"
         },
         course: {
-            id: 0,
+            id: 2,
             name: "Advanced Web Technologies",
             description: "Test Description"
         },
         timeline: {
             origin:{
                 tasks: [{
-                    id: 0
+                    id: 0,
                     type: 'Assignment',
                     data: [new Date('2023-03-12')]
                 },{
@@ -37,13 +37,15 @@ export const courseUser= [
                     data: [new Date('2023-07-28')]
                 }]
 
-            }
-        },
+            }, 
+            usertaskstatus: ['done', 'missed', 'done']
+        }
+    },
         {
             subscriber: {
                 id: 1,
                 username: "Test2",
-                email: "test2@user"
+                email: "test2@user",
                 password: "Test1234"
             },
             course: {
@@ -54,7 +56,7 @@ export const courseUser= [
             timeline: {
                 origin:{
                     tasks: [{
-                        id: 0
+                        id: 0,
                         type: 'Assignment',
                         data: [new Date('2023-03-12')]
                     },{
@@ -80,5 +82,5 @@ export const courseUser= [
                 }
             }
         }
-    }
+    
 ]

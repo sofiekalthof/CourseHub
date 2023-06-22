@@ -7,9 +7,12 @@ import { TabPanel, TabContext } from "@mui/lab";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { courses } from "../data/courses";
+import { courseUser } from "../data/coursesMongoose";
+import { useState, useEffect } from 'react';
 
-function TakeCourse({isOwner}){
-  if(!isOwner){
+function TakeCourse({isOwner, isSubscriber}){
+  console.log(isSubscriber)
+  if(!isOwner && !isSubscriber){
     return <Button variant="contained">Take Course </Button>
   }
 }
@@ -28,14 +31,23 @@ function CoursePage() {
   let selectedCourse = courses.filter((course) => course.id == id);
 
   const [isOwner, setIsOwner] = React.useState(user.id == selectedCourse[0].owner.id ? true : false);
-  console.log(isOwner)
 
+    // Check if user is subscriber of course
+    let subscriber = false;
+    courseUser.map((userData) => {
+      if(userData.course.id == id && userData.subscriber.id == user.id){
+        return subscriber = true;
+      }
+    })
+
+  const [isSubscriber, setIsSubscriber] = React.useState(subscriber);
+
+  console.log(isSubscriber);
   //handleChange function for tabContext
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  console.log(user.id == selectedCourse[0].owner.id)
 
 
   return (
@@ -48,7 +60,7 @@ function CoursePage() {
           <Typography>{selectedCourse[0].name}</Typography>
         </Grid>
         <Grid item xs={1.5}>
-          <TakeCourse isOwner={isOwner}/>
+          <TakeCourse isOwner={isOwner} isSubscriber={isSubscriber}/>
         </Grid>
         <Grid item xs={10}>
         <Card variant='outlined'>
@@ -58,7 +70,7 @@ function CoursePage() {
               <Tab value="two" label="Analytics"></Tab>
             </Tabs>
             <TabPanel value="one">
-              <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner}></GeneralView>
+              <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner} user={user}></GeneralView>
             </TabPanel>
             <TabPanel value="two"></TabPanel>
           </TabContext>

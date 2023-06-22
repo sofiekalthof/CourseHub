@@ -1,22 +1,21 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
+import { courseUser } from "../data/coursesMongoose";
   
 export default function ApexTimelineScatter(props){
   const tasks = props.tasks;
   const milestones = props.milestones;
-  console.log(tasks);
-  console.log(milestones);
 
-    // Convert dates from database into values for the chart
+  // Convert dates from database into values for the chart
   let dataForChart = []
   tasks.map((tasks) => {
     let tasksWithValuesForCharts = [];
     tasks.data.map((taskDate) => {
         if(tasks.type == 'Quiz'){
-          tasksWithValuesForCharts.push([taskDate.getTime(), -1]);
+          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -1});
         }
         if(tasks.type == 'Assignment'){
-          tasksWithValuesForCharts.push([taskDate.getTime(), -2]);
+          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -2});
         }
         
     })
@@ -28,19 +27,19 @@ export default function ApexTimelineScatter(props){
     let milestonesWithValuesForCharts = [];
     milestone.data.map((milestoneDate) => {
       if(milestone.type == 'Lecture'){
-        milestonesWithValuesForCharts.push([milestoneDate.getTime(), 1]);
+        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 1});
       }
       if(milestone.type == 'Exam'){
-        milestonesWithValuesForCharts.push([milestoneDate.getTime(), 2]);
+        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 2});
       }
       if(milestone.type == 'Exercise'){
-        milestonesWithValuesForCharts.push([milestoneDate.getTime(), 3]);
+        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 3});
       }
     })
     dataForChart.push({name: milestone.type, id: milestone.id, data: milestonesWithValuesForCharts});
   })
   // add a point for today to chart
-  dataForChart.push({name: "Today", id: -1, data: [[new Date().getTime(), 0]]})
+  dataForChart.push({name: "Today", id: -1, data: [{x: new Date().getTime(), y: 0, fillColor: '#111'}]})
 
 
     const state = {

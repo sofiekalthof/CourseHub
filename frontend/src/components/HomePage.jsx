@@ -9,7 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function HomePage(){
     const user = {
-        id: 0,
+        id: 1,
         username: "Test",
         email: "test@user",
         password: "Test123"

@@ -67,7 +67,7 @@ function GeneralView(props) {
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <ApexTimelineScatter tasks={props.selectedCourse.timeline.tasks} milestones={props.selectedCourse.timeline.milestones}></ApexTimelineScatter>
+              <ApexTimelineScatter tasks={props.selectedCourse.timeline.tasks} milestones={props.selectedCourse.timeline.milestones} user={props.user}></ApexTimelineScatter>
             </Card>
           </Grid> 
           <Grid item xs={10.25}>
@@ -80,7 +80,7 @@ function GeneralView(props) {
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <AssignmentList tasks={props.selectedCourse.timeline.tasks}/>
+              <AssignmentList tasks={props.selectedCourse.timeline.tasks} user={props.user}/>
             </Card>
           </Grid>
         </Grid>

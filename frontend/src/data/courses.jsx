@@ -64,7 +64,13 @@ export const courses= [
             data: [new Date('2023-07-28')]
         }]
 
-        }
+        },
+        owner: {
+          id: 1,
+          username: "Test2",
+          email: "test@user",
+          password: "Test1234"
+      }
     },
     {
         "id": 2,
@@ -95,7 +101,13 @@ export const courses= [
             data: [new Date('2023-07-28')]
         }]
 
-        }
+        },
+        owner: {
+          id: 0,
+          username: "Test",
+          email: "test@user",
+          password: "Test123"
+      }
     },
     {
         "id": 3,
@@ -126,7 +138,13 @@ export const courses= [
             data: [new Date('2023-07-28')]
         }]
 
-        }
+        },
+        owner: {
+          id: 0,
+          username: "Test",
+          email: "test@user",
+          password: "Test123"
+      }
     },
     {
         "id": 4,
@@ -157,7 +175,13 @@ export const courses= [
             data: [new Date('2023-07-28')]
         }]
 
-        }
+        },
+        owner: {
+          id: 0,
+          username: "Test",
+          email: "test@user",
+          password: "Test123"
+      }
     },
     {
         "id": 5,
@@ -188,6 +212,12 @@ export const courses= [
             data: [new Date('2023-07-28')]
         }]
 
-        }
+        },
+        owner: {
+          id: 0,
+          username: "Test",
+          email: "test@user",
+          password: "Test123"
+      }
     }
 ];
