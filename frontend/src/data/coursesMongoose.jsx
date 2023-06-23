@@ -7,7 +7,7 @@ export const courseUser= [
             password: "Test123"
         },
         course: {
-            id: 1,
+            id: 0,
             name: "Advanced Web Technologies",
             description: "Test Description"
         },
@@ -19,9 +19,12 @@ export const courseUser= [
                     data: [new Date('2023-03-12')]
                 },{
                     id: 1,
-                    type: "Quiz",
-                    data: [new Date('2023-05-12'),
-                    new Date('2023-06-12')]
+                    type: "Exercise",
+                    data: [new Date('2023-06-21')]
+                },{
+                    id: 2,
+                    type: "Exam",
+                    data: [new Date('2023-07-28')]
                 }],
                 milestones: [{
                     id: 0,
@@ -35,11 +38,11 @@ export const courseUser= [
                     id: 2,
                     type: "Exam",
                     data: [new Date('2023-07-28')]
-                }]
+                }],
 
             }, 
-            usertaskstatus: ['done', 'missed', 'done']
-        }
+        },
+        taskStatus: ['due', 'done', 'done']
     },
         {
             subscriber: {
@@ -61,9 +64,12 @@ export const courseUser= [
                         data: [new Date('2023-03-12')]
                     },{
                         id: 1,
-                        type: "Quiz",
-                        data: [new Date('2023-05-12'),
-                        new Date('2023-06-12')]
+                        type: "Exercise",
+                        data: [new Date('2023-06-21')]
+                    },{
+                        id: 2,
+                        type: "Exam",
+                        data: [new Date('2023-07-28')]
                     }],
                     milestones: [{
                         id: 0,
@@ -80,7 +86,8 @@ export const courseUser= [
                     }]
     
                 }
-            }
+            },
+            taskStatus: ['due', 'missed', 'done']
         }
     
 ]

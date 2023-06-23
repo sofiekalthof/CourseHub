@@ -5,27 +5,30 @@ export const courses= [
         "description": "Test Description",
         timeline: {
           tasks: [{
-            id: 0,
-            type: 'Assignment',
-            data: [new Date('2023-5-12')]
-        },{
-            id: 1,
-            type: "Quiz",
-            data: [new Date('2023-07-12'),
-            new Date('2023-06-12')]
-        }],
+          id: 0,
+          type: "Quiz",
+          data: new Date('2023-07-12')
+      }, {
+        id: 1,
+        type: 'Assignment',
+        data: new Date('2023-5-12')
+    },{
+        id: 2,
+        type: 'Quiz',
+        data: new Date('2023-06-12')
+      }],
         milestones: [{
             id: 0,
             type: "Lecture",
-            data: [new Date('2023-06-21')]
+            data: new Date('2023-06-21')
         }, {
             id: 1,
             type: "Exercise",
-            data: [new Date('2023-06-21')]
+            data: new Date('2023-06-21')
         },{
             id: 2,
             type: "Exam",
-            data: [new Date('2023-07-28')]
+            data: new Date('2023-07-28')
         }]
         },
         owner: {
@@ -43,26 +46,29 @@ export const courses= [
           tasks: [{
             id: 0,
             type: 'Assignment',
-            data: [new Date('2023-03-12')]
+            data: new Date('2023-03-12')
         },{
-            id: 1,
-            type: "Quiz",
-            data: [new Date('2023-05-12'),
-            new Date('2023-06-12')]
-        }],
-        milestones: [{
-            id: 0,
-            type: "Lecture",
-            data: [new Date('2023-06-21')]
-        }, {
-            id: 1,
-            type: "Exercise",
-            data: [new Date('2023-06-21')]
-        },{
-            id: 2,
-            type: "Exam",
-            data: [new Date('2023-07-28')]
-        }]
+          id: 1,
+          type: "Quiz",
+          data: new Date('2023-05-12')
+      }, {
+        id: 2,
+        type: 'Quiz',
+        data: new Date('2023-06-12')
+      }],
+      milestones: [{
+        id: 0,
+        type: "Lecture",
+        data: new Date('2023-06-21')
+    }, {
+        id: 1,
+        type: "Exercise",
+        data: new Date('2023-06-21')
+    },{
+        id: 2,
+        type: "Exam",
+        data: new Date('2023-07-28')
+    }]
 
         },
         owner: {
@@ -80,26 +86,29 @@ export const courses= [
           tasks: [{
             id: 0,
             type: 'Assignment',
-            data: [new Date('2023-03-12')]
+            data: new Date('2023-03-12')
         },{
             id: 1,
             type: "Quiz",
-            data: [new Date('2023-05-12'),
-            new Date('2023-06-12')]
+            data: new Date('2023-05-12')
+        }, {
+          id: 2,
+          type: 'Quiz',
+          data: new Date('2023-06-12')
         }],
         milestones: [{
-            id: 0,
-            type: "Lecture",
-            data: [new Date('2023-06-21')]
-        }, {
-            id: 1,
-            type: "Exercise",
-            data: [new Date('2023-06-21')]
-        },{
-            id: 2,
-            type: "Exam",
-            data: [new Date('2023-07-28')]
-        }]
+          id: 0,
+          type: "Lecture",
+          data: new Date('2023-06-21')
+      }, {
+          id: 1,
+          type: "Exercise",
+          data: new Date('2023-06-21')
+      },{
+          id: 2,
+          type: "Exam",
+          data: new Date('2023-07-28')
+      }]
 
         },
         owner: {
@@ -117,26 +126,29 @@ export const courses= [
           tasks: [{
             id: 0,
             type: 'Assignment',
-            data: [new Date('2023-03-12')]
+            data: new Date('2023-03-12')
         },{
-            id: 1,
-            type: "Quiz",
-            data: [new Date('2023-05-12'),
-            new Date('2023-06-12')]
-        }],
-        milestones: [{
-            id: 0,
-            type: "Lecture",
-            data: [new Date('2023-06-21')]
-        }, {
-            id: 1,
-            type: "Exercise",
-            data: [new Date('2023-06-21')]
-        },{
-            id: 2,
-            type: "Exam",
-            data: [new Date('2023-07-28')]
-        }]
+          id: 1,
+          type: "Quiz",
+          data: new Date('2023-05-12')
+      }, {
+        id: 2,
+        type: 'Quiz',
+        data: new Date('2023-06-12')
+      }],
+      milestones: [{
+        id: 0,
+        type: "Lecture",
+        data: new Date('2023-06-21')
+    }, {
+        id: 1,
+        type: "Exercise",
+        data: new Date('2023-06-21')
+    },{
+        id: 2,
+        type: "Exam",
+        data: new Date('2023-07-28')
+    }]
 
         },
         owner: {
@@ -154,26 +166,29 @@ export const courses= [
           tasks: [{
             id: 0,
             type: 'Assignment',
-            data: [new Date('2023-03-12')]
+            data: new Date('2023-03-12')
         },{
-            id: 1,
-            type: "Quiz",
-            data: [new Date('2023-05-12'),
-            new Date('2023-06-12')]
-        }],
-        milestones: [{
-            id: 0,
-            type: "Lecture",
-            data: [new Date('2023-06-21')]
-        }, {
-            id: 1,
-            type: "Exercise",
-            data: [new Date('2023-06-21')]
-        },{
-            id: 2,
-            type: "Exam",
-            data: [new Date('2023-07-28')]
-        }]
+          id: 1,
+          type: "Quiz",
+          data: new Date('2023-05-12')
+      }, {
+        id: 2,
+        type: 'Quiz',
+        data: new Date('2023-06-12')
+      }],
+      milestones: [{
+        id: 0,
+        type: "Lecture",
+        data: new Date('2023-06-21')
+    }, {
+        id: 1,
+        type: "Exercise",
+        data: new Date('2023-06-21')
+    },{
+        id: 2,
+        type: "Exam",
+        data: new Date('2023-07-28')
+    }]
 
         },
         owner: {
@@ -191,26 +206,29 @@ export const courses= [
           tasks: [{
             id: 0,
             type: 'Assignment',
-            data: [new Date('2023-03-12')]
+            data: new Date('2023-03-12')
         },{
-            id: 1,
-            type: "Quiz",
-            data: [new Date('2023-05-12'),
-            new Date('2023-06-12')]
-        }],
-        milestones: [{
-            id: 0,
-            type: "Lecture",
-            data: [new Date('2023-06-21')]
-        }, {
-            id: 1,
-            type: "Exercise",
-            data: [new Date('2023-06-21')]
-        },{
-            id: 2,
-            type: "Exam",
-            data: [new Date('2023-07-28')]
-        }]
+          id: 1,
+          type: "Quiz",
+          data: new Date('2023-05-12')
+      }, {
+        id: 2,
+        type: 'Quiz',
+        data: new Date('2023-06-12')
+      }],
+      milestones: [{
+        id: 0,
+        type: "Lecture",
+        data: new Date('2023-06-21')
+    }, {
+        id: 1,
+        type: "Exercise",
+        data: new Date('2023-06-21')
+    },{
+        id: 2,
+        type: "Exam",
+        data: new Date('2023-07-28')
+    }]
 
         },
         owner: {

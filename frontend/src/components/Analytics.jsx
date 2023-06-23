@@ -1,9 +1,18 @@
 import * as React from "react";
 import { Grid, Card, Typography } from '@mui/material';
 import { useState } from 'react';
+import Leaderboard from "./Leaderboard";
+
+function ShowActivity({userDataForCourse}){
+    console.log(userDataForCourse)
+    if(userDataForCourse.length == 0){
+        return <Typography>You have to take the course to see your activity</Typography>
+    }
+}
+
 
 function Analytics(props) {
-    const [isOwner, setIsOwner] = useState(props.isOwner);
+    const userDataForThisCourse = props.userDataForCourse;
   
       return (
           <>
@@ -14,7 +23,9 @@ function Analytics(props) {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Card variant="outlined" sx={{justifyContent: 'center'}}> </Card>
+              <Card variant="outlined" sx={{justifyContent: 'center'}}> 
+              <ShowActivity userDataForCourse={userDataForThisCourse}/>
+              </Card>
             </Grid> 
             <Grid item xs={10.25}>
               <Typography>
@@ -23,6 +34,7 @@ function Analytics(props) {
             </Grid>
             <Grid item xs={12}>
               <Card variant="outlined" sx={{justifyContent: 'center'}}> 
+              <Leaderboard dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}/>
               </Card>
             </Grid>
           </Grid>

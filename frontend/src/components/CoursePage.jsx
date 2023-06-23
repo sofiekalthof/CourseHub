@@ -34,16 +34,18 @@ function CoursePage() {
   const [isOwner, setIsOwner] = React.useState(user.id == selectedCourse[0].owner.id ? true : false);
 
     // Check if user is subscriber of course
+    const userDataForCourse = courseUser.filter((userData) => userData.course.id == id && userData.subscriber.id == user.id);
     let subscriber = false;
-    courseUser.map((userData) => {
-      if(userData.course.id == id && userData.subscriber.id == user.id){
-        return subscriber = true;
-      }
-    })
+    if(userDataForCourse.length != 0){
+      subscriber = true;
+    }
+
+    const dataOfAllUsersForThisCourse = courseUser.filter((userData) => userData.course.id == id);
+    console.log(dataOfAllUsersForThisCourse);
+
 
   const [isSubscriber, setIsSubscriber] = React.useState(subscriber);
 
-  console.log(isSubscriber);
   //handleChange function for tabContext
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -71,9 +73,9 @@ function CoursePage() {
               <Tab value="two" label="Analytics"></Tab>
             </Tabs>
             <TabPanel value="one">
-              <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner} user={user}></GeneralView>
+              <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner} user={user} userDataForCourse={userDataForCourse}></GeneralView>
             </TabPanel>
-            <TabPanel value="two"><Analytics></Analytics></TabPanel>
+            <TabPanel value="two"><Analytics userDataForCourse={userDataForCourse} selectedCourse={selectedCourse[0]} dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}></Analytics></TabPanel>
           </TabContext>
           </Card>
         </Grid>

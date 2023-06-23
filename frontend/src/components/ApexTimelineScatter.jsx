@@ -9,51 +9,52 @@ export default function ApexTimelineScatter(props){
 
   // Convert dates from database into values for the chart
   const today = new Date();
-  let dataForChart = []
-  tasks.map((tasks) => {
-    let tasksWithValuesForCharts = [];
-    tasks.data.map((taskDate) => {
-        if(tasks.type == 'Quiz' && taskDate.getTime()>today.getTime()){
-          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -1, fillColor:'#D3D3D3'});
-        }
-        if(tasks.type == 'Quiz' && taskDate.getTime()<=today.getTime()){
-          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -1});
-        }
-        if(tasks.type == 'Assignment' && taskDate.getTime()>today.getTime()){
-          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -2,fillColor:'#D3D3D3' });
-        }
-        if(tasks.type == 'Assignment' && taskDate.getTime()<=today.getTime()){
-          tasksWithValuesForCharts.push({x: taskDate.getTime(), y: -2 });
-        }
-        
-    })
-    dataForChart.push({name: tasks.type, id: tasks.id, data: tasksWithValuesForCharts})
+  let dataForChart = [];
+  let assignmentDates = [];
+  let quizDates = [];
+  tasks.map((task) => {
+    if(task.type == 'Quiz' && task.data.getTime()>today.getTime()){
+      quizDates.push({x: task.data.getTime(), y: -1, fillColor:'#D3D3D3'});
+    }
+    if(task.type == 'Quiz' && task.data.getTime()<=today.getTime()){
+      quizDates.push({x: task.data.getTime(), y: -1});
+    }
+    if(task.type == 'Assignment' && task.data.getTime()>today.getTime()){
+      assignmentDates.push({x: task.data.getTime(), y: -2,fillColor:'#D3D3D3' });
+    }
+    if(task.type == 'Assignment' && task.data.getTime()<=today.getTime()){
+      assignmentDates.push({x: task.data.getTime(), y: -2 });
+    }
   })
+  dataForChart.push({name: 'Assignment', data: assignmentDates});
+  dataForChart.push({name: 'Quiz', data: quizDates})
 
+  let lectureDates = [];
+  let examDates = [];
+  let exerciseDates = [];
   milestones.map((milestone) => {
-    let milestonesWithValuesForCharts = [];
-    milestone.data.map((milestoneDate) => {
-      if(milestone.type == 'Lecture' && milestoneDate.getTime()<=today.getTime()){
-        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 1});
+      if(milestone.type == 'Lecture' && milestone.data.getTime()<=today.getTime()){
+        lectureDates.push({x: milestone.data.getTime(), y: 1});
       }
-      if(milestone.type == 'Lecture' && milestoneDate.getTime()>today.getTime()){
-        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 1, fillColor:'#D3D3D3'});
+      if(milestone.type == 'Lecture' && milestone.data.getTime()>today.getTime()){
+        lectureDates.push({x: milestone.data.getTime(), y: 1, fillColor:'#D3D3D3'});
       }
-      if(milestone.type == 'Exam' && milestoneDate.getTime()>today.getTime()){
-        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 2, fillColor:'#D3D3D3'});
+      if(milestone.type == 'Exam' && milestone.data.getTime()>today.getTime()){
+        examDates.push({x: milestone.data.getTime(), y: 2, fillColor:'#D3D3D3'});
       }
-      if(milestone.type == 'Exam' && milestoneDate.getTime()<=today.getTime()){
-        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 2});
+      if(milestone.type == 'Exam' && milestone.data.getTime()<=today.getTime()){
+        examDates.push({x: milestone.data.getTime(), y: 2});
       }
-      if(milestone.type == 'Exercise' && milestoneDate.getTime()<=today.getTime()){
-        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 3});
+      if(milestone.type == 'Exercise' && milestone.data.getTime()<=today.getTime()){
+        exerciseDates.push({x: milestone.data.getTime(), y: 3});
       }
-      if(milestone.type == 'Exercise' && milestoneDate.getTime()>today.getTime()){
-        milestonesWithValuesForCharts.push({x: milestoneDate.getTime(), y: 3, fillColor:'#D3D3D3'});
+      if(milestone.type == 'Exercise' && milestone.data.getTime()>today.getTime()){
+        exerciseDates.push({x: milestone.data.getTime(), y: 3, fillColor:'#D3D3D3'});
       }
-    })
-    dataForChart.push({name: milestone.type, id: milestone.id, data: milestonesWithValuesForCharts});
   })
+  dataForChart.push({name: 'Lecture', data: lectureDates});
+  dataForChart.push({name: 'Exercise', data: exerciseDates});
+  dataForChart.push({name: 'Exam', data: examDates});
   // add a point for today to chart
  // dataForChart.push({name: "Today", id: -1, data: [{x: today.getTime(), y: 0, fillColor:'#000000' }]})
 
@@ -105,7 +106,7 @@ export default function ApexTimelineScatter(props){
       markers:{
         colors: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B'],
         shape: 'circle',
-        size: 10,
+        size: 8,
         strokeColor: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B'],
         strokeWidth: 3,
         strokeOpacity: 1,

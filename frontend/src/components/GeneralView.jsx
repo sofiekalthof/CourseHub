@@ -78,7 +78,7 @@ function GeneralView(props) {
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <AssignmentList tasks={props.selectedCourse.timeline.tasks} user={props.user}/>
+              <AssignmentList tasks={props.selectedCourse.timeline.tasks} user={props.user} userDataForCourse={props.userDataForCourse}/>
             </Card>
           </Grid>
         </Grid>
