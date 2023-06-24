@@ -11,7 +11,7 @@ export const courses= [
       }, {
         id: 1,
         type: 'Assignment',
-        data: new Date('2023-5-12')
+        data: new Date('2023-03-12')
     },{
         id: 2,
         type: 'Quiz',

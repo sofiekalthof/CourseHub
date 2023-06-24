@@ -56,7 +56,7 @@ export default function ApexTimelineScatter(props){
   dataForChart.push({name: 'Exercise', data: exerciseDates});
   dataForChart.push({name: 'Exam', data: examDates});
   // add a point for today to chart
- // dataForChart.push({name: "Today", id: -1, data: [{x: today.getTime(), y: 0, fillColor:'#000000' }]})
+ dataForChart.push({name: "Today", id: -1, data: [{x: today.getTime(), y: 0, fillColor:'#000000' }]})
 
 
     const state = {

@@ -4,10 +4,15 @@ import Typography from '@mui/material/Typography';
 import ApexTimeline from "./ApexTimeline";
 import ApexTimelineScatter from './ApexTimelineScatter';
 import Card from '@mui/material/Card';
-import { Grid, Button, Menu, MenuItem } from '@mui/material';
+import { Grid, Button, Menu, MenuItem, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, FormControl, InputLabel, Select } from '@mui/material';
 import AssignmentList from "./AssignmentList";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from 'react';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+
 
 function CreateNew({isOwner}){
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,8 +49,57 @@ function CreateNew({isOwner}){
 }
 
 function AddMileStone({isOwner}){
+  const [open, setOpen] = useState(false);
+  const [milestoneType, setMilestoneType] = useState('');
+  const [date, setDate] = useState(dayjs())
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClickCancel = () => {
+    setOpen(false);
+    setMilestoneType('');
+    setDate(dayjs());
+  };
+
+  const handleClickSave = () => {
+
+  }
+
+  const handleChange = (event) => {
+    setMilestoneType(event.target.value);
+  };
+  
   if(isOwner){
-    return <Button variant='outlined'>Add Milestone</Button>
+    return (
+      <>
+      <Button variant='outlined' onClick={handleClickOpen}>Add Milestone</Button>
+      <Dialog open={open}>
+        <DialogTitle>Add a milestone</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <InputLabel>Milestone Type</InputLabel>
+            <Select value={milestoneType} label='MileStone Type' onChange={handleChange}>
+              <MenuItem value={'Lecture'}>Lecture</MenuItem>
+              <MenuItem value={'Exercise'}>Exercise</MenuItem>
+              <MenuItem value={'Exam'}>Exam</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker value={date} onChange={(date) => setDate(date)}></DatePicker>
+          </LocalizationProvider>
+          </FormControl>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClickSave}>Save</Button>
+          <Button onClick={handleClickCancel}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+      </>
+    )
   }
 }
 
@@ -61,7 +115,7 @@ function GeneralView(props) {
             </Typography>
           </Grid>
           <Grid item xs={1.75}>
-            <AddMileStone isOwner={isOwner}></AddMileStone>
+            <AddMileStone isOwner={isOwner} ></AddMileStone>
           </Grid>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{justifyContent: 'center'}}> 

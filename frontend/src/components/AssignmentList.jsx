@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Tooltip} from "@mui/material";
 import CircleIcon from '@mui/icons-material/Circle';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import CheckIcon from '@mui/icons-material/Check';
@@ -11,13 +11,29 @@ function ShowTaskStatus({index, userData}) {
         return
     }
     if(userData[0].taskStatus[index].includes('due')){
-        return <AccessTimeFilledIcon sx={{fontSize: 15, color: 'orange'}}/>
+        return (
+        <>
+        <Tooltip title='Due'>
+            <AccessTimeFilledIcon sx={{fontSize: 15, color: 'orange'}}/>    
+        </Tooltip>
+        </>
+        )
     }
     if(userData[0].taskStatus[index].includes('done')){
-        return <CheckCircleIcon sx={{fontSize: 15, color: 'green'}}/>
+        return (
+        <>
+        <Tooltip title='Done'>
+            <CheckCircleIcon sx={{fontSize: 15, color: 'green'}}/>
+        </Tooltip>
+        </>)
     }
     if(userData[0].taskStatus[index].includes('missed')){
-        return <CancelIcon sx={{fontSize: 15, color: 'red'}}/>
+        return (
+            <>
+            <Tooltip title='Missed'>
+                <CancelIcon sx={{fontSize: 15, color: 'red'}}/>
+            </Tooltip>
+            </>)
     }
 }
 

@@ -23,7 +23,7 @@ function Analytics(props) {
       return (
           <>
           <Grid container sx={{justifyContent:'center'}} spacing={2}>
-            <Grid item xs={10.25}>
+            <Grid item xs={12}>
               <Typography>
                 Activity
               </Typography>
@@ -33,7 +33,7 @@ function Analytics(props) {
               <ShowActivity userDataForCourse={userDataForThisCourse} tasks={selectedCourse.timeline.tasks}/>
               </Card>
             </Grid> 
-            <Grid item xs={10.25}>
+            <Grid item xs={12}>
               <Typography>
                Leaderboard
               </Typography>
