@@ -59,6 +59,8 @@ export default function Login() {
         console.log(resJson);
         // route to homepage
         handleHome();
+      } else if (res.status === 400) {
+        alert(resJson.msg);
       } else {
         // some debug commands
         console.log("Form returned error from backend.");
@@ -66,7 +68,6 @@ export default function Login() {
         alert(resJson.msg);
       }
     } catch (err) {
-      alert(resJson.msg);
       console.log("Frontend error. Post request could not be sent. Check API!");
     }
   };

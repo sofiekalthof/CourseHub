@@ -23,7 +23,7 @@ app.use(express.json());
 
 // allow connect-mongodb-session library to save sessions under mySessions collection
 const mongoDBstore = new MongoDBstore({
-  uri: process.env.DATABASE_CONNECTION_STRING,
+  uri: process.env.MONGODB_URL,
   collection: 'mySessions',
 });
 
@@ -33,7 +33,7 @@ app.use(
     name: 'session-id', // name of the cookies (key field)
     store: mongoDBstore,
     cookie: {
-      maxAge: process.env.SESSION_MAX_LENGTH, 
+      maxAge: parseInt(process.env.SESSION_MAX_LENGTH), 
       sameSite: false,  // same-site and cross-site(diff. schemes, domain or sub-domain) requests
       secure: process.env.PROD || false, // need an HTTPS enabled browser
     },

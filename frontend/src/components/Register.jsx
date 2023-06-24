@@ -56,7 +56,7 @@ export default function Register() {
         console.log("Form done.");
         alert("User added");
       } else if (res.status === 400) {
-        alert(resJson.error);
+        alert(resJson.msg);
       } else {
         // some debug commands
         console.log("Form returned error from backend.");
