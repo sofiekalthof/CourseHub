@@ -1,5 +1,6 @@
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 const UserModel = require("./models/dbUsers.js");
 const CourseModel = require("./models/dbCourses.js");
@@ -27,7 +28,6 @@ app.listen(port, () => {
 app.route("/courses").get(async (req, res) => {
     let courses = [];
     try{
-      // full text search
       courses = await CourseModel.find({});
       res.status(200).json(courses);
     } catch(err) {
@@ -36,39 +36,59 @@ app.route("/courses").get(async (req, res) => {
 });
 
 // Get a specific user
-app.route("/:email").get(async (req, res) => {
-    const email = req.params.email;
+app.route("/login").post(async (req, res) => {
 
     try{
-      const result = await UserModel.findOne({ email: email });
+      // check if user exists
+      const user = await UserModel.findOne({ email: req.body.email });
 
-      if (!result) {
-        res.status(400).json({ error: "Searched user not found" });
+      if (!user) {
+        res.status(400).json({ msg: "User not found" });
         return;
       }
-      res.status(200).json(result);
+
+      // check if passwords match
+      const matchPassword = await bcrypt.compare(req.body.poassword, user.password);
+      if (matchPassword) {
+        return res.status(200).json({ msg: 'You have logged in successfully' });
+      } else {
+        return res.status(400).json({ msg: 'Invalid credential' });
+      }
     } catch(err) {
       res.status(500).send("Server error. Request could not be fulfilled.");
     }
 });
 
 // Create a new user
-app.route("/").post(async (req, res) => {
-    const doc = new UserModel(req.body);
+app.route("/register").post(async (req, res) => {
 
     try {
       // check if there is a user with the same email
-      const result = await UserModel.findOne({ email: doc.email });
+      const user = await UserModel.findOne({ email: req.body.email });
 
-
-      if (result) {
-        res.status(400).json({ error: "A user with that email already exists" });
+      if (user) {
+        res.status(400).json({ msg: "A user with that email already exists" });
         return;
       }
-      
-      await doc.save();
 
-      res.status(200).json({ message: "New User created" });
+      // create new user
+      const newUser = new UserModel(req.body);      
+
+      // hash the password
+      bcrypt.hash(req.body.password, 7, async (err, hash) => {
+        if (err) {
+          return res.status(400).json({ msg: 'Error while saving the password' });
+        }
+        // change the password to hash
+        newUser.password = hash
+
+        // save user to database
+        const addedUser = await doc.save();
+        
+        if (addedUser) {
+          res.status(200).json({ msg: "New user created" });
+        }
+      });
     } catch(err) {
       res.status(500).send("Server error. Request could not be fulfilled.");
     }
