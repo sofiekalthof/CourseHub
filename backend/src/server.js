@@ -24,9 +24,11 @@ app.use(express.json());
 // allow connect-mongodb-session library to save sessions under mySessions collection
 const mongoDBstore = new MongoDBstore({
   uri: process.env.MONGODB_URL,
-  collection: 'mySessions',
+  databaseName: process.env.DB_NAME,
+  collection: 'userSessions',
 });
 
+// Add express-session to all routes
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
@@ -37,7 +39,7 @@ app.use(
       sameSite: false,  // same-site and cross-site(diff. schemes, domain or sub-domain) requests
       secure: process.env.PROD || false, // need an HTTPS enabled browser
     },
-    resave: true,  // force session to be saved in session store, even if session was not modified
+    resave: true,  // force session to be saved in session store, even if it was not modified during a request
     saveUninitialized: false,  // dont save session if it was not modified (i.e. no login yet)
   })
 );
