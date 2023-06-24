@@ -48,7 +48,7 @@ app.route("/login").post(async (req, res) => {
       }
 
       // check if passwords match
-      const matchPassword = await bcrypt.compare(req.body.poassword, user.password);
+      const matchPassword = await bcrypt.compare(req.body.password, user.password);
       if (matchPassword) {
         return res.status(200).json({ msg: 'You have logged in successfully' });
       } else {
@@ -83,7 +83,7 @@ app.route("/register").post(async (req, res) => {
         newUser.password = hash
 
         // save user to database
-        const addedUser = await doc.save();
+        const addedUser = await newUser.save();
         
         if (addedUser) {
           res.status(200).json({ msg: "New user created" });
