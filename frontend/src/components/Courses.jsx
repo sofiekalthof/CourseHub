@@ -2,10 +2,10 @@ import { Card, CardContent, Grid, Typography, Paper, Box, TextField } from "@mui
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import CoursePage from "./CoursePage";
-import {courses} from '../data/courses'
+
 
 function Courses(props){
-    console.log(props)
+    const courses = props.courses;
     const userData = props.user;
     const navigate = useNavigate();
     const handleOnClick =(course) => {
