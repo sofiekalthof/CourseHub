@@ -4,7 +4,7 @@ const checkAuth = function (req, res, next) {
     console.log("session exists");
     next();
   } else {
-    return res.status(401).json("Unauthorized");
+    return res.status(401).json({ msg: "Unauthorized" });
   }
 };
 
