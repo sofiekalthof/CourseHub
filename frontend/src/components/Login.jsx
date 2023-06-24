@@ -34,8 +34,13 @@ export default function Login() {
 
     try {
       // send GET request to REST API with email
-      let res = await fetch(`${API_URL}/${email}`, {
-        method: "GET",
+      let res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        // all information being sent
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
         // header neccessary for correct sending of information
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -50,7 +55,7 @@ export default function Login() {
         setPassword("");
         // some debug commands
         console.log("Form done.");
-        alert("User is logged in.");
+        alert(resJson.msg);
         console.log(resJson);
         // route to homepage
         handleHome();
@@ -58,8 +63,10 @@ export default function Login() {
         // some debug commands
         console.log("Form returned error from backend.");
         console.log(resJson);
+        alert(resJson.msg);
       }
     } catch (err) {
+      alert(resJson.msg);
       console.log("Frontend error. Post request could not be sent. Check API!");
     }
   };
