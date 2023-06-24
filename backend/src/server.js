@@ -9,6 +9,7 @@ const CourseModel = require("./models/dbCourses.js");
 const TaskModel = require("./models/dbTasks.js");
 const CourseUserModel = require("./models/dbCourseUser.js");
 const checkAuth = require("./middleware/checkAuth.js");
+const isAuth = require("./middleware/isAuth.js");
 
 // Define port
 const port = 3600;
@@ -60,6 +61,9 @@ app.route("/courses").get(checkAuth, async (req, res) => {
     res.status(500).send("Server error. Request could not be fulfilled.");
   }
 });
+
+// Simple Auth routeGet all courses
+app.route("/isAuth").get(isAuth);
 
 // Get a specific user
 app.route("/login").post(async (req, res) => {
