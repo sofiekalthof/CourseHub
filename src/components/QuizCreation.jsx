@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -11,17 +11,28 @@ import {
   FormControlLabel,
   Box,
   Typography,
-} from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+} from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 function QuizCreation({ onQuizCreated }) {
   // State variables
   const [open, setOpen] = useState(false);
-  const [quizTitle, setQuizTitle] = useState('');
+  const [quizTitle, setQuizTitle] = useState("");
   const [questions, setQuestions] = useState([
-    { id: uuidv4(), text: '', answers: ['', '', '', ''], correctAnswerIndices: [], image: null },
+    {
+      id: uuidv4(),
+      text: "",
+      answers: ["", "", "", ""],
+      correctAnswerIndices: [],
+      image: null,
+    },
   ]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [deadline, setDeadline] = useState(null);
 
   // Function to open the dialog
   const handleOpen = () => {
@@ -31,11 +42,15 @@ function QuizCreation({ onQuizCreated }) {
   // Function to close the dialog
   const handleClose = () => {
     setOpen(false);
+    setError("");
   };
 
   // Function to handle quiz title change
   const handleQuizTitleChange = (event) => {
     setQuizTitle(event.target.value);
+  };
+  const handleDeadlineChange = (date) => {
+    setDeadline(date);
   };
 
   // Function to handle question text change
@@ -73,7 +88,9 @@ function QuizCreation({ onQuizCreated }) {
         if (event.target.checked) {
           updatedIndices.push(answerIndex);
         } else {
-          updatedIndices = updatedIndices.filter((index) => index !== answerIndex);
+          updatedIndices = updatedIndices.filter(
+            (index) => index !== answerIndex
+          );
         }
         return { ...question, correctAnswerIndices: updatedIndices };
       }
@@ -103,8 +120,8 @@ function QuizCreation({ onQuizCreated }) {
   const addQuestion = () => {
     const newQuestion = {
       id: uuidv4(),
-      text: '',
-      answers: ['', '', '', ''],
+      text: "",
+      answers: ["", "", "", ""],
       correctAnswerIndices: [],
       image: null,
     };
@@ -114,25 +131,31 @@ function QuizCreation({ onQuizCreated }) {
   // Function to remove a question
   const removeQuestion = (questionId) => {
     // Filter out the question with the specified ID
-    const updatedQuestions = questions.filter((question) => question.id !== questionId);
+    const updatedQuestions = questions.filter(
+      (question) => question.id !== questionId
+    );
     setQuestions(updatedQuestions);
   };
 
   // Function to handle quiz creation
   const handleCreateQuiz = () => {
     // Validate quiz data before creating
-    if (quizTitle.trim() === '') {
-      setError('Please enter a quiz title');
+    if (quizTitle.trim() === "") {
+      setError("Please enter a quiz title");
+      return;
+    }
+    if (deadline === null) {
+      setError("Please select a deadline");
       return;
     }
 
     for (const question of questions) {
-      if (question.text.trim() === '') {
-        setError('Please fill in all the question fields');
+      if (question.text.trim() === "") {
+        setError("Please fill in all the question fields");
         return;
       }
       if (question.correctAnswerIndices.length === 0) {
-        setError('Please select at least one correct answer for each question');
+        setError("Please select at least one correct answer for each question");
         return;
       }
     }
@@ -140,22 +163,33 @@ function QuizCreation({ onQuizCreated }) {
     // Create the quiz object
     const quiz = {
       title: quizTitle,
-      questions: questions.map(({ id, text, answers, correctAnswerIndices, image }) => ({
-        id,
-        text,
-        answers,
-        correctAnswerIndices,
-        image,
-      })),
+      questions: questions.map(
+        ({ id, text, answers, correctAnswerIndices, image, deadline }) => ({
+          id,
+          text,
+          answers,
+          correctAnswerIndices,
+          image,
+          deadline,
+        })
+      ),
     };
 
     // Pass the created quiz to the parent component
     onQuizCreated(quiz);
 
     // Reset form fields and error
-    setQuizTitle('');
-    setQuestions([{ id: uuidv4(), text: '', answers: ['', '', '', ''], correctAnswerIndices: [], image: null }]);
-    setError('');
+    setQuizTitle("");
+    setQuestions([
+      {
+        id: uuidv4(),
+        text: "",
+        answers: ["", "", "", ""],
+        correctAnswerIndices: [],
+        image: null,
+      },
+    ]);
+    setError("");
 
     // Close the dialog
     handleClose();
@@ -182,6 +216,18 @@ function QuizCreation({ onQuizCreated }) {
             fullWidth
             sx={{ mb: 2 }}
           />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoItem label="deadline" >
+              <DateTimePicker
+                value={deadline}
+                onChange={handleDeadlineChange}
+                disablePast
+                views={["year", "month", "day", "hours", "minutes"]}
+                 
+              />
+            </DemoItem>
+            
+          </LocalizationProvider>
           <Grid container spacing={2}>
             {questions.map((question) => (
               <Grid item xs={12} key={question.id}>
@@ -190,14 +236,17 @@ function QuizCreation({ onQuizCreated }) {
                     border: 1,
                     p: 2,
                     mb: 2,
-                    maxHeight: '300px',
-                    overflow: 'auto',
+                    mt:2,
+                    maxHeight: "300px",
+                    overflow: "auto",
                   }}
                 >
                   <TextField
                     label="Question"
                     value={question.text}
-                    onChange={(event) => handleQuestionTextChange(event.target.value, question.id)}
+                    onChange={(event) =>
+                      handleQuestionTextChange(event.target.value, question.id)
+                    }
                     fullWidth
                     multiline
                     rows={4}
@@ -211,7 +260,11 @@ function QuizCreation({ onQuizCreated }) {
                           label={`Answer ${answerIndex + 1}`}
                           value={answer}
                           onChange={(event) =>
-                            handleAnswerTextChange(event, question.id, answerIndex)
+                            handleAnswerTextChange(
+                              event,
+                              question.id,
+                              answerIndex
+                            )
                           }
                           fullWidth
                           sx={{ mb: 1 }}
@@ -219,9 +272,15 @@ function QuizCreation({ onQuizCreated }) {
                         <FormControlLabel
                           control={
                             <Checkbox
-                              checked={question.correctAnswerIndices.includes(answerIndex)}
+                              checked={question.correctAnswerIndices.includes(
+                                answerIndex
+                              )}
                               onChange={(event) =>
-                                handleCorrectAnswerChange(event, question.id, answerIndex)
+                                handleCorrectAnswerChange(
+                                  event,
+                                  question.id,
+                                  answerIndex
+                                )
                               }
                             />
                           }
@@ -234,7 +293,9 @@ function QuizCreation({ onQuizCreated }) {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(event) => handleQuestionFileChange(event, question.id)}
+                    onChange={(event) =>
+                      handleQuestionFileChange(event, question.id)
+                    }
                     sx={{ mt: 2 }}
                   />
 

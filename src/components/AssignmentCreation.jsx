@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -12,21 +12,21 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-
-
-import  { LocalizationProvider, DatePicker }  from '@mui/x-date-pickers';
-import  {AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 function AssignmentCreation({ onAssignmentCreated }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
   const [deadline, setDeadline] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [error, setError] = useState("");
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -38,8 +38,31 @@ function AssignmentCreation({ onAssignmentCreated }) {
 
   const handleFileChange = (event) => {
     const uploadedFiles = Array.from(event.target.files);
-    setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+  
+    // Check the file conditions before adding to the state
+    const validFiles = uploadedFiles.filter((file) => {
+      // Check the file type
+      const fileType = file.type;
+      const allowedFileTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpeg", "image/png"];
+      if (!allowedFileTypes.includes(fileType)) {
+        console.log(`Invalid file type: ${fileType}`);
+        return false;
+      }
+  
+      // Check the file size (in bytes)
+      const fileSize = file.size;
+      const maxFileSize = 10 * 1024 * 1024; // 10MB
+      if (fileSize > maxFileSize) {
+        console.log(`File size exceeds the limit: ${fileSize}`);
+        return false;
+      }
+  
+      return true; // File meets the conditions
+    });
+  
+    setFiles((prevFiles) => [...prevFiles, ...validFiles]);
   };
+  
 
   const handleDeleteFile = (file) => {
     setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
@@ -50,6 +73,22 @@ function AssignmentCreation({ onAssignmentCreated }) {
   };
 
   const handleSubmit = () => {
+    if (title.trim() === "") {
+      setError("Please enter a title");
+      return;
+    }
+
+    if (description.trim() === "") {
+      setError("Please enter a description");
+      return;
+    }
+
+    if (deadline === null) {
+      setError("Please select a deadline");
+      return;
+    }
+    
+
     const assignment = {
       title,
       description,
@@ -57,11 +96,12 @@ function AssignmentCreation({ onAssignmentCreated }) {
       deadline,
     };
     onAssignmentCreated(assignment);
-    setTitle('');
-    setDescription('');
+    setTitle("");
+    setDescription("");
     setFiles([]);
     setDeadline(null);
     setIsDialogOpen(false);
+    setError(""); // Clear the error after successful submission
   };
 
   const handleDialogOpen = () => {
@@ -70,6 +110,7 @@ function AssignmentCreation({ onAssignmentCreated }) {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
+    setError(""); // Clear the error when closing the dialog
   };
 
   return (
@@ -102,7 +143,7 @@ function AssignmentCreation({ onAssignmentCreated }) {
               type="file"
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               onChange={handleFileChange}
-              style={{ marginBottom: '16px' }}
+              style={{ marginBottom: "16px" }}
               multiple
             />
             {files.length > 0 && (
@@ -117,11 +158,21 @@ function AssignmentCreation({ onAssignmentCreated }) {
                 ))}
               </List>
             )}
-           <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
-        <DatePicker label="Basic date picker" />
-      </DemoContainer>
-    </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoItem label="DateTimePicker">
+                <DateTimePicker
+                  value={deadline}
+                  onChange={handleDeadlineChange}
+                  disablePast
+                  views={["year", "month", "day", "hours", "minutes"]}
+                />
+              </DemoItem>
+            </LocalizationProvider>
+            {error && (
+              <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                {error}
+              </Typography>
+            )}
           </Box>
         </DialogContent>
         <DialogActions>

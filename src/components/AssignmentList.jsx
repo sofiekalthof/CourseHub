@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Button } from '@mui/material';
 
-
-
-function AssignmentList({ assignments, onAssignmentSelected, onAssignmentDelete }) {
+function AssignmentList({ assignments, onAssignmentSelected, onAssignmentDownload }) {
   return (
     <div>
       <h2>Assignment List</h2>
@@ -12,22 +10,22 @@ function AssignmentList({ assignments, onAssignmentSelected, onAssignmentDelete 
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Assignment Title</TableCell> 
-                <TableCell align="center">Actions</TableCell> 
+                <TableCell>Assignment Title</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {assignments.map((assignment) => (
                 <TableRow key={assignment.id}>
                   <TableCell component="th" scope="row">
-                    {assignment.title} 
+                    {assignment.title}
                   </TableCell>
                   <TableCell align="center">
-                    <Button variant="contained" onClick={() => onAssignmentSelected(assignment)}>
-                      Take Assignment 
+                    <Button   variant="contained" onClick={() => onAssignmentSelected(assignment)}>
+                      Take Assignment
                     </Button>
-                    <Button variant="contained" color="secondary" onClick={() => onAssignmentDelete(assignment.id)}>
-                      Delete 
+                    <Button sx={{ ml: 2 }} variant="contained" color="secondary"  onClick={() => onAssignmentDownload(assignment)}>
+                      Download Files
                     </Button>
                   </TableCell>
                 </TableRow>

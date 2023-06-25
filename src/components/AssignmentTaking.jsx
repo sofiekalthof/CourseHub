@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Typography,
   Box,
@@ -12,14 +12,20 @@ import {
   ListItemText,
   IconButton,
   ListItemIcon,
-} from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
-import DeleteIcon from '@mui/icons-material/Delete';
+  Divider,
+} from "@mui/material";
+import DescriptionIcon from "@mui/icons-material/Description";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import GetAppIcon from "@mui/icons-material/GetApp";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(localizedFormat);
 
 function AssignmentTaking({ assignment, onBackToAssignmentList }) {
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [showSummary, setShowSummary] = useState(false);
+  const [answerFile, setAnswerFile] = useState(null);
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -30,12 +36,16 @@ function AssignmentTaking({ assignment, onBackToAssignmentList }) {
   };
 
   const handleFinishAssignment = () => {
-    // Do something with the description and file, e.g., upload the file to a server
     setShowSummary(true);
   };
 
   const handleBackToAssignmentList = () => {
     onBackToAssignmentList();
+  };
+  
+  const handleAnswerFileChange = (event) => {
+    const uploadedFile = event.target.files[0];
+    setAnswerFile(uploadedFile);
   };
 
   const renderAssignmentSummary = () => {
@@ -73,16 +83,16 @@ function AssignmentTaking({ assignment, onBackToAssignmentList }) {
         <Fade in={true}>
           <Box
             sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '80%',
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%",
               maxWidth: 600,
-              bgcolor: 'background.paper',
+              bgcolor: "background.paper",
               boxShadow: 24,
               p: 2,
-              outline: 'none',
+              outline: "none",
             }}
           >
             {showSummary ? (
@@ -92,48 +102,94 @@ function AssignmentTaking({ assignment, onBackToAssignmentList }) {
                 <Typography variant="h5" gutterBottom>
                   Assignment Details
                 </Typography>
+                <Divider sx={{ my: 2 }} /> {/* Line separating sections */}
                 <Typography variant="body1" gutterBottom>
-                  Deadline: {assignment.deadline}
+                  Title: {assignment.title}
                 </Typography>
-                {assignment.file && (
+                <Divider sx={{ my: 2 }} /> {/* Line separating sections */}
+                <Typography variant="body1" gutterBottom>
+                  Deadline: {dayjs(assignment.deadline).format("LLL")}
+                </Typography>
+                
+                <Divider sx={{ my: 2 }} /> {/* Line separating sections */}
+
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="body1" gutterBottom>
+                    Description:
+                  </Typography>
+                  
+                  <Typography variant="body1" gutterBottom>
+                    {assignment.description}
+                  </Typography>
+                  <Divider sx={{ my: 2 }} /> {/* Line separating sections */}
+                </Box>
+
+                {assignment.files && (
                   <Box mb={2}>
                     <Typography variant="body1" gutterBottom>
-                      Uploaded File:
+                      Uploaded Files:
                     </Typography>
                     <List>
-                      <ListItem>
-                        <ListItemIcon>
-                          <DescriptionIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={assignment.file.name} secondary={assignment.file.type} />
-                        <IconButton>
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItem>
+                      {assignment.files.map((file, index) => (
+                        <ListItem key={index}>
+                          <ListItemIcon>
+                            <DescriptionIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={file.name}
+                            secondary={file.type}
+                          />
+                          <IconButton href={file.url} download>
+                            <GetAppIcon />
+                          </IconButton>
+                        </ListItem>
+                      ))}
                     </List>
                   </Box>
                 )}
-                <Typography variant="body1" gutterBottom>
-                  Description:
-                </Typography>
-                <TextField
-                  value={description}
-                  onChange={handleDescriptionChange}
-                  multiline
-                  rows={4}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                />
+
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="body1" gutterBottom>
+                    Answer Description:
+                  </Typography>
+                  <TextField
+                    value={description}
+                    onChange={handleDescriptionChange}
+                    multiline
+                    rows={4}
+                    fullWidth
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Box>
+
                 <input
                   type="file"
-                  accept="*"
-                  onChange={handleFileChange}
-                  style={{ marginBottom: '10px' }}
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                  onChange={handleAnswerFileChange}
+                  style={{ display: "none" }}
+                  id="upload-answer"
                 />
-                <Button variant="contained" onClick={handleFinishAssignment}>
-                  Finish Assignment
-                </Button>
+                <label htmlFor="upload-answer">
+                  <Button
+                    variant="contained"
+                    component="span"
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload Answer
+                  </Button>
+                </label>
+                {answerFile && (
+                  <Typography variant="body1" gutterBottom>
+                    Selected Answer File: {answerFile.name}
+                  </Typography>
+                )}
+
+                <Box mt={2}>
+                  <Button variant="contained" onClick={handleFinishAssignment}>
+                    Finish Assignment
+                  </Button>
+                </Box>
               </Box>
             )}
           </Box>
