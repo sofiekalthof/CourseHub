@@ -38,9 +38,16 @@ const themeDarkGreen = createTheme({
 export const UserContext = createContext({});
 
 export default function App() {
+  // flag for debugging or developing w/o user authentification
+  const debug = false;
   const [userSession, setUserSession] = useState(true);
 
   const fetchUserAuth = async () => {
+    if (debug) {
+      // test user id is set to session
+      setUserSession({ _id: "6496f1ae73f6e014598d9630" });
+      return;
+    }
     try {
       // check if user is authenticated
       const res = await fetch(`${API_URL}/isAuth`);
@@ -49,11 +56,14 @@ export default function App() {
       let resJson = await res.json();
 
       // 401 -> no session found, hence a redirect
-      if (res.status === 401) {
+      if (
+        res.status === 401 &&
+        window.location.pathname !== "/" &&
+        window.location.pathname !== "/registerlogin"
+      ) {
         // debug messages
         console.log(`${resJson.msg}. Redirecting to HomePage`);
         alert(`${resJson.msg}. Redirecting to HomePage`);
-        return;
       }
       // set state with user/cookie data
       setUserSession(resJson);
@@ -71,7 +81,7 @@ export default function App() {
   return (
     <>
       {/* using user context */}
-      <UserContext.Provider value={userSession}>
+      <UserContext.Provider value={[userSession, setUserSession]}>
         {/* using the theme defined above */}
         <ThemeProvider theme={themeDarkGreen}>
           <CssBaseline />
