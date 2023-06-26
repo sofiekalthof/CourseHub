@@ -43,6 +43,7 @@ app.use(
     },
     resave: true, // force session to be saved in session store, even if it was not modified during a request
     saveUninitialized: false, // dont save session if it was not modified (i.e. no login yet)
+    unset: "destroy", // delete cookie from db when it is null(completes task in a few minutes)
   })
 );
 
@@ -57,6 +58,21 @@ app.route("/courses").get(checkAuth, async (req, res) => {
   try {
     courses = await CourseModel.find({});
     res.status(200).json(courses);
+  } catch (err) {
+    res.status(500).send("Server error. Request could not be fulfilled.");
+  }
+});
+
+// Simple route to destory session
+app.route("/logout").get(async (req, res) => {
+  try {
+    // destroy session all together
+    await req.session.destroy();
+
+    // delete session from db
+    req.session = null;
+
+    res.status(200).json({ msg: "Logged out." });
   } catch (err) {
     res.status(500).send("Server error. Request could not be fulfilled.");
   }
