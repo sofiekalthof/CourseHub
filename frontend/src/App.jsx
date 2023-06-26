@@ -39,7 +39,7 @@ export const UserContext = createContext({});
 
 export default function App() {
   // flag for debugging or developing w/o user authentification
-  const debug = false;
+  const debug = true;
   const [userSession, setUserSession] = useState(true);
 
   const fetchUserAuth = async () => {
