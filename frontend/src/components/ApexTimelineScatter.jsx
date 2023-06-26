@@ -8,11 +8,13 @@ export default function ApexTimelineScatter(props){
   const milestones = props.milestones;
 
   // Convert dates from database into values for the chart
+  // First for all tasks
   const today = new Date();
   let dataForChart = [];
   let assignmentDates = [];
   let quizDates = [];
   tasks.map((task) => {
+    // give marker grey color if date is in future
     if(task.type == 'Quiz' && task.data.getTime()>today.getTime()){
       quizDates.push({x: task.data.getTime(), y: -1, fillColor:'#D3D3D3'});
     }
@@ -29,6 +31,7 @@ export default function ApexTimelineScatter(props){
   dataForChart.push({name: 'Assignment', data: assignmentDates});
   dataForChart.push({name: 'Quiz', data: quizDates})
 
+  // Second for all milestones
   let lectureDates = [];
   let examDates = [];
   let exerciseDates = [];
@@ -52,6 +55,7 @@ export default function ApexTimelineScatter(props){
         exerciseDates.push({x: milestone.data.getTime(), y: 3, fillColor:'#D3D3D3'});
       }
   })
+  // push all conveted data to dataForChart Array
   dataForChart.push({name: 'Lecture', data: lectureDates});
   dataForChart.push({name: 'Exercise', data: exerciseDates});
   dataForChart.push({name: 'Exam', data: examDates});

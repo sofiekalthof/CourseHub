@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { courses } from '../data/courses';
 
 function HomePage(){
+    // Dummy user that is logged in
     const user = {
         id: 0,
         username: "Test",
@@ -18,28 +19,33 @@ function HomePage(){
     }
 
     const [open, setOpen] = useState(false);
-
     const [courseName, setCourseName] = useState("");
     const [courseDescription, setCourseDescription] = useState("");
 
+    // Function for setting the course title
     const handleNewCourse = (e) => {
         setCourseName(e.target.value);
     }
 
+    // Function for setting the course description
     const handleCourseDescription = (e) => {
         setCourseDescription(e.target.value);
     }
 
+    //Function for opening the Dialog
     const handleClickOpen = () => {
         setOpen(true);
     }
 
+    //Function for canceling te creation of a new course
     const handleClickCancel = () => {
         setOpen(false);
         setSearchInput('');
         setCourseDescription('');
       };
     
+      // Function for saving a new course
+      //TODO: connection to Backend
       const handleClickSave = () => {
         courses.push({id:9, name: courseName, description: courseDescription});
         setOpen(false);
@@ -48,11 +54,13 @@ function HomePage(){
     return(
         <>
         <Grid container spacing={2} sx={{justifyContent:'center'}}>
+            {/* Grid for the NavigationBar */}
             <Grid item xs={12}> 
                 <Navbar/>
             </Grid>
             <Grid item xs={10}>
                 <Grid container>
+                    {/* Grid for showing the title of the page */}
                     <Grid item xs={10.7}>
                         <Typography>
                             All Courses
@@ -60,6 +68,7 @@ function HomePage(){
                     </Grid>
                     <Grid item xs={1.3}>
                         <Button variant='contained' onClick={handleClickOpen}>Create New</Button>
+                        {/* Dialog for creating a new course */}
                         <Dialog open={open}>
                             <DialogContent>
                                 <DialogContentText>Create a new course</DialogContentText>
@@ -74,6 +83,7 @@ function HomePage(){
                     </Grid>
                 </Grid>
             </Grid>
+            {/* Grid for showing all Course Cards and Searchbar*/}
             <Grid item xs={10}>
                 <Courses user={user} courses={courses}></Courses>
             </Grid>

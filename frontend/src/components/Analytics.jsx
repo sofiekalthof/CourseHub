@@ -4,12 +4,12 @@ import { useState } from 'react';
 import Leaderboard from "./Leaderboard";
 import Activity from "./Activity";
 
+// Show Activity Graph when user takes the course and a warning message when user not takes course
 function ShowActivity({userDataForCourse, tasks}){
-    console.log(userDataForCourse);
-    console.log(tasks)
     if(userDataForCourse.length == 0){
-        return <Typography>You have to take the course to see your activity</Typography>
+        return <Typography>You have to take the course and submit assignments/quizzes to see your activity</Typography>
     } 
+    // Show Activity graph is user has already data in this course with all tasks of the selected course
     if(userDataForCourse.length != 0) {
         return <Activity userDataForCourse={userDataForCourse} tasks={tasks}></Activity>
     }
@@ -17,8 +17,14 @@ function ShowActivity({userDataForCourse, tasks}){
 
 
 function Analytics(props) {
+    // Get the data for logged in user for this course
     const userDataForThisCourse = props.userDataForCourse;
+
+    // Get selected course
     const selectedCourse = props.selectedCourse;
+
+    // Get the data for all users of this course
+    const dataOfAllUsersForThisCourse = props.dataOfAllUsersForThisCourse;
   
       return (
           <>
@@ -30,7 +36,7 @@ function Analytics(props) {
             </Grid>
             <Grid item xs={12}>
               <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <ShowActivity userDataForCourse={userDataForThisCourse} tasks={selectedCourse.timeline.tasks}/>
+                <ShowActivity userDataForCourse={userDataForThisCourse} tasks={selectedCourse.timeline.tasks}/>
               </Card>
             </Grid> 
             <Grid item xs={12}>
@@ -38,9 +44,10 @@ function Analytics(props) {
                Leaderboard
               </Typography>
             </Grid>
+            {/* Show leaderboard of the course */}
             <Grid item xs={12}>
               <Card variant="outlined" sx={{justifyContent: 'center'}}> 
-              <Leaderboard dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse} tasks={props.selectedCourse.tasks}/>
+                <Leaderboard dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse} tasks={selectedCourse.tasks}/>
               </Card>
             </Grid>
           </Grid>

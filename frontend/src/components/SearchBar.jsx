@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { courses } from "../data/courses";
 
 
-function SearchBar(){
+function SearchBar(props){
     const [searchInput, setSearchInput] = useState("");
     const handleChange = (e) => {
         setSearchInput(e.target.value);
@@ -11,7 +11,7 @@ function SearchBar(){
     }
 
     if(searchInput.length > 0){
-        courses.filter((course) => {
+        props.courses.filter((course) => {
             return course.name.match(searchInput);
         })
     }
