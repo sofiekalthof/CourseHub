@@ -6,6 +6,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";
@@ -19,6 +21,9 @@ export default function Login() {
   const handleHome = () => {
     navigate("/home");
   };
+
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
 
   // function to handle submitting the form
   const handleSubmit = async (event) => {
@@ -54,9 +59,13 @@ export default function Login() {
         setEmail("");
         setPassword("");
         // some debug commands
+        console.log(resJson);
+        console.log(userSession);
+        // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
+        await setUserSession(resJson.userSession);
+        console.log(userSession);
         console.log("Form done.");
         alert(resJson.msg);
-        console.log(resJson);
         // route to homepage
         handleHome();
       } else if (res.status === 400) {
