@@ -1,44 +1,9 @@
 import {TextField, Grid} from "@mui/material";
 import { useState } from 'react';
+import { courses } from "../data/courses";
 
 
-function SearchBar(){
-
-    const courses= [
-        {
-            "id": 0,
-            "name": "Advanced Web Technologies",
-            "description": "Test Description"
-        },
-        {
-            "id": 1,
-            "name": "Compilerbau",
-            "description": "Test Description"
-        },
-        {
-            "id": 2,
-            "name": "IDEA Lab",
-            "description": "Test Description"
-        },
-        {
-            "id": 3,
-            "name": " Bioinformatics",
-            "description": "Test Description"
-        },
-        {
-            "id": 4,
-            "name": "Kommunikationspsychologie",
-            "description": "Test Description"
-        },
-        {
-            "id": 5,
-            "name": "Digital Games Research",
-            "description": "Test Description"
-        }
-    ];
-
-
-
+function SearchBar(props){
     const [searchInput, setSearchInput] = useState("");
     const handleChange = (e) => {
         setSearchInput(e.target.value);
@@ -46,7 +11,7 @@ function SearchBar(){
     }
 
     if(searchInput.length > 0){
-        courses.filter((course) => {
+        props.courses.filter((course) => {
             return course.name.match(searchInput);
         })
     }
