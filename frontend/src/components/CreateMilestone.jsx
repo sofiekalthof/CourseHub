@@ -21,6 +21,7 @@ import {
   Checkbox,
   Typography,
   Card,
+  FormLabel
 } from "@mui/material";
 import AssignmentList from "./AssignmentList";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -69,15 +70,17 @@ function CreateMileStone({ isOwner }) {
           Add Milestone
         </Button>
         {/* Dialog for adding a new Milestone */}
-        <Dialog open={open}>
+        <Dialog open={open} fullWidth>
           <DialogTitle>Add a milestone</DialogTitle>
           <DialogContent>
+            <Grid container spacing={3}>
             {/* Dropdown Menu for selecting the Milestone Type */}
+            <Grid item xs={12}>
             <FormControl fullWidth>
               <InputLabel>Milestone Type</InputLabel>
               <Select
                 value={milestoneType}
-                label="MileStone Type"
+                label="Milestone Type"
                 onChange={handleChange}
               >
                 <MenuItem value={"Lecture"}>Lecture</MenuItem>
@@ -85,15 +88,20 @@ function CreateMileStone({ isOwner }) {
                 <MenuItem value={"Exam"}>Exam</MenuItem>
               </Select>
             </FormControl>
+            </Grid>
             {/* DatePicker for Selecting Milestone Date */}
+            <Grid item xs={12}>
             <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   value={date}
+                  label='Milestone Date'
                   onChange={(date) => setDate(date)}
                 ></DatePicker>
               </LocalizationProvider>
             </FormControl>
+            </Grid>
+            </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClickSave}>Save</Button>

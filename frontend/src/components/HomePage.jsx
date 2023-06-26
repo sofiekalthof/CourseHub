@@ -85,7 +85,9 @@ function HomePage() {
               {/* Dialog for creating a new course */}
               <Dialog open={open}>
                 <DialogContent>
+                    <Grid container spacing={2}>
                   <DialogContentText>Create a new course</DialogContentText>
+                  <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Course name"
@@ -94,6 +96,8 @@ function HomePage() {
                     onChange={handleNewCourse}
                     value={courseName}
                   ></TextField>
+                  </Grid>
+                  <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Course description"
@@ -102,6 +106,8 @@ function HomePage() {
                     onChange={handleCourseDescription}
                     value={courseDescription}
                   ></TextField>
+                  </Grid>
+                  </Grid>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClickSave}>Save</Button>
