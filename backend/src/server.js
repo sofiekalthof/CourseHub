@@ -150,8 +150,76 @@ app.route("/courses/:id/createmilestone").post(checkAuth, async (req, res) => {
   }
 });
 
+// // Take course
+// app.route("/courses/:id/takecourse").post(checkAuth, async (req, res) => {
+//   // IMPROVEMENT: user data could be received from req.session.user directly (to check)
+//   // IMPROVEMENT: would be better if we send timeline id directly
+//   let currTaskStats = [];
+//   let currMilestioneStats = [];
+//   try {
+//     // find the course user is trying to subscribe to
+//     const course = await CourseModel.find({ _id: req.params.id });
+
+//     // extract timeline id of the course
+//     const courseTimelineId = course[0].timeline;
+
+//     // find timeline of the course
+//     const timeline = await TimelineModel.find({ _id: courseTimelineId });
+
+//     // create new array of tasks for user based-on timeline's array of tasks
+//     timeline.tasks.forEach((task) => {
+//       currTaskStats = [
+//         ...currTaskStats,
+//         {
+//           originalTaskId: task._id,
+//           userTaskSatus: task.status,
+//           userTaskSatus: 0,
+//         },
+//       ];
+//     });
+//     console.log(currTaskStats);
+
+//     // create new array of tasks for user based-on timeline's array of tasks
+//     timeline.milestones.forEach((milestone) => {
+//       currMilestioneStats = [
+//         ...currMilestioneStats,
+//         {
+//           originalTaskId: milestone._id,
+//           userTaskSatus: milestone.status,
+//         },
+//       ];
+//     });
+//     console.log(currMilestioneStats);
+
+//     // create user timeline based on existing timeline
+//     const newTimelineUser = TimelineUserModel({
+//       origin: courseTimelineId,
+//       userTasksStats: currTaskStats,
+//       userMilestonesStatus: currMilestioneStats,
+//     });
+//     console.log(newTimelineUser);
+
+//     // save new user timeline
+//     await newTimelineUser.save();
+
+//     // create new subscriber-course-usertimeline relation
+//     const newSubscriberAndCourse = CourseUserModel({
+//       subscriber: req.body._id,
+//       course: req.params.id,
+//       timeline: newTimelineUser._id,
+//     });
+//     console.log(newSubscriberAndCourse);
+
+//     // save new subscriber-course-usertimeline relation
+//     await newSubscriberAndCourse.save();
+
+//     res.status(200).json({ msg: "User subscribed to the course" });
+//   } catch (err) {
+//     res.status(500).send("Server error. Request could not be fulfilled.");
+//   }
+// });
 // Take course
-app.route("/courses/:id/takecourse").post(checkAuth, async (req, res) => {
+app.route("/courses/:id/takecourse").post(async (req, res) => {
   // IMPROVEMENT: user data could be received from req.session.user directly (to check)
   // IMPROVEMENT: would be better if we send timeline id directly
   let currTaskStats = [];
@@ -166,8 +234,14 @@ app.route("/courses/:id/takecourse").post(checkAuth, async (req, res) => {
     // find timeline of the course
     const timeline = await TimelineModel.find({ _id: courseTimelineId });
 
+    // extract task ids of the timeline
+    const timelineTaskIds = timeline[0].tasks;
+
+    // find timeline of the course
+    const tasks = await TaskModel.find({ _id: timelineTaskIds });
+
     // create new array of tasks for user based-on timeline's array of tasks
-    timeline.tasks.forEach((task) => {
+    tasks.forEach((task) => {
       currTaskStats = [
         ...currTaskStats,
         {
@@ -189,7 +263,7 @@ app.route("/courses/:id/takecourse").post(checkAuth, async (req, res) => {
         },
       ];
     });
-    console.log(currMilestioneStats);
+    // console.log(currMilestioneStats);
 
     // create user timeline based on existing timeline
     const newTimelineUser = TimelineUserModel({
