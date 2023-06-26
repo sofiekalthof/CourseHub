@@ -7,47 +7,47 @@ collectionName = process.env.DB_COLLECTION_TASKS;
 // create mongoose schema
 const TaskSchema = new mongoose.Schema({
   type: {
-    type: String, 
-    enum: ['Quiz', 'Assignment'], 
-    default: 'Quizz',
-    required: true
-  },
-  desc: {
     type: String,
-    required: true
+    enum: ["Quiz", "Assignment"],
+    default: "Quizz",
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
   },
   data: {
     type: Date,
-    required: true
+    required: true,
   },
   status: {
-    type: String, 
-    enum: ['due', 'missed', 'done'], 
-    default: 'due'
+    type: String,
+    enum: ["due", "missed", "done"],
+    default: "due",
   },
   questions: {
-    type: [String]
+    type: [String],
   },
   answers: {
-    type: [String]
+    type: [[String]],
   },
   // array of correct answers for each question
   correctAnswers: {
-    type: [[Number]]
+    type: [[Number]],
   },
-  // for any images 
+  // for any images
   files: {
-    type: File
+    type: File,
   },
   // belonging timeline
   timeline: {
     type: mongoose.Types.ObjectId,
-    ref: "TimelineModel"
-  }
+    ref: "TimelineModel",
+  },
 });
 
 // define task
-const TaskModel = mongoose.model(collectionName, schema=TaskSchema);
+const TaskModel = mongoose.model(collectionName, (schema = TaskSchema));
 
 // export model
 module.exports = TaskModel;

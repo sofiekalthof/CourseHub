@@ -1,4 +1,6 @@
 const mongoose = require("../dbConnection.js");
+const userTaskSatusSchema = require("../schemas/dbUserTaskStatus.js");
+const userMilestoneSatusSchema = require("../schemas/dbUserMilestoneStatus.js");
 
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_TIMELINEUSERS;
@@ -7,34 +9,27 @@ const collectionName = process.env.DB_COLLECTION_TIMELINEUSERS;
 const TimelineUserSchema = new mongoose.Schema({
   origin: {
     type: mongoose.Types.ObjectId,
-    ref: "TimelineModel"
+    ref: "TimelineModel",
   },
   // tasks' status for a user
-  usertaskstatus: [
+  userTasksStats: [
     {
-      type: String, 
-      enum: ['due', 'missed', 'done'], 
-      default: 'due'
-    }
-  ],
-  // tasks' scores for a user
-  usertasksscores: [
-    {
-      type: [Number]
-    }
+      type: userTaskSatusSchema,
+    },
   ],
   // milestones' status for a user
-  usermilestonesstatus: [
+  userMilestonesStatus: [
     {
-      type: String, 
-      enum: ['due', 'missed', 'done'], 
-      default: 'due'
-    }
-  ]
+      type: userMilestoneSatusSchema,
+    },
+  ],
 });
 
 // create model from schema
-let TimelineUserModel = mongoose.model(collectionName, schema=TimelineUserSchema);
+let TimelineUserModel = mongoose.model(
+  collectionName,
+  (schema = TimelineUserSchema)
+);
 
 // export model
 module.exports = TimelineUserModel;
