@@ -1,6 +1,5 @@
 import Courses from "./Courses";
 import Navbar from "./Navbar";
-import SearchBar from "./SearchBar";
 import {
   TextField,
   Card,
@@ -21,9 +20,65 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../App";
+import { useEffect } from "react";
 import { courses } from "../data/courses";
 
+async function getAllCourses() {
+  // make API call to get all courses
+  try {
+    // send get request to REST API
+    let res = await fetch(`${import.meta.env.VITE_API_URL}/courses`, {
+      method: "GET",
+      // header neccessary for correct sending of information
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      credentials: "include",
+    });
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      return resJson;
+    } else if (res.status === 401) {
+      alert(resJson.msg);
+    } else {
+      // some debug commands
+      alert(resJson.msg);
+    }
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
 function HomePage() {
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
+
+  // setting the initial loading state to false
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [courses, setCourses] = useState();
+
+  // useEffect first time it is rendering
+  useEffect(() => {
+    // get all courses
+    getAllCourses()
+      .then((res) => {
+        // use promise to set courses
+        setCourses(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(true);
+        setData();
+      });
+  }, []);
+
   // Dummy user that is logged in
   const user = {
     id: 0,
@@ -46,12 +101,12 @@ function HomePage() {
     setCourseDescription(e.target.value);
   };
 
-  //Function for opening the Dialog
+  // Function for opening the Dialog
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  //Function for canceling te creation of a new course
+  // Function for canceling te creation of a new course
   const handleClickCancel = () => {
     setOpen(false);
     setCourseName("");
@@ -119,7 +174,13 @@ function HomePage() {
         </Grid>
         {/* Grid for showing all Course Cards and Searchbar*/}
         <Grid item xs={10}>
-          <Courses user={user} courses={courses}></Courses>
+          {loading && <></>}
+          {error && <></>}
+          {courses && (
+            <>
+              <Courses user={user} courses={courses}></Courses>
+            </>
+          )}
         </Grid>
       </Grid>
     </>

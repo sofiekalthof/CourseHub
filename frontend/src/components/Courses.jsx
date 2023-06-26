@@ -13,6 +13,7 @@ import CoursePage from "./CoursePage";
 
 function Courses(props) {
   const courses = props.courses;
+  console.log("courses in courses.jsx:", courses);
   const userData = props.user;
 
   // Navigate to the course page of selected course
@@ -31,7 +32,7 @@ function Courses(props) {
   };
 
   // Function for filtering the courses
-  const filteredData = courses.filter((el) => {
+  const filteredData = Object.values(courses).filter((el) => {
     //if no input the return the original
     if (searchInput === "") {
       return el;
@@ -41,6 +42,8 @@ function Courses(props) {
       return el.name.includes(searchInput);
     }
   });
+
+  console.log(filteredData);
 
   return (
     <>
@@ -64,7 +67,7 @@ function Courses(props) {
         </Grid>
         {/* Show one card for each course */}
         {filteredData.map((course) => (
-          <Grid item xs={4} key={course.id}>
+          <Grid item xs={4} key={course._id}>
             <Card
               sx={{
                 minHeight: 300,
