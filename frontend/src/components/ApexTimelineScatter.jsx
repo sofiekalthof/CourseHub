@@ -117,7 +117,7 @@ export default function ApexTimelineScatter(props){
       },
       legend:{
         markers: {
-          fillColors: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B', 'black']
+          fillColors: ['#1E90FF', '#FFD700', '#00EE76', '#FF3030', '#8B008B', '#000000']
         }
       },
       /*fill: {

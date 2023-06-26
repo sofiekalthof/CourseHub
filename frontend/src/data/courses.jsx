@@ -2,7 +2,7 @@ export const courses= [
     {
         "id": 0,
         "name": "Advanced Web Technologies",
-        "description": "Test Description",
+        "description": "This course follows a student-centered and project-based learning approach. Web technologies will be presented in the lecture by student groups. The presented technologies are further investigated and applied in hands-on sessions as well as small student projects carried out throughout the course.",
         timeline: {
           tasks: [{
           id: 0,

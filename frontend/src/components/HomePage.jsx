@@ -40,7 +40,7 @@ function HomePage(){
     //Function for canceling te creation of a new course
     const handleClickCancel = () => {
         setOpen(false);
-        setSearchInput('');
+        setCourseName('');
         setCourseDescription('');
       };
     
