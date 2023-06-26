@@ -8,14 +8,14 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { courses } from "../data/courses";
 import { courseUser } from "../data/coursesMongoose";
-import { useState } from 'react';
+import { useState } from "react";
 import Analytics from "./Analytics";
 
 // Show Button for taking course only when user is not owner and not already taking course
-function TakeCourse({isOwner, isSubscriber}){
-  console.log(isSubscriber)
-  if(!isOwner && !isSubscriber){
-    return <Button variant="contained">Take Course </Button>
+function TakeCourse({ isOwner, isSubscriber }) {
+  console.log(isSubscriber);
+  if (!isOwner && !isSubscriber) {
+    return <Button variant="contained">Take Course </Button>;
   }
 }
 
@@ -28,23 +28,29 @@ function CoursePage() {
   const user = location.state.user;
 
   // Get course id from route
-  let {id} = useParams();
+  let { id } = useParams();
 
   // Filter all courses with the selected course id
   let selectedCourse = courses.filter((course) => course.id == id);
-  
+
   // CHeck if user is owner of course
-  const [isOwner, setIsOwner] = React.useState(user.id == selectedCourse[0].owner.id ? true : false);
+  const [isOwner, setIsOwner] = React.useState(
+    user.id == selectedCourse[0].owner.id ? true : false
+  );
 
   // Check if user is subscriber of course
-  const userDataForCourse = courseUser.filter((userData) => userData.course.id == id && userData.subscriber.id == user.id);
+  const userDataForCourse = courseUser.filter(
+    (userData) => userData.course.id == id && userData.subscriber.id == user.id
+  );
   let subscriber = false;
-  if(userDataForCourse.length != 0){
+  if (userDataForCourse.length != 0) {
     subscriber = true;
   }
 
   // Get data of all users for the selected course
-  const dataOfAllUsersForThisCourse = courseUser.filter((userData) => userData.course.id == id);
+  const dataOfAllUsersForThisCourse = courseUser.filter(
+    (userData) => userData.course.id == id
+  );
 
   const [isSubscriber, setIsSubscriber] = React.useState(subscriber);
 
@@ -53,35 +59,49 @@ function CoursePage() {
     setTabValue(newValue);
   };
 
-
-
   return (
     <>
-      <Grid container spacing={2} sx={{ justifyContent: "center"}}>
+      <Grid container spacing={2} sx={{ justifyContent: "center" }}>
         <Grid item xs={12}>
           <Navbar></Navbar>
         </Grid>
         {/* Show name of selected course */}
         <Grid item xs={8.75}>
-          <Typography variant='h5'>{selectedCourse[0].name}</Typography>
+          <Typography variant="h5">{selectedCourse[0].name}</Typography>
         </Grid>
         {/* Take Cozrse button if user is not owner or already subscriber */}
         <Grid item xs={1.5}>
-          <TakeCourse isOwner={isOwner} isSubscriber={isSubscriber}/>
+          <TakeCourse isOwner={isOwner} isSubscriber={isSubscriber} />
         </Grid>
         <Grid item xs={10}>
-          <Card variant='outlined'>
+          <Card variant="outlined">
             <TabContext value={tabValue}>
-              <Tabs value={tabValue} onChange={handleChange} centered variant="fullWidth">
+              <Tabs
+                value={tabValue}
+                onChange={handleChange}
+                centered
+                variant="fullWidth"
+              >
                 <Tab value="one" label="Assignments and Quizzes"></Tab>
                 <Tab value="two" label="Analytics"></Tab>
               </Tabs>
               <TabPanel value="one">
-                <GeneralView selectedCourse={selectedCourse[0]} isOwner={isOwner} user={user} userDataForCourse={userDataForCourse}></GeneralView>
+                <GeneralView
+                  selectedCourse={selectedCourse[0]}
+                  isOwner={isOwner}
+                  user={user}
+                  userDataForCourse={userDataForCourse}
+                ></GeneralView>
               </TabPanel>
-              <TabPanel value="two"><Analytics userDataForCourse={userDataForCourse} selectedCourse={selectedCourse[0]} dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}></Analytics></TabPanel>
+              <TabPanel value="two">
+                <Analytics
+                  userDataForCourse={userDataForCourse}
+                  selectedCourse={selectedCourse[0]}
+                  dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}
+                ></Analytics>
+              </TabPanel>
             </TabContext>
-            </Card>
+          </Card>
         </Grid>
       </Grid>
     </>

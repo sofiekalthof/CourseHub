@@ -35,10 +35,6 @@ import { v4 as uuidv4 } from "uuid";
 import CreateTask from "./CreateTask";
 import CreateMileStone from "./CreateMilestone";
 
-
-
-
-
 function GeneralView(props) {
   const [isOwner, setIsOwner] = useState(props.isOwner);
 

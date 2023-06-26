@@ -22,7 +22,6 @@ import { UserContext } from "../App";
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";
 
-
 export default function Navbar() {
   const navigate = useNavigate();
   const handleOnClick = () => {
