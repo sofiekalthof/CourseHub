@@ -21,7 +21,7 @@ import {
   Checkbox,
   Typography,
   Card,
-  FormLabel
+  FormLabel,
 } from "@mui/material";
 import AssignmentList from "./AssignmentList";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -74,33 +74,33 @@ function CreateMileStone({ isOwner }) {
           <DialogTitle>Add a milestone</DialogTitle>
           <DialogContent>
             <Grid container spacing={3}>
-            {/* Dropdown Menu for selecting the Milestone Type */}
-            <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel>Milestone Type</InputLabel>
-              <Select
-                value={milestoneType}
-                label="Milestone Type"
-                onChange={handleChange}
-              >
-                <MenuItem value={"Lecture"}>Lecture</MenuItem>
-                <MenuItem value={"Exercise"}>Exercise</MenuItem>
-                <MenuItem value={"Exam"}>Exam</MenuItem>
-              </Select>
-            </FormControl>
-            </Grid>
-            {/* DatePicker for Selecting Milestone Date */}
-            <Grid item xs={12}>
-            <FormControl fullWidth>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  value={date}
-                  label='Milestone Date'
-                  onChange={(date) => setDate(date)}
-                ></DatePicker>
-              </LocalizationProvider>
-            </FormControl>
-            </Grid>
+              {/* Dropdown Menu for selecting the Milestone Type */}
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Milestone Type</InputLabel>
+                  <Select
+                    value={milestoneType}
+                    label="Milestone Type"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"Lecture"}>Lecture</MenuItem>
+                    <MenuItem value={"Exercise"}>Exercise</MenuItem>
+                    <MenuItem value={"Exam"}>Exam</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              {/* DatePicker for Selecting Milestone Date */}
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      value={date}
+                      label="Milestone Date"
+                      onChange={(date) => setDate(date)}
+                    ></DatePicker>
+                  </LocalizationProvider>
+                </FormControl>
+              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>

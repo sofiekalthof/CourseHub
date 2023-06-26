@@ -85,28 +85,28 @@ function HomePage() {
               {/* Dialog for creating a new course */}
               <Dialog open={open}>
                 <DialogContent>
-                    <Grid container spacing={2}>
-                  <DialogContentText>Create a new course</DialogContentText>
-                  <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Course name"
-                    variant="outlined"
-                    sx={{ flexGrow: 1 }}
-                    onChange={handleNewCourse}
-                    value={courseName}
-                  ></TextField>
-                  </Grid>
-                  <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Course description"
-                    variant="outlined"
-                    sx={{ flexGrow: 1 }}
-                    onChange={handleCourseDescription}
-                    value={courseDescription}
-                  ></TextField>
-                  </Grid>
+                  <Grid container spacing={2}>
+                    <DialogContentText>Create a new course</DialogContentText>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Course name"
+                        variant="outlined"
+                        sx={{ flexGrow: 1 }}
+                        onChange={handleNewCourse}
+                        value={courseName}
+                      ></TextField>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Course description"
+                        variant="outlined"
+                        sx={{ flexGrow: 1 }}
+                        onChange={handleCourseDescription}
+                        value={courseDescription}
+                      ></TextField>
+                    </Grid>
                   </Grid>
                 </DialogContent>
                 <DialogActions>
