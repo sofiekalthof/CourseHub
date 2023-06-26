@@ -6,6 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
+// Determine status of one task
 function ShowTaskStatus({index, userData}) {
     if (userData.length == 0){
         return
@@ -74,6 +75,7 @@ function AssignmentList(props){
                             </TableRow>
                         </TableHead>
                         <TableBody>
+                            {/* One table row for each task */}
                             {filteredDatesWithConvertedDates.map((task, index) => (
                                 <TableRow key={task.id}>
                                     <TableCell>

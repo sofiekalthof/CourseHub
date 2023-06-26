@@ -1,6 +1,7 @@
 import * as React from "react";
 import Chart from "react-apexcharts";
 
+// Dtermine the taskScore of a user per month
 function determineTaskScorePerMonth(tasks, userDataForCourse){
     let taskScoreList = [];
     let janScore = 0;
@@ -59,11 +60,9 @@ function determineTaskScorePerMonth(tasks, userDataForCourse){
 }
 
 function Activity(props){
-    console.log(props.tasks)
     const userDataForCourse = props.userDataForCourse;
     const tasks = props.tasks;
     const taskScoreList = determineTaskScorePerMonth(tasks, userDataForCourse);
-    console.log(taskScoreList);
 
     const state = {
         options: {
