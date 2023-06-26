@@ -20,6 +20,7 @@ function TakeCourse({isOwner, isSubscriber}){
 }
 
 function CoursePage() {
+  // TODO(Utku): send everything for course
   const [tabValue, setTabValue] = React.useState("one");
 
   // Get user from route parameters

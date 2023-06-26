@@ -6,6 +6,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";
@@ -19,6 +21,9 @@ export default function Login() {
   const handleHome = () => {
     navigate("/home");
   };
+
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
 
   // function to handle submitting the form
   const handleSubmit = async (event) => {
@@ -34,8 +39,13 @@ export default function Login() {
 
     try {
       // send GET request to REST API with email
-      let res = await fetch(`${API_URL}/${email}`, {
-        method: "GET",
+      let res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        // all information being sent
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
         // header neccessary for correct sending of information
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -49,15 +59,22 @@ export default function Login() {
         setEmail("");
         setPassword("");
         // some debug commands
-        console.log("Form done.");
-        alert("User is logged in.");
         console.log(resJson);
+        console.log(userSession);
+        // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
+        await setUserSession(resJson.userSession);
+        console.log(userSession);
+        console.log("Form done.");
+        alert(resJson.msg);
         // route to homepage
         handleHome();
+      } else if (res.status === 400) {
+        alert(resJson.msg);
       } else {
         // some debug commands
         console.log("Form returned error from backend.");
         console.log(resJson);
+        alert(resJson.msg);
       }
     } catch (err) {
       console.log("Frontend error. Post request could not be sent. Check API!");

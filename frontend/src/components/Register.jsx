@@ -31,7 +31,7 @@ export default function Register() {
     // make API call
     try {
       // send post request to REST API
-      let res = await fetch(API_URL, {
+      let res = await fetch(`${API_URL}/register`, {
         method: "POST",
         // all information being sent
         body: JSON.stringify({
@@ -55,10 +55,8 @@ export default function Register() {
         // some debug commands
         console.log("Form done.");
         alert("User added");
-        // navigate to Log-In component
-        handleLogIn();
       } else if (res.status === 400) {
-        alert(resJson.error);
+        alert(resJson.msg);
       } else {
         // some debug commands
         console.log("Form returned error from backend.");
