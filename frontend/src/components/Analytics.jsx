@@ -30,8 +30,8 @@ function Analytics(props) {
           <>
           <Grid container sx={{justifyContent:'center'}} spacing={2}>
             <Grid item xs={12}>
-              <Typography>
-                Activity
+              <Typography variant="h6">
+                Your Activity
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -40,7 +40,7 @@ function Analytics(props) {
               </Card>
             </Grid> 
             <Grid item xs={12}>
-              <Typography>
+              <Typography variant="h6">
                Leaderboard
               </Typography>
             </Grid>

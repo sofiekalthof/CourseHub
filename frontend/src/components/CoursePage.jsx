@@ -63,7 +63,7 @@ function CoursePage() {
         </Grid>
         {/* Show name of selected course */}
         <Grid item xs={8.75}>
-          <Typography>{selectedCourse[0].name}</Typography>
+          <Typography variant='h5'>{selectedCourse[0].name}</Typography>
         </Grid>
         {/* Take Cozrse button if user is not owner or already subscriber */}
         <Grid item xs={1.5}>

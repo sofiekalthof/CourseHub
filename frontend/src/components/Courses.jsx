@@ -43,9 +43,9 @@ function Courses(props){
             {/* Show one card for each course */}
             {filteredData.map((course)=>(
                     <Grid item xs={4} key={course.id}>
-                            <Card sx={{minHeight:250, minWidth:250, textAlign:'center', cursor: 'pointer'}} onClick={() => handleOnClick(course)}>
+                            <Card sx={{minHeight:300, minWidth:250, textAlign:'center', cursor: 'pointer', border: '1px solid #5CDB95'}} onClick={() => handleOnClick(course)}>
                                 <CardContent>
-                                    <Typography gutterBottom variant="h5" align="center">
+                                    <Typography gutterBottom height={50} variant="h6" align="center">
                                         {course.name}
                                     </Typography>
                                     <Typography variant="body2" align="center">

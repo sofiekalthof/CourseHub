@@ -17,7 +17,7 @@ const themeDarkGreen = createTheme({
     },
     text: {
       primary: "#05386B",
-      secondary: "05386B",
+      secondary: "#05386B",
     },
     primary: {
       main: "#5CDB95",
