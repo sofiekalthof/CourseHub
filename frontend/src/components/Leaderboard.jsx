@@ -12,14 +12,16 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   let usersWithScore = [];
   dataOfAllUsersForThisCourse.map((user) => {
     let userscore = 0;
-    user.taskStatus.map((status) => {
-      if (status.includes("done")) {
+    // extract useful information first
+    let taskStatusData = user.usertimeline.usertimeline;
+    taskStatusData.userTasksStats.map((status) => {
+      if (status.userTaskSatus.includes("done")) {
         userscore += 1;
       }
     });
     usersWithScore.push({
-      name: user.subscriber.username,
-      id: user.subscriber.id,
+      name: user.username,
+      id: user.subscriber,
       score: userscore,
     });
   });
