@@ -110,12 +110,23 @@ app.route("/allSubscriberData/:courseId").get(checkAuth, async (req, res) => {
       const userTimelineID = subscriber.usertimeline;
 
       // get timeline of user for this course
-      const userTimeline = await TimelineUserModel.find({
+      const userTimeline = await TimelineUserModel.findOne({
         _id: userTimelineID,
+      });
+
+      // extract user id
+      const userID = subscriber.subscriber;
+
+      // get timeline of user for this course
+      const user = await UserModel.findOne({
+        _id: userID,
       });
 
       // replace timeline field with tasks
       subscriber.usertimeline = { usertimeline: userTimeline };
+
+      // add username as a new field
+      subscriber.username = user.username;
     }
     res
       .status(200)
