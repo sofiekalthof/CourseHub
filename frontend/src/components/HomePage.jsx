@@ -25,7 +25,8 @@ import { UserContext } from "../App";
 import { useEffect } from "react";
 import { courses } from "../data/courses";
 
-async function createCourse(courseName, courseDescription, ownerID) {
+// Function to create a course in database (parsed for frontend)
+async function CreateCourse(courseName, courseDescription, ownerID) {
   // make API call to get all courses
   try {
     // send get request to REST API
@@ -58,7 +59,8 @@ async function createCourse(courseName, courseDescription, ownerID) {
   }
 }
 
-async function getAllCourses() {
+// Function to return all courses in database (parsed for frontend)
+async function GetAllCourses() {
   // make API call to get all courses
   try {
     // send get request to REST API
@@ -99,7 +101,7 @@ function HomePage() {
   // useEffect first time it is rendering
   useEffect(() => {
     // get all courses
-    getAllCourses()
+    GetAllCourses()
       .then((res) => {
         // use promise to set courses
         setCourses(res);
@@ -112,6 +114,7 @@ function HomePage() {
   }, []);
 
   // take user information from global context
+  // TODO: remove the prop, since userSession is global OR make it all one prop
   const user = userSession;
 
   const [open, setOpen] = useState(false);
@@ -143,7 +146,7 @@ function HomePage() {
   // Function for saving a new course
   const handleClickSave = () => {
     // create new course in db
-    createCourse(courseName, courseDescription, userSession.id)
+    CreateCourse(courseName, courseDescription, userSession.id)
       .then((newCourse) => {
         // use promise to add new course to list of all courses
         setCourses([...courses, newCourse]);
