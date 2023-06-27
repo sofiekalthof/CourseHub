@@ -14,22 +14,24 @@ export default function ApexTimelineScatter(props) {
   let assignmentDates = [];
   let quizDates = [];
   tasks.map((task) => {
+    // convert mongodb data string to date
+    let taskTime = new Date(task.data);
     // give marker grey color if date is in future
-    if (task.type == "Quiz" && task.data.getTime() > today.getTime()) {
-      quizDates.push({ x: task.data.getTime(), y: -1, fillColor: "#D3D3D3" });
+    if (task.type == "Quiz" && taskTime.getTime() > today.getTime()) {
+      quizDates.push({ x: taskTime.getTime(), y: -1, fillColor: "#D3D3D3" });
     }
-    if (task.type == "Quiz" && task.data.getTime() <= today.getTime()) {
-      quizDates.push({ x: task.data.getTime(), y: -1 });
+    if (task.type == "Quiz" && taskTime.getTime() <= today.getTime()) {
+      quizDates.push({ x: taskTime.getTime(), y: -1 });
     }
-    if (task.type == "Assignment" && task.data.getTime() > today.getTime()) {
+    if (task.type == "Assignment" && taskTime.getTime() > today.getTime()) {
       assignmentDates.push({
-        x: task.data.getTime(),
+        x: taskTime.getTime(),
         y: -2,
         fillColor: "#D3D3D3",
       });
     }
-    if (task.type == "Assignment" && task.data.getTime() <= today.getTime()) {
-      assignmentDates.push({ x: task.data.getTime(), y: -2 });
+    if (task.type == "Assignment" && taskTime.getTime() <= today.getTime()) {
+      assignmentDates.push({ x: taskTime.getTime(), y: -2 });
     }
   });
   dataForChart.push({ name: "Assignment", data: assignmentDates });
@@ -40,50 +42,49 @@ export default function ApexTimelineScatter(props) {
   let examDates = [];
   let exerciseDates = [];
   milestones.map((milestone) => {
+    // convert mongodb data string to date
+    let milestoneTime = new Date(milestone.data);
     if (
       milestone.type == "Lecture" &&
-      milestone.data.getTime() <= today.getTime()
+      milestoneTime.getTime() <= today.getTime()
     ) {
-      lectureDates.push({ x: milestone.data.getTime(), y: 1 });
+      lectureDates.push({ x: milestoneTime.getTime(), y: 1 });
     }
     if (
       milestone.type == "Lecture" &&
-      milestone.data.getTime() > today.getTime()
+      milestoneTime.getTime() > today.getTime()
     ) {
       lectureDates.push({
-        x: milestone.data.getTime(),
+        x: milestoneTime.getTime(),
         y: 1,
         fillColor: "#D3D3D3",
       });
     }
-    if (
-      milestone.type == "Exam" &&
-      milestone.data.getTime() > today.getTime()
-    ) {
+    if (milestone.type == "Exam" && milestoneTime.getTime() > today.getTime()) {
       examDates.push({
-        x: milestone.data.getTime(),
+        x: milestoneTime.getTime(),
         y: 2,
         fillColor: "#D3D3D3",
       });
     }
     if (
       milestone.type == "Exam" &&
-      milestone.data.getTime() <= today.getTime()
+      milestoneTime.getTime() <= today.getTime()
     ) {
-      examDates.push({ x: milestone.data.getTime(), y: 2 });
+      examDates.push({ x: milestoneTime.getTime(), y: 2 });
     }
     if (
       milestone.type == "Exercise" &&
-      milestone.data.getTime() <= today.getTime()
+      milestoneTime.getTime() <= today.getTime()
     ) {
-      exerciseDates.push({ x: milestone.data.getTime(), y: 3 });
+      exerciseDates.push({ x: milestoneTime.getTime(), y: 3 });
     }
     if (
       milestone.type == "Exercise" &&
-      milestone.data.getTime() > today.getTime()
+      milestoneTime.getTime() > today.getTime()
     ) {
       exerciseDates.push({
-        x: milestone.data.getTime(),
+        x: milestoneTime.getTime(),
         y: 3,
         fillColor: "#D3D3D3",
       });
