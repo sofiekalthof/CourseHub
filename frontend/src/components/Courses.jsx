@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import CoursePage from "./CoursePage";
 
 function Courses(props) {
   const courses = props.courses;
@@ -18,8 +17,8 @@ function Courses(props) {
   // Navigate to the course page of selected course
   const navigate = useNavigate();
   const handleOnClick = (course) => {
-    navigate(`/course/${course.id}`, {
-      state: { user: userData },
+    navigate(`/course/${course._id}`, {
+      state: { course: course, user: userData },
       replace: true,
     });
   };
@@ -43,7 +42,7 @@ function Courses(props) {
     }
   });
 
-  console.log("filtered data in courses.jsx: ", filteredData);
+  // console.log("filteredData in courses.jsx: ", filteredData);
 
   return (
     <>
