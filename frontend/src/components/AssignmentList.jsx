@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -73,6 +74,17 @@ function AssignmentList(props) {
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
 
+   // State to store the filter type
+   const [filterType, setFilterType] = useState("");
+     // Filter function to filter tasks based on type (quiz/assignment)
+  const filterTasks = (task) => {
+    if (filterType === "") {
+      return true; // If no filter type is selected, show all tasks
+    } else {
+      return task.type.toLowerCase() === filterType.toLowerCase();
+    }
+  };
+
   // convert the Dates from a DateObject into a String for the AssignmentList
   let filteredDatesWithConvertedDates = [];
   tasks.map((task) => {
@@ -94,6 +106,16 @@ function AssignmentList(props) {
 
   return (
     <>
+      {/* Filter controls */}
+      <Box>
+        <Button onClick={() => setFilterType("assignment")}>
+          Show Assignments
+        </Button>
+        <Button onClick={() => setFilterType("quiz")}>Show Quizzes</Button>
+        <Button onClick={() => setFilterType("")}>Show All</Button>
+      </Box>
+
+      {/* Task list */}
       <Grid container>
         <Grid item xs={12}>
           <TableContainer>
@@ -108,16 +130,18 @@ function AssignmentList(props) {
               </TableHead>
               <TableBody>
                 {/* One table row for each task */}
-                {filteredDatesWithConvertedDates.map((task, index) => (
-                  <TableRow key={task.id}>
-                    <TableCell>
-                      <ShowTaskStatus index={index} userData={userData} />
-                    </TableCell>
-                    <TableCell>{task.data}</TableCell>
-                    <TableCell>{task.type}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                ))}
+                {filteredDatesWithConvertedDates
+                  .filter(filterTasks) // Apply the filter
+                  .map((task, index) => (
+                    <TableRow key={task.id}>
+                      <TableCell>
+                        <ShowTaskStatus index={index} userData={userData} />
+                      </TableCell>
+                      <TableCell>{task.data}</TableCell>
+                      <TableCell>{task.type}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -126,5 +150,6 @@ function AssignmentList(props) {
     </>
   );
 }
+
 
 export default AssignmentList;
