@@ -20,11 +20,11 @@ const port = 3600;
 // Create Express app
 const app = express();
 
-// CORS stuff
+// CORS configuration
 const corsOptions = {
-  origin: "http://localhost:5173", //Your Client, do not write '*'
+  origin: "http://localhost:5173",
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-  credentials: true,
+  credentials: true, // needed to allow cookies to be sent between frontend/backend
 };
 
 // Add CORS to all routes and methods
@@ -40,28 +40,20 @@ const mongoDBstore = new MongoDBstore({
   collection: "userSessions",
 });
 
-// // Add express-session to all routes
-// app.use(
-//   session({
-//     secret: process.env.COOKIE_SECRET,
-//     name: "session-id", // name of the cookies (key field)
-//     store: mongoDBstore,
-//     cookie: {
-//       maxAge: parseInt(process.env.SESSION_MAX_LENGTH),
-//       sameSite: false, // same-site and cross-site(diff. schemes, domain or sub-domain) requests
-//       secure: false, // need an HTTPS enabled browser (true-> in prod.)
-//     },
-//     resave: false, // true - force session to be saved in session store, even if it was not modified during a request
-//     saveUninitialized: false, // dont save session if it was not modified (i.e. no login yet)
-//     unset: "destroy", // delete cookie from db when it is null(completes task in a few minutes)
-//   })
-// );
 // Add express-session to all routes
 app.use(
   session({
-    secret: "kekw",
-    resave: true, // true - force session to be saved in session store, even if it was not modified during a request
-    saveUninitialized: false, // save session if it was not modified (i.e. no login yet)
+    secret: process.env.COOKIE_SECRET,
+    name: "session-id", // name of the cookies (key field)
+    store: mongoDBstore,
+    cookie: {
+      maxAge: parseInt(process.env.SESSION_MAX_LENGTH),
+      sameSite: false, // same-site and cross-site(diff. schemes, domain or sub-domain) requests
+      secure: false, // need an HTTPS enabled browser (true-> in prod.)
+    },
+    resave: true, // !!! true - force session to be saved in session store, even if it was not modified during a request
+    saveUninitialized: false, // dont save session if it was not modified (i.e. no login yet)
+    unset: "destroy", // delete cookie from db when it is null(completes task in a few minutes)
   })
 );
 
@@ -70,37 +62,27 @@ app.listen(port, () => {
   console.log("Listening on " + port + ".");
 });
 
+// Function to check auth
 const checkAuth = function (req, res, next) {
-  console.log(
-    "checkAuth Called, userSession in session-store: ",
-    req.session.user
-  );
+  // console.log(
+  //   "checkAuth Called, userSession in session-store: ",
+  //   req.session.user
+  // );
   if (req.session.user) {
-    console.log("session exists");
+    // console.log("session exists");
     next();
   } else {
     return res.status(401).json({ msg: "Unauthorized" });
   }
 };
 
-// Simple Auth routeGet all courses
-app.route("/rando").get((req, res) => {
-  req.session.user = { userId: req.id };
-  console.log(
-    "rando Called, userSession(req.session.user) in session-store: ",
-    req.session.user
-  );
-  console.log("rando Called, req.session in session-store: ", req.session);
-  return res.status(200).json({ test: "abc", lol: req.session });
-});
-
-// Simple Auth routeGet all courses
+// Route to check auth and return user info in cookie
 app.route("/isAuth").get((req, res) => {
-  console.log(
-    "isAuth Called, userSession(req.session.user) in session-store: ",
-    req.session.user
-  );
-  console.log("isAuth Called, req.session in session-store: ", req.session);
+  // console.log(
+  //   "isAuth Called, userSession(req.session.user) in session-store: ",
+  //   req.session.user
+  // );
+  // console.log("isAuth Called, req.session in session-store: ", req.session);
   if (req.session.user) {
     return res.status(200).json(req.session.user);
   } else {
@@ -108,7 +90,7 @@ app.route("/isAuth").get((req, res) => {
   }
 });
 
-// Update milestone(autom.)
+// Update milestone(autom.)?
 
 // Take task
 
@@ -348,12 +330,6 @@ app.route("/courses/:id/takecourse").post(checkAuth, async (req, res) => {
 
 // Create course
 app.route("/courses/create").post(checkAuth, async (req, res) => {
-  // MAKE-SURE: req.body has name, description and owner
-  // EXAMPLE: {
-  //     "name": "test",
-  //     "description": "test",
-  //     "owner": "6496f1ae73f6e014598d9630"
-  //  }
   let newCourse;
   try {
     // create empty timeline
@@ -370,7 +346,14 @@ app.route("/courses/create").post(checkAuth, async (req, res) => {
 
     // create new course
     await newCourse.save();
-    res.status(200).json(newCourse);
+
+    // convert document to JSON object (to make it editable)
+    let newCourseJSON = newCourse.toJSON();
+
+    // set the timeline field correctly for frontend
+    newCourseJSON.timeline = { tasks: [], milestones: [] };
+
+    res.status(200).json({ msg: "New course added", newCourse: newCourseJSON });
   } catch (err) {
     res.status(500).send("Server error. Request could not be fulfilled.");
   }
@@ -534,11 +517,24 @@ app.route("/register").post(async (req, res) => {
   }
 });
 
-// app.route("/login").get(async (req, res) => {
-//   // create a new session for the user (email and id used to identify user)
-//   const userSession = { id: "567" };
-
-//   // attach new session to express-session
-//   req.session.user = userSession;
-//   res.send("Kekw");
+// For debugging user authentification
+// TODO: delete later
+// app.route("/rando").get((req, res) => {
+//   req.session.user = { userId: req.id };
+//   console.log(
+//     "rando Called, userSession(req.session.user) in session-store: ",
+//     req.session.user
+//   );
+//   console.log("rando Called, req.session in session-store: ", req.session);
+//   return res.status(200).json({ test: "abc", lol: req.session });
 // });
+
+// Express-session without store capabilities (still there for auth. debugging)
+// TODO: delete later
+// app.use(
+//   session({
+//     secret: "kekw",
+//     resave: true, // true - force session to be saved in session store, even if it was not modified during a request
+//     saveUninitialized: false, // save session if it was not modified (i.e. no login yet)
+//   })
+// );

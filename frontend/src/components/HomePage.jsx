@@ -25,6 +25,39 @@ import { UserContext } from "../App";
 import { useEffect } from "react";
 import { courses } from "../data/courses";
 
+async function createCourse(courseName, courseDescription, ownerID) {
+  // make API call to get all courses
+  try {
+    // send get request to REST API
+    let res = await fetch(`${import.meta.env.VITE_API_URL}/courses/create`, {
+      method: "POST",
+      body: JSON.stringify({
+        name: courseName,
+        description: courseDescription,
+        owner: ownerID,
+      }),
+      // header neccessary for correct sending of information
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      credentials: "include",
+    });
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      alert(resJson.msg);
+      return resJson.newCourse;
+    } else {
+      // some debug commands
+      alert(resJson.msg);
+    }
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
 async function getAllCourses() {
   // make API call to get all courses
   try {
@@ -75,17 +108,11 @@ function HomePage() {
       .catch((err) => {
         setLoading(false);
         setError(true);
-        setData();
       });
   }, []);
 
-  // Dummy user that is logged in
-  const user = {
-    id: 0,
-    username: "Test",
-    email: "test@user",
-    password: "Test123",
-  };
+  // take user information from global context
+  const user = userSession;
 
   const [open, setOpen] = useState(false);
   const [courseName, setCourseName] = useState("");
@@ -114,9 +141,18 @@ function HomePage() {
   };
 
   // Function for saving a new course
-  //TODO: connection to Backend
   const handleClickSave = () => {
-    courses.push({ id: 9, name: courseName, description: courseDescription });
+    // create new course in db
+    createCourse(courseName, courseDescription, userSession.id)
+      .then((newCourse) => {
+        // use promise to add new course to list of all courses
+        setCourses([...courses, newCourse]);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(true);
+      });
     setOpen(false);
   };
 
@@ -174,6 +210,7 @@ function HomePage() {
         </Grid>
         {/* Grid for showing all Course Cards and Searchbar*/}
         <Grid item xs={10}>
+          {/* allow backend to do its magic */}
           {loading && <></>}
           {error && <></>}
           {courses && (

@@ -13,7 +13,6 @@ import CoursePage from "./CoursePage";
 
 function Courses(props) {
   const courses = props.courses;
-  console.log("courses in courses.jsx:", courses);
   const userData = props.user;
 
   // Navigate to the course page of selected course
@@ -39,11 +38,12 @@ function Courses(props) {
     }
     //return the item which contains the user input
     else {
-      return el.name.includes(searchInput);
+      // case insensitive filtering
+      return el.name.toLowerCase().includes(searchInput.toLowerCase());
     }
   });
 
-  console.log(filteredData);
+  console.log("filtered data in courses.jsx: ", filteredData);
 
   return (
     <>
