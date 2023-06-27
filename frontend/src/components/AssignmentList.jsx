@@ -39,7 +39,7 @@ function ShowTaskStatus({ index, userData }) {
     return;
   }
   // extract relevant information from array first
-  let taskStatusData = userData[0].usertimeline.usertimeline[0];
+  let taskStatusData = userData[0].usertimeline.usertimeline;
   if (taskStatusData.userTasksStats[index].userTaskSatus.includes("due")) {
     return (
       <>

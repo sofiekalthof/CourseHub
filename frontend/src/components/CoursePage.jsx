@@ -94,7 +94,7 @@ function CoursePage() {
     GetAllCourseSubscriberData(courseId, user)
       .then(async (res) => {
         // use promise to set subscriber data
-        setDataOfAllUsersForThisCourse(res);
+        setDataOfAllUsersForThisCourse(res.subscribers);
         setLoading(false);
       })
       .catch((err) => {
@@ -116,7 +116,7 @@ function CoursePage() {
   //   setIsSubscriber(subscriber);
   // }
   if (!loading) {
-    userDataForCourse = dataOfAllUsersForThisCourse.subscribers.filter(
+    userDataForCourse = dataOfAllUsersForThisCourse.filter(
       (subscriber) =>
         subscriber.course == courseId && subscriber.subscriber == user.id
     );
