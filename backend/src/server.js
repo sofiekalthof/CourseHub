@@ -92,7 +92,7 @@ app.route("/isAuth").get((req, res) => {
 
 //////////////////////// below are tested and working routes
 
-// Get all subscriber data of a course (POSTMAN checked)
+// Get all subscriber data of a course
 app.route("/allSubscriberData/:courseId").get(checkAuth, async (req, res) => {
   let subscribers = [];
   try {
@@ -160,8 +160,9 @@ app.route("/courses/create").post(checkAuth, async (req, res) => {
     // convert document to JSON object (to make it editable)
     let newCourseJSON = newCourse.toJSON();
 
-    // set the timeline field correctly for frontend
-    newCourseJSON.timeline = { tasks: [], milestones: [] };
+    // remove unnecessary fields
+    delete newCourse.timeline;
+    delete newCourse.owner;
 
     res.status(200).json({ msg: "New course added", newCourse: newCourseJSON });
   } catch (err) {
@@ -169,8 +170,8 @@ app.route("/courses/create").post(checkAuth, async (req, res) => {
   }
 });
 
-// Get all courses
-app.route("/courses").get(checkAuth, async (req, res) => {
+// Get all courses (returns only id, name and descriptions)
+app.route("/courseIdDescs").get(checkAuth, async (req, res) => {
   let courses = [];
   try {
     // find all courses
@@ -181,50 +182,69 @@ app.route("/courses").get(checkAuth, async (req, res) => {
     for (var courseIdx in courses) {
       let course = courses[courseIdx];
 
-      // extract course's timeline id
-      const timelineID = course.timeline;
-
-      // get timeline of a course
-      const timeline = await TimelineModel.find({ _id: timelineID });
-
-      // extract task ids of timeline
-      const taskIds = timeline[0].tasks;
-
-      // extract milestone ids of timeline
-      const milestoneIds = timeline[0].milestones;
-
-      let tasks = [];
-      // if there are any tasks in the course, parse them
-      if (taskIds) {
-        // for each taskId
-        for (var taskId in taskIds) {
-          // find task itself
-          let task = await TaskModel.findOne({ _id: taskIds[taskId] });
-
-          // append to list
-          tasks = [...tasks, task];
-        }
-      }
-
-      let milestones = [];
-      // if there are any tasks in the course, parse them
-      if (milestoneIds) {
-        // for each taskId
-        for (var milestoneId in milestoneIds) {
-          // find task itself
-          let milestone = await MilestoneModel.findOne({
-            _id: milestoneIds[milestoneId],
-          });
-
-          // append to list
-          milestones = [...milestones, milestone];
-        }
-      }
-
-      // replace timeline field with tasks
-      course.timeline = { tasks: tasks, milestones: milestones };
+      // remove unnecessary fields
+      delete course.timeline;
+      delete course.owner;
     }
+    // console.log("backend sends: ", courses);
     res.status(200).json(courses);
+  } catch (err) {
+    res.status(500).send("Server error. Request could not be fulfilled.");
+  }
+});
+
+// Get all information of a course (parsed to the needs of a frontend) (POSTMAN Checked)
+app.route("/courseAllInfo/:courseId").get(checkAuth, async (req, res) => {
+  let course = [];
+  try {
+    // find all courses
+    course = await CourseModel.findOne({ _id: req.params.courseId }).lean(); // lean neccessary to make courses editable(for replacing timeline with real tasks and milestones)
+
+    //// parse and edit course to ready them for frontend
+    // extract course's timeline id
+    const timelineID = course.timeline;
+
+    // get timeline of a course
+    const timeline = await TimelineModel.findOne({ _id: timelineID });
+
+    // extract task ids of timeline
+    const taskIds = timeline.tasks;
+
+    // extract milestone ids of timeline
+    const milestoneIds = timeline.milestones;
+
+    let tasks = [];
+    // if there are any tasks in the course, parse them
+    if (taskIds) {
+      // for each taskId
+      for (var taskId in taskIds) {
+        // find task itself
+        let task = await TaskModel.findOne({ _id: taskIds[taskId] });
+
+        // append to list
+        tasks = [...tasks, task];
+      }
+    }
+
+    let milestones = [];
+    // if there are any tasks in the course, parse them
+    if (milestoneIds) {
+      // for each taskId
+      for (var milestoneId in milestoneIds) {
+        // find task itself
+        let milestone = await MilestoneModel.findOne({
+          _id: milestoneIds[milestoneId],
+        });
+
+        // append to list
+        milestones = [...milestones, milestone];
+      }
+    }
+
+    // replace timeline field with tasks
+    course.timeline = { tasks: tasks, milestones: milestones };
+    // console.log(course);
+    res.status(200).json(course);
   } catch (err) {
     res.status(500).send("Server error. Request could not be fulfilled.");
   }
@@ -317,6 +337,67 @@ app.route("/register").post(async (req, res) => {
 });
 
 //////////////////////// below are to-be-tested/to-be-implemented routes
+
+// Get all courses
+// app.route("/courses").get(async (req, res) => {
+//   let courses = [];
+//   try {
+//     // find all courses
+//     courses = await CourseModel.find({}).lean(); // lean neccessary to make courses editable(for replacing timeline with real tasks and milestones)
+
+//     // parse and edit courses to ready them for frontend
+//     // for loop as such neccessary due to async. functions inside (alternative: forEach with promise -> not working)
+//     for (var courseIdx in courses) {
+//       let course = courses[courseIdx];
+
+//       // extract course's timeline id
+//       const timelineID = course.timeline;
+
+//       // get timeline of a course
+//       const timeline = await TimelineModel.find({ _id: timelineID });
+
+//       // extract task ids of timeline
+//       const taskIds = timeline[0].tasks;
+
+//       // extract milestone ids of timeline
+//       const milestoneIds = timeline[0].milestones;
+
+//       let tasks = [];
+//       // if there are any tasks in the course, parse them
+//       if (taskIds) {
+//         // for each taskId
+//         for (var taskId in taskIds) {
+//           // find task itself
+//           let task = await TaskModel.findOne({ _id: taskIds[taskId] });
+
+//           // append to list
+//           tasks = [...tasks, task];
+//         }
+//       }
+
+//       let milestones = [];
+//       // if there are any tasks in the course, parse them
+//       if (milestoneIds) {
+//         // for each taskId
+//         for (var milestoneId in milestoneIds) {
+//           // find task itself
+//           let milestone = await MilestoneModel.findOne({
+//             _id: milestoneIds[milestoneId],
+//           });
+
+//           // append to list
+//           milestones = [...milestones, milestone];
+//         }
+//       }
+
+//       // replace timeline field with tasks
+//       course.timeline = { tasks: tasks, milestones: milestones };
+//     }
+//     res.status(200).json(courses);
+//   } catch (err) {
+//     res.status(500).send("Server error. Request could not be fulfilled.");
+//   }
+// });
 // Update milestone(autom.)?
 
 // Take task
