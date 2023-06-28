@@ -214,7 +214,7 @@ function CoursePage() {
   const handleTakeCourse = (courseId, userId) => {
     TakeCourse(courseId, userId)
       .then(() => {
-        // using setGetDataAfterPost to re-render component upon correct execution of TakeCourse
+        // using setGetDataAfterPost to call useEffect which will update information
         setGetDataAfterPost(true);
       })
       .catch((err) => {
