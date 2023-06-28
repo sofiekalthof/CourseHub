@@ -91,6 +91,87 @@ app.route("/isAuth").get((req, res) => {
 });
 
 //////////////////////// below are tested and working routes
+// Take course
+app.route("/takeCourse/:courseId").post(async (req, res) => {
+  // IMPROVEMENT: user data could be received from req.session.user directly (to check)
+  // IMPROVEMENT: would be better if we send timeline id directly
+  let currTaskStats = [];
+  let currMilestioneStats = [];
+  try {
+    // find the course user is trying to subscribe to
+    const course = await CourseModel.findOne({ _id: req.params.courseId });
+
+    // extract timeline id of the course
+    const courseTimelineId = course.timeline;
+
+    // find timeline of the course
+    const timeline = await TimelineModel.findOne({ _id: courseTimelineId });
+
+    // extract task ids of the timeline
+    const timelineTaskIds = timeline.tasks;
+
+    // find timeline of the course
+    const tasks = await TaskModel.find({ _id: timelineTaskIds });
+
+    // create new array of tasks for user based-on timeline's array of tasks
+    tasks.forEach((task) => {
+      currTaskStats = [
+        ...currTaskStats,
+        {
+          originalTaskId: task._id,
+          userTaskSatus: task.status,
+          userTaskScore: 0,
+        },
+      ];
+    });
+    // console.log("current Task stats: ", currTaskStats);
+
+    // extract task ids of the timeline
+    const milestoneTaskIds = timeline.milestones;
+
+    // find timeline of the course
+    const milestones = await MilestoneModel.find({ _id: milestoneTaskIds });
+
+    // create new array of tasks for user based-on timeline's array of tasks
+    milestones.forEach((milestone) => {
+      currMilestioneStats = [
+        ...currMilestioneStats,
+        {
+          originalMilestoneId: milestone._id,
+          userMilestoneSatus: milestone.status,
+        },
+      ];
+    });
+    // console.log("current milestones: ", currMilestioneStats);
+
+    // create user timeline based on existing timeline
+    const newTimelineUser = TimelineUserModel({
+      origin: courseTimelineId,
+      userTasksStats: currTaskStats,
+      userMilestonesStats: currMilestioneStats,
+      userId: req.body.userId,
+    });
+    // console.log(newTimelineUser);
+
+    // save new user timeline
+    await newTimelineUser.save();
+
+    // create new subscriber-course-usertimeline relation
+    const newSubscriberAndCourse = CourseUserModel({
+      subscriber: req.body.userId,
+      course: req.params.courseId,
+      usertimeline: newTimelineUser._id,
+    });
+    // console.log(newSubscriberAndCourse);
+
+    // save new subscriber-course-usertimeline relation
+    await newSubscriberAndCourse.save();
+
+    res.status(200).json({ msg: "User subscribed to the course" });
+  } catch (err) {
+    res.status(500).send("Server error. Request could not be fulfilled.");
+  }
+});
 
 // Get all subscriber data of a course
 app.route("/allSubscriberData/:courseId").get(checkAuth, async (req, res) => {
@@ -287,7 +368,7 @@ app.route("/login").post(async (req, res) => {
 
       // attach new session to express-session
       req.session.user = userSession;
-      console.log("Session in store after login: ", req.session);
+      // console.log("Session in store after login: ", req.session);
 
       // status, message and new session (as a cookie) sent to frontend
       return res.status(200).json({

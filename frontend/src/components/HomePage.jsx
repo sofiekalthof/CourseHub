@@ -112,7 +112,7 @@ function HomePage() {
         setError(true);
       });
   }, []);
-  console.log("courseIdDescs in homepage: ", courseIdDescs);
+  // console.log("courseIdDescs in homepage: ", courseIdDescs);
 
   // take user information from global context
   // TODO: remove the prop, since userSession is global OR make it all one prop

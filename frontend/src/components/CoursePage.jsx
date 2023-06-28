@@ -13,6 +13,42 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
+// Function to take a course
+async function TakeCourse(courseId, userId) {
+  // make API call to subscribe user to the course
+  try {
+    // send POST request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/takeCourse/${courseId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userId: userId,
+        }),
+        // header neccessary for correct sending of information
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        credentials: "include",
+      }
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      alert(resJson.msg);
+      return;
+    } else {
+      // some debug commands
+      alert(resJson.msg);
+    }
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
+// Function to get all course info
 async function GetAllCourseInfo(courseId) {
   // console.log("function GetAllCourseInfo called in CoursePage");
   // make API call to get all courses
@@ -47,7 +83,8 @@ async function GetAllCourseInfo(courseId) {
   }
 }
 
-async function GetAllCourseSubscriberData(courseId, user) {
+// Function to get all subscriber data from backend for the course
+async function GetAllCourseSubscriberData(courseId) {
   // make API call to get all subscriber data for a course
   try {
     // send get request to REST API
@@ -79,12 +116,12 @@ async function GetAllCourseSubscriberData(courseId, user) {
   }
 }
 
-// Show Button for taking course only when user is not owner and not already taking course
-function TakeCourse({ isOwner, isSubscriber }) {
-  if (!isOwner && !isSubscriber) {
-    return <Button variant="contained">Take Course </Button>;
-  }
-}
+// // Show Button for taking course only when user is not owner and not already taking course
+// function ShowTakeCourse({ isOwner, isSubscriber }) {
+//   if (!isOwner && !isSubscriber) {
+//     return <Button variant="contained">Take Course </Button>;
+//   }
+// }
 
 function CoursePage() {
   // console.log("rendered coursepage");
@@ -104,32 +141,45 @@ function CoursePage() {
   const [selectedCourse, setSelectedCourse] = useState();
   const [dataOfAllUsersForThisCourse, setDataOfAllUsersForThisCourse] =
     useState();
+  const [getDataAfterPost, setGetDataAfterPost] = useState(false);
   let isOwner = false;
   let isSubscriber = false;
   let userDataForCourse;
 
   useEffect(() => {
-    // get all subscribers of the course
-    GetAllCourseSubscriberData(courseId, user)
-      .then((res) => {
-        // use promise to set subscriber data
-        setDataOfAllUsersForThisCourse(res.subscribers);
-      })
-      .catch((err) => {
-        setError(true);
-      });
+    // // get all subscribers of the course
+    // GetAllCourseSubscriberData(courseId)
+    //   .then((res) => {
+    //     // use promise to set subscriber data
+    //     setDataOfAllUsersForThisCourse(res.subscribers);
+    //   })
+    //   .catch((err) => {
+    //     setError(true);
+    //   });
 
-    // get all course data
-    GetAllCourseInfo(courseId)
-      .then((res) => {
-        // use promise to set selected course data
-        setSelectedCourse(res);
+    // // get all course data
+    // GetAllCourseInfo(courseId)
+    //   .then((res) => {
+    //     // use promise to set selected course data
+    //     setSelectedCourse(res);
+    //     setLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     setError(true);
+    //   });
+    Promise.all([
+      GetAllCourseSubscriberData(courseId),
+      GetAllCourseInfo(courseId),
+    ])
+      .then(([res1, res2]) => {
+        setDataOfAllUsersForThisCourse(res1.subscribers);
+        setSelectedCourse(res2);
         setLoading(false);
       })
       .catch((err) => {
         setError(true);
       });
-  }, []);
+  }, [getDataAfterPost]);
 
   // console.log("all course data in coursepage: ", selectedCourse);
   // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
@@ -161,11 +211,22 @@ function CoursePage() {
     setTabValue(newValue);
   };
 
+  const handleTakeCourse = (courseId, userId) => {
+    TakeCourse(courseId, userId)
+      .then(() => {
+        // using setGetDataAfterPost to re-render component upon correct execution of TakeCourse
+        setGetDataAfterPost(true);
+      })
+      .catch((err) => {
+        setError(true);
+      });
+  };
+
   return (
     <>
       {/* allow backend to do its magic */}
-      {loading && <></>}
-      {error && <></>}
+      {/* {loading && <></>}
+      {error && <></>} */}
       {dataOfAllUsersForThisCourse && selectedCourse && (
         <>
           <Grid container spacing={2} sx={{ justifyContent: "center" }}>
@@ -178,7 +239,17 @@ function CoursePage() {
             </Grid>
             {/* Take Cozrse button if user is not owner or already subscriber */}
             <Grid item xs={1.5}>
-              <TakeCourse isOwner={isOwner} isSubscriber={isSubscriber} />
+              {/* <ShowTakeCourse isOwner={isOwner} isSubscriber={isSubscriber} /> */}
+              {!isOwner && !isSubscriber && (
+                <>
+                  <Button
+                    onClick={() => handleTakeCourse(courseId, user.id)}
+                    variant="contained"
+                  >
+                    Take Course{" "}
+                  </Button>
+                </>
+              )}
             </Grid>
             <Grid item xs={10}>
               <Card variant="outlined">
