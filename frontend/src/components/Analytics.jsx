@@ -55,6 +55,7 @@ function Analytics(props) {
             <Leaderboard
               dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}
               tasks={selectedCourse.tasks}
+              user={props.user}
             />
           </Card>
         </Grid>

@@ -60,7 +60,7 @@ function Leaderboard(props) {
                 {usersWithScore.map((user, index) => (
                   <TableRow key={user.id}>
                     <TableCell>#{index + 1}</TableCell>
-                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.id==props.user.id ? user.name + ' (You)' : user.name}</TableCell>
                     <TableCell>{user.score}</TableCell>
                   </TableRow>
                 ))}

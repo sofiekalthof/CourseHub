@@ -6,6 +6,7 @@ import {
   Paper,
   Box,
   TextField,
+  Tooltip
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -66,18 +67,17 @@ function Courses(props) {
         </Grid>
         {/* Show one card for each course */}
         {filteredData.map((course) => (
-          <Grid item xs={4} key={course._id}>
+          <Grid item xs={6} lg={4} key={course._id}>
             <Card
               sx={{
-                minHeight: 300,
-                minWidth: 250,
-                textAlign: "center",
+                height:300,
                 cursor: "pointer",
-                border: "1px solid #5CDB95",
+                border: "1px solid #5CDB95"
               }}
               onClick={() => handleOnClick(course)}
             >
               <CardContent>
+              <Tooltip title={course.name}>
                 <Typography
                   gutterBottom
                   height={50}
@@ -85,10 +85,14 @@ function Courses(props) {
                   align="center"
                 >
                   {course.name}
+                  
                 </Typography>
-                <Typography variant="body2" align="center">
+                </Tooltip>
+                <Tooltip title={course.description}>
+                <Typography variant="body2" sx={{paddingLeft: 3,paddingRight: 3, paddingTop:3, paddingBottom:3}}>
                   {course.description}
                 </Typography>
+                </Tooltip>
               </CardContent>
             </Card>
           </Grid>

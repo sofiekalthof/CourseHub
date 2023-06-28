@@ -182,6 +182,7 @@ function CoursePage() {
                       userDataForCourse={userDataForCourse}
                       selectedCourse={selectedCourse}
                       dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}
+                      user={user}
                     ></Analytics>
                   </TabPanel>
                 </TabContext>
