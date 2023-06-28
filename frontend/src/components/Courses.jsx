@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import CoursePage from "./CoursePage";
 
 function Courses(props) {
   const courses = props.courses;
@@ -18,8 +17,8 @@ function Courses(props) {
   // Navigate to the course page of selected course
   const navigate = useNavigate();
   const handleOnClick = (course) => {
-    navigate(`/course/${course.id}`, {
-      state: { user: userData },
+    navigate(`/course/${course._id}`, {
+      state: { course: course, user: userData },
       replace: true,
     });
   };
@@ -31,16 +30,19 @@ function Courses(props) {
   };
 
   // Function for filtering the courses
-  const filteredData = courses.filter((el) => {
+  const filteredData = Object.values(courses).filter((el) => {
     //if no input the return the original
     if (searchInput === "") {
       return el;
     }
     //return the item which contains the user input
     else {
-      return el.name.includes(searchInput);
+      // case insensitive filtering
+      return el.name.toLowerCase().includes(searchInput.toLowerCase());
     }
   });
+
+  // console.log("filteredData in courses.jsx: ", filteredData);
 
   return (
     <>
@@ -64,7 +66,7 @@ function Courses(props) {
         </Grid>
         {/* Show one card for each course */}
         {filteredData.map((course) => (
-          <Grid item xs={4} key={course.id}>
+          <Grid item xs={4} key={course._id}>
             <Card
               sx={{
                 minHeight: 300,

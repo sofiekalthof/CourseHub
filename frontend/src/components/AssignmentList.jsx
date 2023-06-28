@@ -38,7 +38,9 @@ function ShowTaskStatus({ index, userData }) {
   if (userData.length == 0) {
     return;
   }
-  if (userData[0].taskStatus[index].includes("due")) {
+  // extract relevant information from array first
+  let taskStatusData = userData[0].usertimeline.usertimeline;
+  if (taskStatusData.userTasksStats[index].userTaskSatus.includes("due")) {
     return (
       <>
         <Tooltip title="Due">
@@ -47,7 +49,7 @@ function ShowTaskStatus({ index, userData }) {
       </>
     );
   }
-  if (userData[0].taskStatus[index].includes("done")) {
+  if (taskStatusData.userTasksStats[index].userTaskSatus.includes("done")) {
     return (
       <>
         <Tooltip title="Done">
@@ -56,7 +58,7 @@ function ShowTaskStatus({ index, userData }) {
       </>
     );
   }
-  if (userData[0].taskStatus[index].includes("missed")) {
+  if (taskStatusData.userTasksStats[index].userTaskSatus.includes("missed")) {
     return (
       <>
         <Tooltip title="Missed">
@@ -68,7 +70,6 @@ function ShowTaskStatus({ index, userData }) {
 }
 
 function AssignmentList(props) {
-  // TODO(Utku): send props with tasks and milestones
   // get CourseDates as a prop from GeneralView
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
@@ -76,16 +77,18 @@ function AssignmentList(props) {
   // convert the Dates from a DateObject into a String for the AssignmentList
   let filteredDatesWithConvertedDates = [];
   tasks.map((task) => {
+    // convert mongodb data string to date
+    let taskTime = new Date(task.data);
     let convertedDates = [];
     convertedDates.push(
-      `${task.data.getDate()}/${
-        task.data.getMonth() + 1
-      }/${task.data.getFullYear()}`
+      `${taskTime.getDate()}/${
+        taskTime.getMonth() + 1
+      }/${taskTime.getFullYear()}`
     );
 
     filteredDatesWithConvertedDates.push({
       type: task.type,
-      id: task.id,
+      id: task._id,
       data: convertedDates,
       assignmentStatus: task.assignmentStatus,
       quizstatus: task.quizstatus,

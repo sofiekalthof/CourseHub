@@ -9,9 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-// TODO: move url to .env
-const API_URL = "http://localhost:3600";
-
 export default function Login() {
   // define states
   const [email, setEmail] = useState("");
@@ -28,6 +25,7 @@ export default function Login() {
   // function to handle submitting the form
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     // RegEx for checking a valid e-mail format
     let re = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
 
@@ -39,7 +37,7 @@ export default function Login() {
 
     try {
       // send GET request to REST API with email
-      let res = await fetch(`${API_URL}/login`, {
+      let res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         // all information being sent
         body: JSON.stringify({
@@ -48,23 +46,20 @@ export default function Login() {
         }),
         // header neccessary for correct sending of information
         headers: {
-          "Content-type": "application/json; charset=UTF-8",
+          "Content-type": "application/json",
         },
+        credentials: "include",
       });
       // parse return statement from backend
       let resJson = await res.json();
-
+      console.log(resJson);
       if (res.status === 200) {
         // if response is successful, reset states
         setEmail("");
         setPassword("");
-        // some debug commands
-        console.log(resJson);
-        console.log(userSession);
         // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
-        await setUserSession(resJson.userSession);
-        console.log(userSession);
-        console.log("Form done.");
+        await setUserSession(resJson.userInfo);
+        console.log("Login form done.");
         alert(resJson.msg);
         // route to homepage
         handleHome();

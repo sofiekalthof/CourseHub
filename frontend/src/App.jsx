@@ -39,7 +39,7 @@ export const UserContext = createContext({});
 
 export default function App() {
   // flag for debugging or developing w/o user authentification
-  const debug = true;
+  const debug = false;
   const [userSession, setUserSession] = useState(true);
 
   const fetchUserAuth = async () => {
@@ -50,7 +50,14 @@ export default function App() {
     }
     try {
       // check if user is authenticated
-      const res = await fetch(`${API_URL}/isAuth`);
+      const res = await fetch(`${API_URL}/isAuth`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+        credentials: "include",
+      });
+      console.log("isAuth API call from App");
 
       // parse return statement from backend
       let resJson = await res.json();
@@ -89,14 +96,14 @@ export default function App() {
             {/* default route is landing page */}
             <Route path="*" element={<LandingPage />} />
             {/* if there is a user session, these routes are available */}
-            {userSession._id && (
+            {userSession.id && (
               <>
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/course/:id" element={<CoursePage />} />
               </>
             )}
             {/* if there is no user session, these routes are available */}
-            {!userSession._id && (
+            {!userSession.id && (
               <>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/registerlogin" element={<RegisterLogInPage />} />

@@ -18,7 +18,7 @@ const TimelineUserSchema = new mongoose.Schema({
     },
   ],
   // milestones' status for a user
-  userMilestonesStatus: [
+  userMilestonesStats: [
     {
       type: userMilestoneSatusSchema,
     },

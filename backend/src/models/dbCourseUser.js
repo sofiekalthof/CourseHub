@@ -11,23 +11,26 @@ const collectionName = process.env.DB_COLLECTION_COURSEUSERS;
 const CourseUserSchema = new mongoose.Schema({
   // user taking the course
   subscriber: {
-    type: mongoose.Types.ObjectId, 
-    ref: "UserModel"
+    type: mongoose.Types.ObjectId,
+    ref: "UserModel",
   },
   // course that the user takes
   course: {
-    type: mongoose.Types.ObjectId, 
-    ref: "CourseModel"
+    type: mongoose.Types.ObjectId,
+    ref: "CourseModel",
   },
   // reduced timeline for each subscriber of any course with information on scores, completion status etc.
-  timeline: {
+  usertimeline: {
     type: mongoose.Types.ObjectId,
-    ref: "TimelineUserModel"
+    ref: "TimelineUserModel",
   },
 });
 
 // create model from schema
-let CourseUserModel = mongoose.model(collectionName, schema=CourseUserSchema);
+let CourseUserModel = mongoose.model(
+  collectionName,
+  (schema = CourseUserSchema)
+);
 
 // export model
 module.exports = CourseUserModel;
