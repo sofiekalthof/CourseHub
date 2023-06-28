@@ -13,17 +13,38 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-function ExtractUserData(dataOfAllUsersForThisCourse, user) {
-  console.log("extract user data: ", dataOfAllUsersForThisCourse);
-  console.log("A");
-  // Check if user is subscriber of course
-  const userDataForCourse = dataOfAllUsersForThisCourse.filter(
-    (subscriber) =>
-      subscriber.course == courseId && subscriber.subscriber == user.id
-  );
-  console.log("B");
-  console.log("XXXuserDataForCourse: ", userDataForCourse);
-  return userDataForCourse;
+async function GetAllCourseInfo(courseId) {
+  // console.log("function GetAllCourseInfo called in CoursePage");
+  // make API call to get all courses
+  try {
+    // send get request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courseAllInfo/${courseId}`,
+      {
+        method: "GET",
+        // header neccessary for correct sending of information
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        credentials: "include",
+      }
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      // console.log("resJson in GetAllCourseInfo: ", resJson);
+      return resJson;
+    } else if (res.status === 401) {
+      alert(resJson.msg);
+    } else {
+      // some debug commands
+      alert(resJson.msg);
+    }
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
 }
 
 async function GetAllCourseSubscriberData(courseId, user) {
@@ -70,7 +91,7 @@ function CoursePage() {
   // Get user and selected course from route parameters
   const location = useLocation();
   const user = location.state.user;
-  const selectedCourse = location.state.course;
+  // const selectedCourseId = location.state.courseId;
 
   // Get course id from route
   let courseId = useParams().id;
@@ -80,42 +101,52 @@ function CoursePage() {
   // setting the initial loading state to false
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState();
   const [dataOfAllUsersForThisCourse, setDataOfAllUsersForThisCourse] =
     useState();
-  // Check if user is owner of course
-  const [isOwner, setIsOwner] = React.useState(
-    user.id == selectedCourse.owner ? true : false
-  );
+  let isOwner = false;
   let isSubscriber = false;
   let userDataForCourse;
 
   useEffect(() => {
     // get all subscribers of the course
     GetAllCourseSubscriberData(courseId, user)
-      .then(async (res) => {
+      .then((res) => {
         // use promise to set subscriber data
         setDataOfAllUsersForThisCourse(res.subscribers);
+      })
+      .catch((err) => {
+        setError(true);
+      });
+
+    // get all course data
+    GetAllCourseInfo(courseId)
+      .then((res) => {
+        // use promise to set selected course data
+        setSelectedCourse(res);
         setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
         setError(true);
       });
   }, []);
 
-  // let subscriber = false;
-  // if (userDataForCourse.length != 0) {
-  //   subscriber = true;
-  // }
+  // console.log("all course data in coursepage: ", selectedCourse);
+  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
+  // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
+  // console.log("courseId: ", courseId);
+  // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
+  // console.log("userId: ", user.id);
+  // console.log("loading: ", loading);
+  // console.log("isSubscriber: ", isSubscriber);
 
-  // console.log("userDataForCourse: ", userDataForCourse);
-  // console.log("subscriber: ", subscriber);
-
-  // console.log("loading: ", loading, " / error: ", error);
-  // if (!loading && !error) {
-  //   setIsSubscriber(subscriber);
-  // }
   if (!loading) {
+    // Check if user is owner of course
+    if (user.id == selectedCourse.owner) {
+      isOwner = true;
+    }
+
+    // check if user is a subscriber of course
     userDataForCourse = dataOfAllUsersForThisCourse.filter(
       (subscriber) =>
         subscriber.course == courseId && subscriber.subscriber == user.id
@@ -124,14 +155,6 @@ function CoursePage() {
       isSubscriber = true;
     }
   }
-
-  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
-  // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
-  // console.log("courseId: ", courseId);
-  // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
-  // console.log("userId: ", user.id);
-  // console.log("loading: ", loading);
-  // console.log("isSubscriber: ", isSubscriber);
 
   // HandleChange function for tabContext
   const handleChange = (event, newValue) => {
@@ -143,7 +166,7 @@ function CoursePage() {
       {/* allow backend to do its magic */}
       {loading && <></>}
       {error && <></>}
-      {dataOfAllUsersForThisCourse && (
+      {dataOfAllUsersForThisCourse && selectedCourse && (
         <>
           <Grid container spacing={2} sx={{ justifyContent: "center" }}>
             <Grid item xs={12}>

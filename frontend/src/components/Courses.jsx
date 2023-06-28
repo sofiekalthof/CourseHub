@@ -11,14 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function Courses(props) {
-  const courses = props.courses;
+  const courseIdDescs = props.courseIdDescs;
   const userData = props.user;
 
   // Navigate to the course page of selected course
   const navigate = useNavigate();
   const handleOnClick = (course) => {
     navigate(`/course/${course._id}`, {
-      state: { course: course, user: userData },
+      state: { courseId: course._id, user: userData },
       replace: true,
     });
   };
@@ -30,7 +30,7 @@ function Courses(props) {
   };
 
   // Function for filtering the courses
-  const filteredData = Object.values(courses).filter((el) => {
+  const filteredData = Object.values(courseIdDescs).filter((el) => {
     //if no input the return the original
     if (searchInput === "") {
       return el;
@@ -42,7 +42,7 @@ function Courses(props) {
     }
   });
 
-  // console.log("filteredData in courses.jsx: ", filteredData);
+  console.log("filteredData in courses.jsx: ", filteredData);
 
   return (
     <>
@@ -65,8 +65,8 @@ function Courses(props) {
           />
         </Grid>
         {/* Show one card for each course */}
-        {filteredData.map((course) => (
-          <Grid item xs={4} key={course._id}>
+        {filteredData.map((courseIdDescs) => (
+          <Grid item xs={4} key={courseIdDescs._id}>
             <Card
               sx={{
                 minHeight: 300,
@@ -75,7 +75,7 @@ function Courses(props) {
                 cursor: "pointer",
                 border: "1px solid #5CDB95",
               }}
-              onClick={() => handleOnClick(course)}
+              onClick={() => handleOnClick(courseIdDescs)}
             >
               <CardContent>
                 <Typography
@@ -84,10 +84,10 @@ function Courses(props) {
                   variant="h6"
                   align="center"
                 >
-                  {course.name}
+                  {courseIdDescs.name}
                 </Typography>
                 <Typography variant="body2" align="center">
-                  {course.description}
+                  {courseIdDescs.description}
                 </Typography>
               </CardContent>
             </Card>
