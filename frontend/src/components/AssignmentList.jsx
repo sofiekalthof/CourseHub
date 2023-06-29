@@ -31,16 +31,17 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import { useState } from "react";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 dayjs.extend(localizedFormat);
 
 // Determine status of one task
-function ShowTaskStatus({ index, userData }) {
-  if (userData.length == 0) {
+function ShowTaskStatus(taskStatus) {
+  if (taskStatus.taskStatus == undefined) {
     return;
   }
-  // extract relevant information from array first
-  let taskStatusData = userData[0].usertimeline.usertimeline;
-  if (taskStatusData.userTasksStats[index].userTaskSatus.includes("due")) {
+  if (taskStatus.taskStatus.includes("due")) {
     return (
       <>
         <Tooltip title="Due">
@@ -49,7 +50,7 @@ function ShowTaskStatus({ index, userData }) {
       </>
     );
   }
-  if (taskStatusData.userTasksStats[index].userTaskSatus.includes("done")) {
+  if (taskStatus.taskStatus.includes("done")) {
     return (
       <>
         <Tooltip title="Done">
@@ -58,7 +59,7 @@ function ShowTaskStatus({ index, userData }) {
       </>
     );
   }
-  if (taskStatusData.userTasksStats[index].userTaskSatus.includes("missed")) {
+  if (taskStatus.taskStatus.includes("missed")) {
     return (
       <>
         <Tooltip title="Missed">
@@ -73,30 +74,67 @@ function AssignmentList(props) {
   // get CourseDates as a prop from GeneralView
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
+  const taskStatusData = userData[0].usertimeline.usertimeline;
+  const [areDatesDescending, setAreStatesDescending] = useState(true);
+
+   // State to store the filter type
+   const [filterType, setFilterType] = useState("");
+     // Filter function to filter tasks based on type (quiz/assignment)
+  const filterTasks = (task) => {
+    if (filterType === "") {
+      return true; // If no filter type is selected, show all tasks
+    } else {
+      return task.type.toLowerCase() === filterType.toLowerCase();
+    }
+  };
 
   // convert the Dates from a DateObject into a String for the AssignmentList
   let filteredDatesWithConvertedDates = [];
-  tasks.map((task) => {
+  tasks.map((task, index) => {
     // convert mongodb data string to date
     let taskTime = new Date(task.data);
-    let convertedDates = [];
-    convertedDates.push(
+    // convert date into String format for assignment list
+    let convertedDate =
       `${taskTime.getDate()}/${
         taskTime.getMonth() + 1
       }/${taskTime.getFullYear()}`
-    );
+    ;
 
+    // push original date, datString and taskStatus to list for displaying data in assignment list
     filteredDatesWithConvertedDates.push({
       type: task.type,
       id: task._id,
-      data: convertedDates,
+      data: taskTime,
+      dateToString: convertedDate,
       assignmentStatus: task.assignmentStatus,
       quizstatus: task.quizstatus,
+      taskstatus: taskStatusData.userTasksStats[index].userTaskSatus
     });
   });
+  filteredDatesWithConvertedDates.sort((a,b) => b.data - a.data)
+
+
+  const [dates, setDates] = useState(filteredDatesWithConvertedDates);
+
+  const filterDates = () => {
+    if (areDatesDescending){
+      setAreStatesDescending(false);
+      const ascendingDates = [...dates].sort((a,b) => a.data - b.data);
+      setDates(ascendingDates);
+    } else {
+      setAreStatesDescending(true);
+      const descendingDates = [...dates].sort((a,b) => b.data - a.data)
+      setDates(descendingDates);
+    }
+  }
 
   return (
     <>
+    <Button onClick={() => setFilterType("assignment")}>
+          Show Assignments
+        </Button>
+        <Button onClick={() => setFilterType("quiz")}>Show Quizzes</Button>
+        <Button onClick={() => setFilterType("")}>Show All</Button>
       <Grid container>
         <Grid item xs={12}>
           <TableContainer>
@@ -104,19 +142,21 @@ function AssignmentList(props) {
               <TableHead>
                 <TableRow>
                   <TableCell></TableCell>
-                  <TableCell>Due Date</TableCell>
+                  <TableCell>Due Date {areDatesDescending ? <ArrowDownwardIcon fontSize="15px" onClick={filterDates}/>: <ArrowUpwardIcon fontSize="15px" onClick={filterDates}/>}</TableCell>
                   <TableCell>Assignment/Quiz</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {/* One table row for each task */}
-                {filteredDatesWithConvertedDates.map((task, index) => (
+                {dates
+                .filter(filterTasks) // Apply the filter
+                .map((task, index) => (
                   <TableRow key={task.id}>
                     <TableCell>
-                      <ShowTaskStatus index={index} userData={userData} />
+                      <ShowTaskStatus taskStatus={task.taskstatus} />
                     </TableCell>
-                    <TableCell>{task.data}</TableCell>
+                    <TableCell>{task.dateToString}</TableCell>
                     <TableCell>{task.type}</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
