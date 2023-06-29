@@ -21,7 +21,7 @@ import {
   ListItemIcon,
   Divider,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
@@ -77,7 +77,7 @@ function AssignmentList(props) {
   // get CourseDates as a prop from GeneralView
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
-  const taskStatusData = userData[0].usertimeline.usertimeline;
+  const taskStatusData = (userData.length > 0 ? userData[0].usertimeline.usertimeline : []);
   const [areDatesDescending, setAreStatesDescending] = useState(true);
 
   // State to store the filter type
@@ -148,20 +148,30 @@ function AssignmentList(props) {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell></TableCell>
+                  <TableCell> Status</TableCell>
                   <TableCell>
-                    Due Date{" "}
+                    Due Date
                     {areDatesDescending ? (
                       <ArrowDownwardIcon
                         fontSize="15px"
                         onClick={filterDates}
+                        sx={{ cursor: "pointer" }}
                       />
                     ) : (
-                      <ArrowUpwardIcon fontSize="15px" onClick={filterDates} />
+                      <ArrowUpwardIcon
+                        fontSize="15px"
+                        onClick={filterDates}
+                        sx={{ cursor: "pointer" }}
+                      />
                     )}
                   </TableCell>
                   <TableCell>
-                    Assignment/Quiz <FilterAltIcon fontSize="15px" onClick={handleClick}/>
+                    Assignment/Quiz{" "}
+                    <FilterAltIcon
+                      fontSize="15px"
+                      onClick={handleClick}
+                      sx={{ cursor: "pointer" }}
+                    />
                     <Menu
                       id="basic-menu"
                       anchorEl={anchorEl}
@@ -171,9 +181,15 @@ function AssignmentList(props) {
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem onClick={() => setFilterType("")}>Show All</MenuItem>
-                      <MenuItem onClick={() => setFilterType("quiz")}>Show Quizzes</MenuItem>
-                      <MenuItem onClick={() => setFilterType("assignment")}>Show Assignments</MenuItem>
+                      <MenuItem onClick={() => setFilterType("")}>
+                        Show All
+                      </MenuItem>
+                      <MenuItem onClick={() => setFilterType("quiz")}>
+                        Show Quizzes
+                      </MenuItem>
+                      <MenuItem onClick={() => setFilterType("assignment")}>
+                        Show Assignments
+                      </MenuItem>
                     </Menu>
                   </TableCell>
                   <TableCell></TableCell>
