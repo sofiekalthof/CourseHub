@@ -20,6 +20,8 @@ import {
   IconButton,
   ListItemIcon,
   Divider,
+  Menu,
+  MenuItem
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
@@ -32,8 +34,9 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { useState } from "react";
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 dayjs.extend(localizedFormat);
 
 // Determine status of one task
@@ -77,9 +80,9 @@ function AssignmentList(props) {
   const taskStatusData = userData[0].usertimeline.usertimeline;
   const [areDatesDescending, setAreStatesDescending] = useState(true);
 
-   // State to store the filter type
-   const [filterType, setFilterType] = useState("");
-     // Filter function to filter tasks based on type (quiz/assignment)
+  // State to store the filter type
+  const [filterType, setFilterType] = useState("");
+  // Filter function to filter tasks based on type (quiz/assignment)
   const filterTasks = (task) => {
     if (filterType === "") {
       return true; // If no filter type is selected, show all tasks
@@ -94,12 +97,9 @@ function AssignmentList(props) {
     // convert mongodb data string to date
     let taskTime = new Date(task.data);
     // convert date into String format for assignment list
-    let convertedDate =
-      `${taskTime.getDate()}/${
-        taskTime.getMonth() + 1
-      }/${taskTime.getFullYear()}`
-    ;
-
+    let convertedDate = `${taskTime.getDate()}/${
+      taskTime.getMonth() + 1
+    }/${taskTime.getFullYear()}`;
     // push original date, datString and taskStatus to list for displaying data in assignment list
     filteredDatesWithConvertedDates.push({
       type: task.type,
@@ -108,33 +108,40 @@ function AssignmentList(props) {
       dateToString: convertedDate,
       assignmentStatus: task.assignmentStatus,
       quizstatus: task.quizstatus,
-      taskstatus: taskStatusData.userTasksStats[index].userTaskSatus
+      taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
     });
   });
-  filteredDatesWithConvertedDates.sort((a,b) => b.data - a.data)
-
+  filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
 
   const [dates, setDates] = useState(filteredDatesWithConvertedDates);
 
   const filterDates = () => {
-    if (areDatesDescending){
+    if (areDatesDescending) {
       setAreStatesDescending(false);
-      const ascendingDates = [...dates].sort((a,b) => a.data - b.data);
+      const ascendingDates = [...dates].sort((a, b) => a.data - b.data);
       setDates(ascendingDates);
     } else {
       setAreStatesDescending(true);
-      const descendingDates = [...dates].sort((a,b) => b.data - a.data)
+      const descendingDates = [...dates].sort((a, b) => b.data - a.data);
       setDates(descendingDates);
     }
-  }
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  // Function for showing the dropdown list for creating new task
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Function for closing dropdown
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
-    <Button onClick={() => setFilterType("assignment")}>
-          Show Assignments
-        </Button>
-        <Button onClick={() => setFilterType("quiz")}>Show Quizzes</Button>
-        <Button onClick={() => setFilterType("")}>Show All</Button>
       <Grid container>
         <Grid item xs={12}>
           <TableContainer>
@@ -142,25 +149,50 @@ function AssignmentList(props) {
               <TableHead>
                 <TableRow>
                   <TableCell></TableCell>
-                  <TableCell>Due Date {areDatesDescending ? <ArrowDownwardIcon fontSize="15px" onClick={filterDates}/>: <ArrowUpwardIcon fontSize="15px" onClick={filterDates}/>}</TableCell>
-                  <TableCell>Assignment/Quiz</TableCell>
+                  <TableCell>
+                    Due Date{" "}
+                    {areDatesDescending ? (
+                      <ArrowDownwardIcon
+                        fontSize="15px"
+                        onClick={filterDates}
+                      />
+                    ) : (
+                      <ArrowUpwardIcon fontSize="15px" onClick={filterDates} />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    Assignment/Quiz <FilterAltIcon fontSize="15px" onClick={handleClick}/>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem onClick={() => setFilterType("")}>Show All</MenuItem>
+                      <MenuItem onClick={() => setFilterType("quiz")}>Show Quizzes</MenuItem>
+                      <MenuItem onClick={() => setFilterType("assignment")}>Show Assignments</MenuItem>
+                    </Menu>
+                  </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {/* One table row for each task */}
                 {dates
-                .filter(filterTasks) // Apply the filter
-                .map((task, index) => (
-                  <TableRow key={task.id}>
-                    <TableCell>
-                      <ShowTaskStatus taskStatus={task.taskstatus} />
-                    </TableCell>
-                    <TableCell>{task.dateToString}</TableCell>
-                    <TableCell>{task.type}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                ))}
+                  .filter(filterTasks) // Apply the filter
+                  .map((task, index) => (
+                    <TableRow key={task.id}>
+                      <TableCell>
+                        <ShowTaskStatus taskStatus={task.taskstatus} />
+                      </TableCell>
+                      <TableCell>{task.dateToString}</TableCell>
+                      <TableCell>{task.type}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
