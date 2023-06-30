@@ -76,7 +76,7 @@ function CreateMileStone({ isOwner }) {
             <Grid container spacing={3}>
               {/* Dropdown Menu for selecting the Milestone Type */}
               <Grid item xs={12}>
-                <FormControl fullWidth>
+                <FormControl fullWidth sx={{marginTop: 1}}>
                   <InputLabel>Milestone Type</InputLabel>
                   <Select
                     value={milestoneType}
