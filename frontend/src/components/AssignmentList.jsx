@@ -77,7 +77,6 @@ function AssignmentList(props) {
   // get CourseDates as a prop from GeneralView
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
-  console.log(userData)
   const taskStatusData =
     userData.length > 0 ? userData[0].usertimeline.usertimeline.userTasksStats[index].userTaskSatus : [];
   const [areDatesDescending, setAreStatesDescending] = useState(true);
