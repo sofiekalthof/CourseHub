@@ -88,17 +88,25 @@ function AssignmentTaking({ assignment, onBackToAssignmentList }) {
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: "80%",
-              maxWidth: 600,
+              maxWidth: 1000,
               bgcolor: "background.paper",
               boxShadow: 24,
               p: 2,
               outline: "none",
+              
             }}
           >
             {showSummary ? (
               renderAssignmentSummary()
             ) : (
-              <Box sx={{ p: 2 }}>
+              <Box sx={{
+                p: 2,
+                mb: 2,
+                mt:2,
+                maxHeight: "900px",
+               
+                overflow: "auto",
+              }}>
                 <Typography variant="h5" gutterBottom>
                   Assignment Details
                 </Typography>

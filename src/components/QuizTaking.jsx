@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Typography,
-  Box,
-  Checkbox,
-  Button,
-  FormControlLabel,
-  Modal,
-  Backdrop,
-  Fade,
-} from "@mui/material";
+import { Typography, Box, Checkbox, Button, FormControlLabel, Modal, Backdrop, Fade } from "@mui/material";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 dayjs.extend(localizedFormat);
@@ -78,28 +69,43 @@ function QuizTaking({ quiz, onBackToQuizList }) {
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
     const isFirstQuestion = currentQuestionIndex === 0;
-
+    const progressBarSize = Math.max(1, quiz.questions.length); // Calculate the size of the progress bar
     return (
       <>
         <Box sx={{ p: 2 }}>
-         
-          <Typography variant="h5" gutterBottom>
-            Question {currentQuestionIndex + 1} of {quiz.questions.length}
-          </Typography>
+          <Box mb={2}>
+          
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                justifyContent: "center",
+                marginBottom: 2,
+              }}
+            >
+               {/* Progress bar */}
+              {[...Array(progressBarSize)].map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: `${100 / progressBarSize}%`,
+                    height: 4,
+                    backgroundColor: index === currentQuestionIndex ? "green" : "grey",
+                    marginRight: 1,
+                    borderRadius: 2,
+                  }}
+                />
+              ))}
+            </Box>
+
+            <Typography variant="h5" gutterBottom>
+              Question {currentQuestionIndex + 1} of {quiz.questions.length}
+            </Typography>
+          </Box>
 
           <Box mb={2}>
             <Typography variant="body1">{currentQuestion.text}</Typography>
           </Box>
-
-          {currentQuestion.image && (
-            <Box mb={2} display="flex" justifyContent="center">
-              <img
-                src={currentQuestion.image}
-                alt={`Question ${currentQuestionIndex + 1}`}
-                style={{ width: "500px", height: "300px", objectFit: "contain" }}
-              />
-            </Box>
-          )}
 
           {currentQuestion.answers.map((answer, index) => (
             <FormControlLabel
@@ -115,7 +121,7 @@ function QuizTaking({ quiz, onBackToQuizList }) {
             />
           ))}
 
-          <Box mt={2} >
+          <Box mt={2}>
             <Button variant="contained" onClick={handlePreviousQuestion} disabled={isFirstQuestion}>
               Previous Question
             </Button>{" "}
@@ -133,7 +139,13 @@ function QuizTaking({ quiz, onBackToQuizList }) {
 
     return (
       <>
-        <Box sx={{ p: 2 }}>
+        <Box   sx={{
+                    p: 2,
+                    mb: 2,
+                    mt:2,
+                    maxHeight: "600px",
+                    overflow: "auto",
+                  }}>
           <Typography variant="h5" gutterBottom>
             Quiz Completed Summary
           </Typography>
@@ -219,7 +231,7 @@ function QuizTaking({ quiz, onBackToQuizList }) {
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: "80%",
-              maxWidth: 600,
+              maxWidth: 1000,
               bgcolor: "background.paper",
               boxShadow: 24,
               p: 2,

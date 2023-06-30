@@ -71,7 +71,7 @@ export default function UserPage() {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
           <Box sx={{ position: 'relative', width: '150px', height: '150px', borderRadius: '50%', overflow: 'hidden' }}>
             <img src="./userprofile.png" alt="Profile Pic" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            <Tooltip title="Change Photo" placement="bottom">
+            <Tooltip title="Change Photo" placement="left">
               <Box
                 sx={{
                   position: 'absolute',
