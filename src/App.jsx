@@ -1,10 +1,13 @@
 import React from 'react';
-import QuizApp from './components/QuizApp';
+import UserPage
+ from './components/UserPage';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div>
-      <QuizApp />
+      <Navbar/>
+      <UserPage />
     </div>
   );
 }
