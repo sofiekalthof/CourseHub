@@ -57,7 +57,7 @@ function ShowTaskStatus(taskStatus) {
     return (
       <>
         <Tooltip title="Done">
-          <CheckCircleIcon sx={{ fontSize: 15, color: "green" }} />
+          <CheckCircleIcon sx={{ fontSize: 15, color: "#5CDB95" }} />
         </Tooltip>
       </>
     );
@@ -147,7 +147,7 @@ function AssignmentList(props) {
         <Grid item xs={12}>
           <TableContainer>
             <Table>
-              <TableHead>
+              <TableHead sx={{backgroundColor: "#5CDB95"}}>
                 <TableRow>
                   <TableCell> Status</TableCell>
                   <TableCell>

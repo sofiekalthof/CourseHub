@@ -49,7 +49,7 @@ function Leaderboard(props) {
         <Grid item xs={12}>
           <TableContainer>
             <Table>
-              <TableHead>
+              <TableHead sx={{backgroundColor: "#5CDB95"}}>
                 <TableRow>
                   <TableCell>Position</TableCell>
                   <TableCell>User</TableCell>
