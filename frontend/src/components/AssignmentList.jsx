@@ -77,8 +77,9 @@ function AssignmentList(props) {
   // get CourseDates as a prop from GeneralView
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
+  console.log(userData)
   const taskStatusData =
-    userData.length > 0 ? userData[0].usertimeline.usertimeline : [];
+    userData.length > 0 ? userData[0].usertimeline.usertimeline.userTasksStats[index].userTaskSatus : [];
   const [areDatesDescending, setAreStatesDescending] = useState(true);
 
   // State to store the filter type
@@ -109,7 +110,7 @@ function AssignmentList(props) {
       dateToString: convertedDate,
       assignmentStatus: task.assignmentStatus,
       quizstatus: task.quizstatus,
-      taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
+      taskstatus: taskStatusData,
     });
   });
   filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
