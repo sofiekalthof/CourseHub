@@ -59,9 +59,27 @@ function Leaderboard(props) {
               <TableBody>
                 {usersWithScore.map((user, index) => (
                   <TableRow key={user.id}>
-                    <TableCell>#{index + 1}</TableCell>
-                    <TableCell>{user.id==props.user.id ? user.name + ' (You)' : user.name}</TableCell>
-                    <TableCell>{user.score}</TableCell>
+                    {user.id == props.user.id ? (
+                      <TableCell sx={{ color: "#379683" }}>
+                        #{index + 1}
+                      </TableCell>
+                    ) : (
+                      <TableCell>#{index + 1}</TableCell>
+                    )}
+                    {user.id == props.user.id ? (
+                      <TableCell sx={{ color: "#379683" }}>
+                        {user.name} (You)
+                      </TableCell>
+                    ) : (
+                      <TableCell>{user.name}</TableCell>
+                    )}
+                    {user.id == props.user.id ? (
+                      <TableCell sx={{ color: "#379683" }}>
+                        {user.score}
+                      </TableCell>
+                    ) : (
+                      <TableCell>{user.score}</TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
