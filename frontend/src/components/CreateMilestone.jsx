@@ -36,7 +36,7 @@ import { v4 as uuidv4 } from "uuid";
 import CreateTask from "./CreateTask";
 
 // Function for Showing the Add Milestone button
-function CreateMileStone({ isOwner }) {
+function CreateMileStone(props) {
   const [open, setOpen] = useState(false);
   const [milestoneType, setMilestoneType] = useState("");
   const [date, setDate] = useState(dayjs());
@@ -54,8 +54,22 @@ function CreateMileStone({ isOwner }) {
   };
 
   // Function for saving the milestone
-  // TODO: Connection to backend
-  const handleClickSave = () => {};
+  const handleClickSave = () => {
+    props
+      .createAndSaveMilestone(
+        props.selectedCourseTimelineId,
+        milestoneType,
+        date,
+        props.subscriberTimelines
+      )
+      .then((res) => {
+        props.coursePageRerender(true);
+        setOpen(false);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   // Function for selecting milestone type
   const handleChange = (event) => {
@@ -63,7 +77,7 @@ function CreateMileStone({ isOwner }) {
   };
 
   // Show MileStone Button only when user is owner of course
-  if (isOwner) {
+  if (props.isOwner) {
     return (
       <>
         <Button variant="outlined" onClick={handleClickOpen}>

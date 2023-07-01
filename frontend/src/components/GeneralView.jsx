@@ -46,7 +46,13 @@ function GeneralView(props) {
         </Grid>
         {/* Button for adding a milestone */}
         <Grid item xs={1.75}>
-          <CreateMileStone isOwner={isOwner}></CreateMileStone>
+          <CreateMileStone
+            selectedCourseTimelineId={props.selectedCourse.timeline._id}
+            subscriberTimelines={props.subscriberTimelines}
+            createAndSaveMilestone={props.createAndSaveMilestone}
+            coursePageRerender={props.coursePageRerender}
+            isOwner={isOwner}
+          ></CreateMileStone>
         </Grid>
         {/* Showing timeline */}
         <Grid item xs={12}>

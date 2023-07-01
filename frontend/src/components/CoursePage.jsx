@@ -14,6 +14,48 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 
 // Function to take a course
+async function CreateAndSaveMileStone(
+  courseTimelieId,
+  type,
+  data,
+  subscriberTimelines
+) {
+  // make API call to subscribe user to the course
+  try {
+    // send POST request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courseAddMilestone/${courseTimelieId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          type: type,
+          data: data,
+          subscriberTimelines: subscriberTimelines,
+        }),
+        // header neccessary for correct sending of information
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        credentials: "include",
+      }
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      alert(resJson.msg);
+      return;
+    } else {
+      // some debug commands
+      alert(resJson.msg);
+    }
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
+// Function to take a course
 async function TakeCourse(courseId, userId) {
   // make API call to subscribe user to the course
   try {
@@ -145,6 +187,7 @@ function CoursePage() {
   let isOwner = false;
   let isSubscriber = false;
   let userDataForCourse;
+  let subscriberTimelines = [];
 
   useEffect(() => {
     // // get all subscribers of the course
@@ -181,15 +224,6 @@ function CoursePage() {
       });
   }, [getDataAfterPost]);
 
-  // console.log("all course data in coursepage: ", selectedCourse);
-  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
-  // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
-  // console.log("courseId: ", courseId);
-  // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
-  // console.log("userId: ", user.id);
-  // console.log("loading: ", loading);
-  // console.log("isSubscriber: ", isSubscriber);
-
   if (!loading) {
     // Check if user is owner of course
     if (user.id == selectedCourse.owner) {
@@ -204,7 +238,23 @@ function CoursePage() {
     if (userDataForCourse.length !== 0) {
       isSubscriber = true;
     }
+
+    dataOfAllUsersForThisCourse.forEach((subscriber) => {
+      subscriberTimelines = [
+        ...subscriberTimelines,
+        subscriber.usertimeline.usertimeline._id,
+      ];
+    });
   }
+
+  console.log("all course data in coursepage: ", selectedCourse);
+  console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
+  // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
+  // console.log("courseId: ", courseId);
+  // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
+  // console.log("userId: ", user.id);
+  // console.log("loading: ", loading);
+  // console.log("isSubscriber: ", isSubscriber);
 
   // HandleChange function for tabContext
   const handleChange = (event, newValue) => {
@@ -269,6 +319,9 @@ function CoursePage() {
                       isOwner={isOwner}
                       user={user}
                       userDataForCourse={userDataForCourse}
+                      subscriberTimelines={subscriberTimelines}
+                      createAndSaveMilestone={CreateAndSaveMileStone}
+                      coursePageRerender={setGetDataAfterPost}
                     ></GeneralView>
                   </TabPanel>
                   <TabPanel value="two">
