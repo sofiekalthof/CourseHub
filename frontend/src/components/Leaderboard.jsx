@@ -6,7 +6,7 @@ import {
   TableHead,
   TableRow,
   Grid,
-  Alert
+  Alert,
 } from "@mui/material";
 
 function createSortedListWithScore(dataOfAllUsersForThisCourse) {
@@ -50,7 +50,7 @@ function Leaderboard(props) {
         <Grid item xs={12}>
           <TableContainer>
             <Table>
-              <TableHead sx={{backgroundColor: "#5CDB95"}}>
+              <TableHead sx={{ backgroundColor: "#5CDB95" }}>
                 <TableRow>
                   <TableCell>Position</TableCell>
                   <TableCell>User</TableCell>
@@ -58,32 +58,40 @@ function Leaderboard(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {usersWithScore.length == 0 ? (<TableRow><TableCell colSpan={3}><Alert severity='info'>No scores from other users available</Alert></TableCell></TableRow>) : (
-                usersWithScore.map((user, index) => (
-                  <TableRow key={user.id}>
-                    {user.id == props.user.id ? (
-                      <TableCell sx={{ color: "#379683" }}>
-                        #{index + 1}
-                      </TableCell>
-                    ) : (
-                      <TableCell>#{index + 1}</TableCell>
-                    )}
-                    {user.id == props.user.id ? (
-                      <TableCell sx={{ color: "#379683" }}>
-                        {user.name} (You)
-                      </TableCell>
-                    ) : (
-                      <TableCell>{user.name}</TableCell>
-                    )}
-                    {user.id == props.user.id ? (
-                      <TableCell sx={{ color: "#379683" }}>
-                        {user.score}
-                      </TableCell>
-                    ) : (
-                      <TableCell>{user.score}</TableCell>
-                    )}
+                {usersWithScore.length == 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3}>
+                      <Alert severity="info">
+                        No scores from other users available
+                      </Alert>
+                    </TableCell>
                   </TableRow>
-                ))
+                ) : (
+                  usersWithScore.map((user, index) => (
+                    <TableRow key={user.id}>
+                      {user.id == props.user.id ? (
+                        <TableCell sx={{ color: "#379683" }}>
+                          #{index + 1}
+                        </TableCell>
+                      ) : (
+                        <TableCell>#{index + 1}</TableCell>
+                      )}
+                      {user.id == props.user.id ? (
+                        <TableCell sx={{ color: "#379683" }}>
+                          {user.name} (You)
+                        </TableCell>
+                      ) : (
+                        <TableCell>{user.name}</TableCell>
+                      )}
+                      {user.id == props.user.id ? (
+                        <TableCell sx={{ color: "#379683" }}>
+                          {user.score}
+                        </TableCell>
+                      ) : (
+                        <TableCell>{user.score}</TableCell>
+                      )}
+                    </TableRow>
+                  ))
                 )}
               </TableBody>
             </Table>

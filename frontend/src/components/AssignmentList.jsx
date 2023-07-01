@@ -22,7 +22,7 @@ import {
   Divider,
   Menu,
   MenuItem,
-  Alert
+  Alert,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
@@ -42,7 +42,7 @@ dayjs.extend(localizedFormat);
 
 // Determine status of one task
 function ShowTaskStatus(taskStatus) {
-  console.log(taskStatus)
+  console.log(taskStatus);
   if (taskStatus.taskStatus == undefined) {
     return;
   }
@@ -104,27 +104,27 @@ function AssignmentList(props) {
       taskTime.getMonth() + 1
     }/${taskTime.getFullYear()}`;
     // push original date, datString and taskStatus to list for displaying data in assignment list
-    if (taskStatusData.length == 0){
-    filteredDatesWithConvertedDates.push({
-      type: task.type,
-      id: task._id,
-      data: taskTime,
-      dateToString: convertedDate,
-      assignmentStatus: task.assignmentStatus,
-      quizstatus: task.quizstatus,
-      taskstatus: taskStatusData,
-    });
-  } else{
-    filteredDatesWithConvertedDates.push({
-      type: task.type,
-      id: task._id,
-      data: taskTime,
-      dateToString: convertedDate,
-      assignmentStatus: task.assignmentStatus,
-      quizstatus: task.quizstatus,
-      taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
-    });
-  }
+    if (taskStatusData.length == 0) {
+      filteredDatesWithConvertedDates.push({
+        type: task.type,
+        id: task._id,
+        data: taskTime,
+        dateToString: convertedDate,
+        assignmentStatus: task.assignmentStatus,
+        quizstatus: task.quizstatus,
+        taskstatus: taskStatusData,
+      });
+    } else {
+      filteredDatesWithConvertedDates.push({
+        type: task.type,
+        id: task._id,
+        data: taskTime,
+        dateToString: convertedDate,
+        assignmentStatus: task.assignmentStatus,
+        quizstatus: task.quizstatus,
+        taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
+      });
+    }
   });
   filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
 
@@ -161,7 +161,7 @@ function AssignmentList(props) {
         <Grid item xs={12}>
           <TableContainer>
             <Table>
-              <TableHead sx={{backgroundColor: "#5CDB95"}}>
+              <TableHead sx={{ backgroundColor: "#5CDB95" }}>
                 <TableRow>
                   <TableCell> Status</TableCell>
                   <TableCell>
@@ -212,19 +212,27 @@ function AssignmentList(props) {
               </TableHead>
               <TableBody>
                 {/* One table row for each task */}
-                {dates.length == 0 ? (<TableRow><TableCell colSpan={3}><Alert severity='info'>No assignments/quizzes available for this course</Alert></TableCell></TableRow>) : (
-                dates
-                  .filter(filterTasks) // Apply the filter
-                  .map((task, index) => (
-                    <TableRow key={task.id}>
-                      <TableCell>
-                        <ShowTaskStatus taskStatus={task.taskstatus} />
-                      </TableCell>
-                      <TableCell>{task.dateToString}</TableCell>
-                      <TableCell>{task.type}</TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  ))
+                {dates.length == 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3}>
+                      <Alert severity="info">
+                        No assignments/quizzes available for this course
+                      </Alert>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  dates
+                    .filter(filterTasks) // Apply the filter
+                    .map((task, index) => (
+                      <TableRow key={task.id}>
+                        <TableCell>
+                          <ShowTaskStatus taskStatus={task.taskstatus} />
+                        </TableCell>
+                        <TableCell>{task.dateToString}</TableCell>
+                        <TableCell>{task.type}</TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    ))
                 )}
               </TableBody>
             </Table>
