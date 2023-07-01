@@ -22,7 +22,7 @@ export default function LandingPage() {
   */}
         <Grid item xs={12}>
           <Grid container direction="row" justifyContent="flex-end">
-            <Grid item xs={5.5}>
+            <Grid item xs={5.25}>
               <Grid
                 container
                 direction="column"
@@ -32,7 +32,7 @@ export default function LandingPage() {
               >
                 <Grid item sx={{ paddingTop: 20, paddingLeft: 10 }}>
                   <Typography variant="h3" sx={{ fontWeight: "bold" }}>
-                    Experience a new way to
+                    Experience a new way 
                   </Typography>
                   <Typography
                     variant="h3"
@@ -40,7 +40,7 @@ export default function LandingPage() {
                     sx={{ fontWeight: "bold" }}
                   >
                     {" "}
-                    manage your studies
+                    to manage your studies
                   </Typography>
                 </Grid>
                 <Grid item sx={{ paddingLeft: 10 }}>
@@ -56,10 +56,10 @@ export default function LandingPage() {
                   </Typography>
                 </Grid>
                 <Grid item sx={{ paddingLeft: 10 }}>
-                  <Typography variant="h6">
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Bring Structure to Your Learning,
                   </Typography>
-                  <Typography variant="h6">
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                      Bring Success to Your
                     Studies!
                   </Typography>
@@ -75,7 +75,7 @@ export default function LandingPage() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6.5}>
+            <Grid item xs={6.75}>
               <img src={LandingPageHalf} width={800} height={700}></img>
             </Grid>
           </Grid>
