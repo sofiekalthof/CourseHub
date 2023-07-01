@@ -73,37 +73,41 @@ function Courses(props) {
                 height: 300,
                 cursor: "pointer",
                 border: "1.5px solid #5CDB95",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
               onClick={() => handleOnClick(course)}
               raised
             >
-                <Box sx={{backgroundColor: "primary.main", height: 50}}>
+              <Box sx={{ backgroundColor: "primary.main", minHeight: 50 }}>
                 <Tooltip title={course.name}>
                   <Typography
                     variant="h6"
                     align="center"
                     height={50}
                     gutterBottom
+                    sx={{ paddingTop: 1 }}
+                    noWrap
                   >
                     {course.name}
                   </Typography>
+                </Tooltip>
+              </Box>
+              <CardContent>
+                <Box sx={{ height: 300 }}>
+                  <Tooltip title={course.description}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        paddingLeft: 3,
+                        paddingRight: 3,
+                        paddingTop: 3,
+                        paddingBottom: 3,
+                      }}
+                    >
+                      {course.description}
+                    </Typography>
                   </Tooltip>
                 </Box>
-              <CardContent>
-                <Tooltip title={course.description}>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      paddingLeft: 3,
-                      paddingRight: 3,
-                      paddingTop: 3,
-                      paddingBottom: 3,
-                    }}
-                  >
-                    {course.description}
-                  </Typography>
-                </Tooltip>
               </CardContent>
             </Card>
           </Grid>
