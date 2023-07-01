@@ -30,9 +30,9 @@ export default function LandingPage() {
                 alignItems="flex-start"
                 height={700}
               >
-                <Grid item sx={{ paddingTop: 20, paddingLeft: 10 }}>
+                <Grid item sx={{ paddingTop: 20, paddingLeft: 8 }}>
                   <Typography variant="h3" sx={{ fontWeight: "bold" }}>
-                    Experience a new way 
+                    Experience a new way to
                   </Typography>
                   <Typography
                     variant="h3"
@@ -40,31 +40,29 @@ export default function LandingPage() {
                     sx={{ fontWeight: "bold" }}
                   >
                     {" "}
-                    to manage your studies
+                    manage your studies
                   </Typography>
                 </Grid>
-                <Grid item sx={{ paddingLeft: 10 }}>
+                <Grid item sx={{ paddingLeft: 8 }}>
                   <Typography variant="h6">
-                    Reach your study goals by tracking 
+                    Reach your study goals by tracking
                   </Typography>
                   <Typography variant="h6">
-                    your progress with
-                    timelines and activity charts
+                    your progress with timelines and activity charts
                   </Typography>
                   <Typography variant="h6">
                     or create and take quizzes and assignments.
                   </Typography>
                 </Grid>
-                <Grid item sx={{ paddingLeft: 10 }}>
+                <Grid item sx={{ paddingLeft: 8 }}>
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     Bring Structure to Your Learning,
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                     Bring Success to Your
-                    Studies!
+                    Bring Success to Your Studies!
                   </Typography>
                 </Grid>
-                <Grid item sx={{ paddingLeft: 10 }}>
+                <Grid item sx={{ paddingLeft: 8 }}>
                   <Button
                     variant="contained"
                     color="primary"
