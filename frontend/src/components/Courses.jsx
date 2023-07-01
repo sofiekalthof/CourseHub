@@ -72,21 +72,25 @@ function Courses(props) {
               sx={{
                 height: 300,
                 cursor: "pointer",
-                border: "1px solid #5CDB95",
+                border: "1.5px solid #5CDB95",
+                borderRadius: "5px"
               }}
               onClick={() => handleOnClick(course)}
+              raised
             >
-              <CardContent>
+                <Box sx={{backgroundColor: "primary.main", height: 50}}>
                 <Tooltip title={course.name}>
                   <Typography
-                    gutterBottom
-                    height={50}
                     variant="h6"
                     align="center"
+                    height={50}
+                    gutterBottom
                   >
                     {course.name}
                   </Typography>
-                </Tooltip>
+                  </Tooltip>
+                </Box>
+              <CardContent>
                 <Tooltip title={course.description}>
                   <Typography
                     variant="body2"

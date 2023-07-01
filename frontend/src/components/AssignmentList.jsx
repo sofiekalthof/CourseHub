@@ -41,6 +41,7 @@ dayjs.extend(localizedFormat);
 
 // Determine status of one task
 function ShowTaskStatus(taskStatus) {
+  console.log(taskStatus)
   if (taskStatus.taskStatus == undefined) {
     return;
   }
@@ -78,7 +79,7 @@ function AssignmentList(props) {
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
   const taskStatusData =
-    userData.length > 0 ? userData[0].usertimeline.usertimeline.userTasksStats[index].userTaskSatus : [];
+    userData.length > 0 ? userData[0].usertimeline.usertimeline : [];
   const [areDatesDescending, setAreStatesDescending] = useState(true);
 
   // State to store the filter type
@@ -102,6 +103,7 @@ function AssignmentList(props) {
       taskTime.getMonth() + 1
     }/${taskTime.getFullYear()}`;
     // push original date, datString and taskStatus to list for displaying data in assignment list
+    if (taskStatusData.length == 0){
     filteredDatesWithConvertedDates.push({
       type: task.type,
       id: task._id,
@@ -111,6 +113,17 @@ function AssignmentList(props) {
       quizstatus: task.quizstatus,
       taskstatus: taskStatusData,
     });
+  } else{
+    filteredDatesWithConvertedDates.push({
+      type: task.type,
+      id: task._id,
+      data: taskTime,
+      dateToString: convertedDate,
+      assignmentStatus: task.assignmentStatus,
+      quizstatus: task.quizstatus,
+      taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
+    });
+  }
   });
   filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
 
