@@ -6,6 +6,7 @@ import {
   TableHead,
   TableRow,
   Grid,
+  Alert
 } from "@mui/material";
 
 function createSortedListWithScore(dataOfAllUsersForThisCourse) {
@@ -57,7 +58,8 @@ function Leaderboard(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {usersWithScore.map((user, index) => (
+                {usersWithScore.length == 0 ? (<TableRow><TableCell colSpan={3}><Alert severity='info'>No scores from other users available</Alert></TableCell></TableRow>) : (
+                usersWithScore.map((user, index) => (
                   <TableRow key={user.id}>
                     {user.id == props.user.id ? (
                       <TableCell sx={{ color: "#379683" }}>
@@ -81,7 +83,8 @@ function Leaderboard(props) {
                       <TableCell>{user.score}</TableCell>
                     )}
                   </TableRow>
-                ))}
+                ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

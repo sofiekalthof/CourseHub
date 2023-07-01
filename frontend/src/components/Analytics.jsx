@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Grid, Card, Typography } from "@mui/material";
+import { Grid, Card, Typography, Alert } from "@mui/material";
 import { useState } from "react";
 import Leaderboard from "./Leaderboard";
 import Activity from "./Activity";
@@ -8,10 +8,10 @@ import Activity from "./Activity";
 function ShowActivity({ userDataForCourse, tasks }) {
   if (userDataForCourse.length == 0) {
     return (
-      <Typography>
+      <Alert severity="error">
         You have to take the course and submit assignments/quizzes to see your
         activity
-      </Typography>
+      </Alert>
     );
   }
   // Show Activity graph is user has already data in this course with all tasks of the selected course

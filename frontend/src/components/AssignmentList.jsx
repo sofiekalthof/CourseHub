@@ -22,6 +22,7 @@ import {
   Divider,
   Menu,
   MenuItem,
+  Alert
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
@@ -211,7 +212,8 @@ function AssignmentList(props) {
               </TableHead>
               <TableBody>
                 {/* One table row for each task */}
-                {dates
+                {dates.length == 0 ? (<TableRow><TableCell colSpan={3}><Alert severity='info'>No assignments/quizzes available for this course</Alert></TableCell></TableRow>) : (
+                dates
                   .filter(filterTasks) // Apply the filter
                   .map((task, index) => (
                     <TableRow key={task.id}>
@@ -222,7 +224,8 @@ function AssignmentList(props) {
                       <TableCell>{task.type}</TableCell>
                       <TableCell></TableCell>
                     </TableRow>
-                  ))}
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>
