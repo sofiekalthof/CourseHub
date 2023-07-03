@@ -98,7 +98,6 @@ function CreateMileStone(props) {
                     onChange={handleChange}
                   >
                     <MenuItem value={"Lecture"}>Lecture</MenuItem>
-                    <MenuItem value={"Exercise"}>Exercise</MenuItem>
                     <MenuItem value={"Exam"}>Exam</MenuItem>
                   </Select>
                 </FormControl>
