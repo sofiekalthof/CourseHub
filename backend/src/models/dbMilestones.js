@@ -1,4 +1,5 @@
-const mongoose = require("../dbConnection.js");
+const dbModule = require("../dbConnection.js");
+const mongoose = dbModule.mongoose;
 
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_MILESTONES;
@@ -7,7 +8,7 @@ const collectionName = process.env.DB_COLLECTION_MILESTONES;
 const MilestoneSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ["Lecture", "Exercise", "Exam"],
+    enum: ["Lecture", "Exam"],
     default: "Lecture",
     required: true,
   },

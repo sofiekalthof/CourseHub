@@ -1,4 +1,5 @@
-const mongoose = require("../dbConnection.js");
+const dbModule = require("../dbConnection.js");
+const mongoose = dbModule.mongoose;
 const File = require("../schemas/dbFileUploadSchema.js");
 
 // initialize parameters
@@ -31,7 +32,7 @@ const TaskSchema = new mongoose.Schema({
   },
   files: [
     {
-      type: File,
+      type: mongoose.Types.ObjectId,
     },
   ],
   // belonging timeline

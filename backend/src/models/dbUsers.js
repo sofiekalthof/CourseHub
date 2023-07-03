@@ -1,4 +1,5 @@
-const mongoose = require("../dbConnection.js");
+const dbModule = require("../dbConnection.js");
+const mongoose = dbModule.mongoose;
 
 // Initialize parameters
 const collectionName = process.env.DB_COLLECTION_USERS;
@@ -7,22 +8,22 @@ const collectionName = process.env.DB_COLLECTION_USERS;
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
   // TODO: other user-analytics?
 });
 
 // create model from schema
-let UserModel = mongoose.model(collectionName, schema=UserSchema);
+let UserModel = mongoose.model(collectionName, (schema = UserSchema));
 
 // export model
 module.exports = UserModel;

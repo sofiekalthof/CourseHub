@@ -1,20 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+// file storage stuff  ---> currently based-on https://github.com/ThomasFoydel/MERN-image-upload/blob/main/routes/image.js
 const fs = require("fs");
 const multer = require("multer"); // for parsing FormData which is type multipart-bodies
-var storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now());
-  },
-});
-const upload = multer({ storage: storage }); // middleware for multer
+const GridFsStorage = require("multer-gridfs-storage").GridFsStorage;
+const { mongoose, gridFSBucket } = require("./dbConnection.js");
+// user authentification stuff
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const MongoDBstore = require("connect-mongodb-session")(session);
+// db models
 const UserModel = require("./models/dbUsers.js");
 const CourseModel = require("./models/dbCourses.js");
 const TaskModel = require("./models/dbTasks.js");
@@ -30,9 +26,6 @@ const port = 3600;
 
 // Create Express app
 const app = express();
-
-// Add body parser (for parsing FormData from frontend)
-// app.use(bodyParser.urlencoded({ extended: true }));
 
 // CORS configuration
 const corsOptions = {
@@ -58,6 +51,82 @@ const mongoDBstore = new MongoDBstore({
   databaseName: process.env.DB_NAME,
   collection: "userSessions",
 });
+
+// storage for multer and gridfs
+var storage = new GridFsStorage({
+  url: process.env.MONGODB_URL,
+  options: {
+    useUnifiedtopology: true,
+  },
+  file: (req, file) => {
+    console.log("file in storage: ", file);
+    console.log("req. in storage: ", reqs);
+    // this function runs every time a new file is created
+    return new Promise((resolve, reject) => {
+      // use the crypto package to generate some random hex bytes
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        // turn the random bytes into a string and add the file extention at the end of it (.png or .jpg)
+        // this way our file names will not collide if someone uploads the same file twice
+        const filename = buf.toString("hex") + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: "files",
+        };
+        // resolve these properties so they will be added to the new file document
+        resolve(fileInfo);
+      });
+    });
+  },
+});
+
+// set up our multer to use the gridfs storage defined above
+const store = multer({
+  storage,
+  // limit the size to 15MB for any files coming in
+  limits: { fileSize: 15000000 },
+  // filer out invalid filetypes
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+});
+
+function checkFileType(file, cb) {
+  console.log("file in checkFileType: ", file);
+  // define a regex that includes the file types we accept
+  const filetypes = /jpeg|jpg|pdf|msword/;
+  // check the file extention of incoming file
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // more importantly, check the mimetype
+  const mimetype = filetypes.test(file.mimetype);
+  // if both are good then continue -> callback(cb) having null as first parameter means no error, since first parameter of cb context is an error object
+  if (mimetype && extname) return cb(null, true);
+  // otherwise, return error message
+  cb("filetype");
+}
+
+// upload middleware
+const uploadMiddleware = (req, res, next) => {
+  console.log("req.body of uploadMiddleware: ", req.body);
+  console.log("req.body.allFiles of uploadMiddleware: ", req.body.allFiles);
+  const upload = store.array("allFiles", 3);
+  upload(req, res, function (err) {
+    // catch any multer error
+    if (err instanceof multer.MulterError) {
+      return res.status(400).send("File too large");
+    } else if (err) {
+      // check if our filetype error occurred
+      if (err === "filetype")
+        return res.status(400).send("jpeg|jpg|pdf|msword files only");
+      // An unknown error occurred when uploading.
+      return res.sendStatus(500);
+    }
+    // all good, proceed
+    next();
+  });
+};
 
 // Add express-session to all routes
 app.use(
@@ -507,7 +576,7 @@ app.route("/register").post(async (req, res) => {
 // Create Assignment
 app
   .route("/courseAddAssignment/:timelineId")
-  .post(checkAuth, upload.none(), async (req, res) => {
+  .post(checkAuth, uploadMiddleware, async (req, res) => {
     // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly
     // MAKE-SURE: req.body has type, desc and data
     // EXAMPLE: {
@@ -517,19 +586,26 @@ app
     //     "data": "2023-07-15",
     //     "timeline": "64993b0b326b752cc8f3e421"
     // }
+    // get the .file property from req that was added by the upload middleware
+    const { files } = req;
+    // and the id of that new image file
+    const { ids } = files;
+    console.log("files: ", files);
+    console.log("ids: ", ids);
+    console.log("req.body: ", req.body);
+    console.log("req.body.allFiles: ", req.body.allFiles);
+    console.log("req.body.allFiles[0]: ", req.body.allFiles[0]);
     let assignmentData = {
       type: req.body.type,
       title: req.body.title,
       description: req.body.description,
       data: req.body.data,
-      files: fs.readFileSync(
-        path.join(__dirname + "/uploads/" + req.file.filename)
-      ),
+      files: ids,
       timeline: req.params.timelineId,
     };
     let subscriberTimelines = req.body.subscriberTimelines;
     let newAssignment;
-    console.log("aasignmentData: ", assignmentData);
+    console.log("assignmentData: ", assignmentData);
     try {
       // create new task
       newAssignment = new TaskModel(assignmentData);

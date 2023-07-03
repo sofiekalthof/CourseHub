@@ -1,19 +1,20 @@
-const mongoose = require("../dbConnection.js");
+const dbModule = require("../dbConnection.js");
+const mongoose = dbModule.mongoose;
 
 // create mongoose schema
 const FileUploadSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   desc: {
     type: String,
-    required: true
+    required: true,
   },
   file: {
     data: Buffer,
-    contentType: String
-  }
+    contentType: String,
+  },
 });
 
 // export schema only, since it is needed for defining the TaskSchema

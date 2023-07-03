@@ -301,7 +301,7 @@ function CreateTask(props) {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("data", deadline);
-    formData.append("files", files);
+    formData.append("allFiles", files);
     formData.append("timeline", props.selectedCourseTimelineId);
     formData.append("subscriberTimelines", props.subscriberTimelines);
     // for (var pair of formData.entries()) {
