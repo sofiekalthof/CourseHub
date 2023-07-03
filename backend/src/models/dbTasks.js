@@ -12,6 +12,10 @@ const TaskSchema = new mongoose.Schema({
     default: "Quizz",
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,
@@ -25,6 +29,17 @@ const TaskSchema = new mongoose.Schema({
     enum: ["due", "missed", "done"],
     default: "due",
   },
+  files: [
+    {
+      type: File,
+    },
+  ],
+  // belonging timeline
+  timeline: {
+    type: mongoose.Types.ObjectId,
+    ref: "TimelineModel",
+  },
+  // From here on, only related to Quizz
   questions: {
     type: [String],
   },
@@ -34,15 +49,6 @@ const TaskSchema = new mongoose.Schema({
   // array of correct answers for each question
   correctAnswers: {
     type: [[Number]],
-  },
-  // for any images
-  files: {
-    type: File,
-  },
-  // belonging timeline
-  timeline: {
-    type: mongoose.Types.ObjectId,
-    ref: "TimelineModel",
   },
 });
 

@@ -7,9 +7,15 @@ const collectionName = process.env.DB_COLLECTION_TIMELINEUSERS;
 
 // create mongoose schema
 const TimelineUserSchema = new mongoose.Schema({
+  // original timeline
   origin: {
     type: mongoose.Types.ObjectId,
     ref: "TimelineModel",
+  },
+  // user's id
+  userId: {
+    type: mongoose.Types.ObjectId,
+    ref: "UserModel",
   },
   // tasks' status for a user
   userTasksStats: [

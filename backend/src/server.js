@@ -1,6 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const multer = require("multer"); // for parsing FormData which is type multipart-bodies
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+const upload = multer({ storage: storage }); // middleware for multer
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const MongoDBstore = require("connect-mongodb-session")(session);
@@ -20,6 +31,9 @@ const port = 3600;
 // Create Express app
 const app = express();
 
+// Add body parser (for parsing FormData from frontend)
+// app.use(bodyParser.urlencoded({ extended: true }));
+
 // CORS configuration
 const corsOptions = {
   origin: "http://localhost:5173",
@@ -32,6 +46,11 @@ app.use(cors(corsOptions));
 
 // Enable parsing of JSON bodies
 app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 // allow connect-mongodb-session library to save sessions under mySessions collection
 const mongoDBstore = new MongoDBstore({
@@ -91,8 +110,151 @@ app.route("/isAuth").get((req, res) => {
 });
 
 //////////////////////// below are tested and working routes
+// Create milestone
+app
+  .route("/courseAddMilestone/:timelineId")
+  .post(checkAuth, async (req, res) => {
+    let milestoneData = {
+      type: req.body.type,
+      data: req.body.data,
+      timeline: req.params.timelineId,
+    };
+    let subscriberTimelines = req.body.subscriberTimelines;
+    let newMilestone;
+    try {
+      // create new task
+      newMilestone = new MilestoneModel(milestoneData);
 
-// Get all subscriber data of a course (POSTMAN checked)
+      // save task in db
+      await newMilestone.save();
+
+      // find timeline of the course and add milestone to it
+      const result = await TimelineModel.findByIdAndUpdate(
+        req.params.timelineId,
+        {
+          $push: {
+            milestones: newMilestone,
+          },
+        }
+      );
+
+      if (!result) {
+        res
+          .status(400)
+          .json({ msg: "Timeline not updated (milestone was not added)" });
+      }
+
+      // parse each subscriber's timeline
+      for (var subscriberTimeline in subscriberTimelines) {
+        let subscriberTimelineId = subscriberTimelines[subscriberTimeline];
+
+        // add new milestone status to the user's timeline
+        const result = await TimelineUserModel.findByIdAndUpdate(
+          subscriberTimelineId,
+          {
+            $push: {
+              userMilestonesStats: {
+                originalMilestoneId: newMilestone._id,
+                userMilestoneSatus: newMilestone.status,
+              },
+            },
+          }
+        );
+        if (!result) {
+          res.status(400).json({
+            msg: "User Timeline not updated (milestone was not added)",
+          });
+        }
+      }
+      res.status(200).json({ msg: "New milestone added to DB" });
+    } catch (err) {
+      res.status(500).send("Server error. Request could not be fulfilled.");
+    }
+  });
+
+// Take course
+app.route("/takeCourse/:courseId").post(async (req, res) => {
+  // IMPROVEMENT: user data could be received from req.session.user directly (to check)
+  // IMPROVEMENT: would be better if we send timeline id directly
+  let currTaskStats = [];
+  let currMilestioneStats = [];
+  try {
+    // find the course user is trying to subscribe to
+    const course = await CourseModel.findOne({ _id: req.params.courseId });
+
+    // extract timeline id of the course
+    const courseTimelineId = course.timeline;
+
+    // find timeline of the course
+    const timeline = await TimelineModel.findOne({ _id: courseTimelineId });
+
+    // extract task ids of the timeline
+    const timelineTaskIds = timeline.tasks;
+
+    // find timeline of the course
+    const tasks = await TaskModel.find({ _id: timelineTaskIds });
+
+    // create new array of tasks for user based-on timeline's array of tasks
+    tasks.forEach((task) => {
+      currTaskStats = [
+        ...currTaskStats,
+        {
+          originalTaskId: task._id,
+          userTaskSatus: task.status,
+          userTaskScore: 0,
+        },
+      ];
+    });
+    // console.log("current Task stats: ", currTaskStats);
+
+    // extract task ids of the timeline
+    const milestoneTaskIds = timeline.milestones;
+
+    // find timeline of the course
+    const milestones = await MilestoneModel.find({ _id: milestoneTaskIds });
+
+    // create new array of tasks for user based-on timeline's array of tasks
+    milestones.forEach((milestone) => {
+      currMilestioneStats = [
+        ...currMilestioneStats,
+        {
+          originalMilestoneId: milestone._id,
+          userMilestoneSatus: milestone.status,
+        },
+      ];
+    });
+    // console.log("current milestones: ", currMilestioneStats);
+
+    // create user timeline based on existing timeline
+    const newTimelineUser = TimelineUserModel({
+      origin: courseTimelineId,
+      userTasksStats: currTaskStats,
+      userMilestonesStats: currMilestioneStats,
+      userId: req.body.userId,
+    });
+    // console.log(newTimelineUser);
+
+    // save new user timeline
+    await newTimelineUser.save();
+
+    // create new subscriber-course-usertimeline relation
+    const newSubscriberAndCourse = CourseUserModel({
+      subscriber: req.body.userId,
+      course: req.params.courseId,
+      usertimeline: newTimelineUser._id,
+    });
+    // console.log(newSubscriberAndCourse);
+
+    // save new subscriber-course-usertimeline relation
+    await newSubscriberAndCourse.save();
+
+    res.status(200).json({ msg: "User subscribed to the course" });
+  } catch (err) {
+    res.status(500).send("Server error. Request could not be fulfilled.");
+  }
+});
+
+// Get all subscriber data of a course
 app.route("/allSubscriberData/:courseId").get(checkAuth, async (req, res) => {
   let subscribers = [];
   try {
@@ -160,8 +322,9 @@ app.route("/courses/create").post(checkAuth, async (req, res) => {
     // convert document to JSON object (to make it editable)
     let newCourseJSON = newCourse.toJSON();
 
-    // set the timeline field correctly for frontend
-    newCourseJSON.timeline = { tasks: [], milestones: [] };
+    // remove unnecessary fields
+    delete newCourse.timeline;
+    delete newCourse.owner;
 
     res.status(200).json({ msg: "New course added", newCourse: newCourseJSON });
   } catch (err) {
@@ -169,8 +332,8 @@ app.route("/courses/create").post(checkAuth, async (req, res) => {
   }
 });
 
-// Get all courses
-app.route("/courses").get(checkAuth, async (req, res) => {
+// Get all courses (returns only id, name and descriptions)
+app.route("/courseIdDescs").get(checkAuth, async (req, res) => {
   let courses = [];
   try {
     // find all courses
@@ -181,50 +344,69 @@ app.route("/courses").get(checkAuth, async (req, res) => {
     for (var courseIdx in courses) {
       let course = courses[courseIdx];
 
-      // extract course's timeline id
-      const timelineID = course.timeline;
-
-      // get timeline of a course
-      const timeline = await TimelineModel.find({ _id: timelineID });
-
-      // extract task ids of timeline
-      const taskIds = timeline[0].tasks;
-
-      // extract milestone ids of timeline
-      const milestoneIds = timeline[0].milestones;
-
-      let tasks = [];
-      // if there are any tasks in the course, parse them
-      if (taskIds) {
-        // for each taskId
-        for (var taskId in taskIds) {
-          // find task itself
-          let task = await TaskModel.findOne({ _id: taskIds[taskId] });
-
-          // append to list
-          tasks = [...tasks, task];
-        }
-      }
-
-      let milestones = [];
-      // if there are any tasks in the course, parse them
-      if (milestoneIds) {
-        // for each taskId
-        for (var milestoneId in milestoneIds) {
-          // find task itself
-          let milestone = await MilestoneModel.findOne({
-            _id: milestoneIds[milestoneId],
-          });
-
-          // append to list
-          milestones = [...milestones, milestone];
-        }
-      }
-
-      // replace timeline field with tasks
-      course.timeline = { tasks: tasks, milestones: milestones };
+      // remove unnecessary fields
+      delete course.timeline;
+      delete course.owner;
     }
+    // console.log("backend sends: ", courses);
     res.status(200).json(courses);
+  } catch (err) {
+    res.status(500).send("Server error. Request could not be fulfilled.");
+  }
+});
+
+// Get all information of a course (parsed to the needs of a frontend) (POSTMAN Checked)
+app.route("/courseAllInfo/:courseId").get(checkAuth, async (req, res) => {
+  let course = [];
+  try {
+    // find all courses
+    course = await CourseModel.findOne({ _id: req.params.courseId }).lean(); // lean neccessary to make courses editable(for replacing timeline with real tasks and milestones)
+
+    //// parse and edit course to ready them for frontend
+    // extract course's timeline id
+    const timelineID = course.timeline;
+
+    // get timeline of a course
+    const timeline = await TimelineModel.findOne({ _id: timelineID });
+
+    // extract task ids of timeline
+    const taskIds = timeline.tasks;
+
+    // extract milestone ids of timeline
+    const milestoneIds = timeline.milestones;
+
+    let tasks = [];
+    // if there are any tasks in the course, parse them
+    if (taskIds) {
+      // for each taskId
+      for (var taskId in taskIds) {
+        // find task itself
+        let task = await TaskModel.findOne({ _id: taskIds[taskId] });
+
+        // append to list
+        tasks = [...tasks, task];
+      }
+    }
+
+    let milestones = [];
+    // if there are any tasks in the course, parse them
+    if (milestoneIds) {
+      // for each taskId
+      for (var milestoneId in milestoneIds) {
+        // find task itself
+        let milestone = await MilestoneModel.findOne({
+          _id: milestoneIds[milestoneId],
+        });
+
+        // append to list
+        milestones = [...milestones, milestone];
+      }
+    }
+
+    // replace timeline field with tasks
+    course.timeline = { _id: timelineID, tasks: tasks, milestones: milestones };
+    // console.log(course);
+    res.status(200).json(course);
   } catch (err) {
     res.status(500).send("Server error. Request could not be fulfilled.");
   }
@@ -267,7 +449,7 @@ app.route("/login").post(async (req, res) => {
 
       // attach new session to express-session
       req.session.user = userSession;
-      console.log("Session in store after login: ", req.session);
+      // console.log("Session in store after login: ", req.session);
 
       // status, message and new session (as a cookie) sent to frontend
       return res.status(200).json({
@@ -317,9 +499,88 @@ app.route("/register").post(async (req, res) => {
 });
 
 //////////////////////// below are to-be-tested/to-be-implemented routes
+
 // Update milestone(autom.)?
 
 // Take task
+
+// Create Assignment
+app
+  .route("/courseAddAssignment/:timelineId")
+  .post(checkAuth, upload.none(), async (req, res) => {
+    // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly
+    // MAKE-SURE: req.body has type, desc and data
+    // EXAMPLE: {
+    //     "type": "Assignment",
+    //     "title": "Test"
+    //     "description": "test",
+    //     "data": "2023-07-15",
+    //     "timeline": "64993b0b326b752cc8f3e421"
+    // }
+    let assignmentData = {
+      type: req.body.type,
+      title: req.body.title,
+      description: req.body.description,
+      data: req.body.data,
+      files: fs.readFileSync(
+        path.join(__dirname + "/uploads/" + req.file.filename)
+      ),
+      timeline: req.params.timelineId,
+    };
+    let subscriberTimelines = req.body.subscriberTimelines;
+    let newAssignment;
+    console.log("aasignmentData: ", assignmentData);
+    try {
+      // create new task
+      newAssignment = new TaskModel(assignmentData);
+
+      // save task in db
+      await newAssignment.save();
+
+      // find timeline and add task to it
+      const result = await TimelineModel.findByIdAndUpdate(
+        req.params.timelineId,
+        {
+          $push: {
+            tasks: newAssignment,
+          },
+        }
+      );
+
+      if (!result) {
+        res
+          .status(400)
+          .json({ msg: "Timeline not updated (assignment was not added)" });
+      }
+
+      // parse each subscriber's timeline
+      for (var subscriberTimeline in subscriberTimelines) {
+        let subscriberTimelineId = subscriberTimelines[subscriberTimeline];
+
+        // add new task status to the user's timeline
+        const result = await TimelineUserModel.findByIdAndUpdate(
+          subscriberTimelineId,
+          {
+            $push: {
+              userTasksStats: {
+                originalTaskId: newAssignment._id,
+                userTaskSatus: newAssignment.status,
+                userTaskScore: 0,
+              },
+            },
+          }
+        );
+        if (!result) {
+          res.status(400).json({
+            msg: "User Timeline not updated (assignment was not added)",
+          });
+        }
+      }
+      res.status(200).json({ msg: "Assignment created" });
+    } catch (err) {
+      res.status(500).send("Server error. Request could not be fulfilled.");
+    }
+  });
 
 // Create task (POSTMAN checked)
 app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {
@@ -365,201 +626,6 @@ app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {
     // TODO: update all subs timelines
 
     res.status(200).json(result);
-  } catch (err) {
-    res.status(500).send("Server error. Request could not be fulfilled.");
-  }
-});
-
-// Create milestone (POSTMAN checked)
-app.route("/courses/:id/createmilestone").post(checkAuth, async (req, res) => {
-  // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly
-  // MAKE-SURE: req.body has type, desc and data
-  // EXAMPLE: {
-  //     "type": "Lecture",
-  //     "description": "test",
-  //     "data": "2023-07-15",
-  //     "timeline": "64993b0b326b752cc8f3e421"
-  // }
-  let newMilestone;
-  try {
-    // create new task
-    newMilestone = new MilestoneModel(req.body);
-
-    // save task in db
-    await newMilestone.save();
-
-    console.log(req.params.id);
-    // find the course the milestone belongs to
-    const course = await CourseModel.find({ _id: req.params.id });
-
-    // extract timeline of the course
-    const courseTimelineId = course[0].timeline;
-
-    // find timeline and add milestone to it
-    const result = await TimelineModel.findByIdAndUpdate(courseTimelineId, {
-      $push: {
-        milestones: newMilestone,
-      },
-    });
-
-    if (!result) {
-      res
-        .status(400)
-        .json({ msg: "Timeline not updated (milestone was not added)" });
-    }
-
-    // TODO: update all subs timelines
-
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).send("Server error. Request could not be fulfilled.");
-  }
-});
-
-// // Take course (POSTMAN checked)
-// app.route("/courses/:id/takecourse").post(checkAuth, async (req, res) => {
-//   // IMPROVEMENT: user data could be received from req.session.user directly (to check)
-//   // IMPROVEMENT: would be better if we send timeline id directly
-//   let currTaskStats = [];
-//   let currMilestioneStats = [];
-//   try {
-//     // find the course user is trying to subscribe to
-//     const course = await CourseModel.find({ _id: req.params.id });
-
-//     // extract timeline id of the course
-//     const courseTimelineId = course[0].timeline;
-
-//     // find timeline of the course
-//     const timeline = await TimelineModel.find({ _id: courseTimelineId });
-
-//     // create new array of tasks for user based-on timeline's array of tasks
-//     timeline.tasks.forEach((task) => {
-//       currTaskStats = [
-//         ...currTaskStats,
-//         {
-//           originalTaskId: task._id,
-//           userTaskSatus: task.status,
-//           userTaskSatus: 0,
-//         },
-//       ];
-//     });
-//     console.log(currTaskStats);
-
-//     // create new array of tasks for user based-on timeline's array of tasks
-//     timeline.milestones.forEach((milestone) => {
-//       currMilestioneStats = [
-//         ...currMilestioneStats,
-//         {
-//           originalTaskId: milestone._id,
-//           userTaskSatus: milestone.status,
-//         },
-//       ];
-//     });
-//     console.log(currMilestioneStats);
-
-//     // create user timeline based on existing timeline
-//     const newTimelineUser = TimelineUserModel({
-//       origin: courseTimelineId,
-//       userTasksStats: currTaskStats,
-//       userMilestonesStatus: currMilestioneStats,
-//     });
-//     console.log(newTimelineUser);
-
-//     // save new user timeline
-//     await newTimelineUser.save();
-
-//     // create new subscriber-course-usertimeline relation
-//     const newSubscriberAndCourse = CourseUserModel({
-//       subscriber: req.body._id,
-//       course: req.params.id,
-//       timeline: newTimelineUser._id,
-//     });
-//     console.log(newSubscriberAndCourse);
-
-//     // save new subscriber-course-usertimeline relation
-//     await newSubscriberAndCourse.save();
-
-//     res.status(200).json({ msg: "User subscribed to the course" });
-//   } catch (err) {
-//     res.status(500).send("Server error. Request could not be fulfilled.");
-//   }
-// });
-// Take course
-app.route("/courses/:id/takecourse").post(async (req, res) => {
-  // IMPROVEMENT: user data could be received from req.session.user directly (to check)
-  // IMPROVEMENT: would be better if we send timeline id directly
-  let currTaskStats = [];
-  let currMilestioneStats = [];
-  try {
-    // find the course user is trying to subscribe to
-    const course = await CourseModel.find({ _id: req.params.id });
-
-    // extract timeline id of the course
-    const courseTimelineId = course[0].timeline;
-
-    // find timeline of the course
-    const timeline = await TimelineModel.find({ _id: courseTimelineId });
-
-    // extract task ids of the timeline
-    const timelineTaskIds = timeline[0].tasks;
-
-    // find timeline of the course
-    const tasks = await TaskModel.find({ _id: timelineTaskIds });
-
-    // create new array of tasks for user based-on timeline's array of tasks
-    tasks.forEach((task) => {
-      currTaskStats = [
-        ...currTaskStats,
-        {
-          originalTaskId: task._id,
-          userTaskSatus: task.status,
-          userTaskScore: 0,
-        },
-      ];
-    });
-    // console.log("current Task stats: ", currTaskStats);
-
-    // extract task ids of the timeline
-    const milestoneTaskIds = timeline[0].milestones;
-
-    // find timeline of the course
-    const milestones = await MilestoneModel.find({ _id: milestoneTaskIds });
-
-    // create new array of tasks for user based-on timeline's array of tasks
-    milestones.forEach((milestone) => {
-      currMilestioneStats = [
-        ...currMilestioneStats,
-        {
-          originalMilestoneId: milestone._id,
-          userMilestoneSatus: milestone.status,
-        },
-      ];
-    });
-    // console.log("current milestones: ", currMilestioneStats);
-
-    // create user timeline based on existing timeline
-    const newTimelineUser = TimelineUserModel({
-      origin: courseTimelineId,
-      userTasksStats: currTaskStats,
-      userMilestonesStats: currMilestioneStats,
-    });
-    // console.log(newTimelineUser);
-
-    // save new user timeline
-    await newTimelineUser.save();
-
-    // create new subscriber-course-usertimeline relation
-    const newSubscriberAndCourse = CourseUserModel({
-      subscriber: req.body._id,
-      course: req.params.id,
-      usertimeline: newTimelineUser._id,
-    });
-    // console.log(newSubscriberAndCourse);
-
-    // save new subscriber-course-usertimeline relation
-    await newSubscriberAndCourse.save();
-
-    res.status(200).json({ msg: "User subscribed to the course" });
   } catch (err) {
     res.status(500).send("Server error. Request could not be fulfilled.");
   }

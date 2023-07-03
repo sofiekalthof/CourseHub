@@ -60,11 +60,11 @@ async function CreateCourse(courseName, courseDescription, ownerID) {
 }
 
 // Function to return all courses in database (parsed for frontend)
-async function GetAllCourses() {
+async function GetAllCourseIdDescs() {
   // make API call to get all courses
   try {
     // send get request to REST API
-    let res = await fetch(`${import.meta.env.VITE_API_URL}/courses`, {
+    let res = await fetch(`${import.meta.env.VITE_API_URL}/courseIdDescs`, {
       method: "GET",
       // header neccessary for correct sending of information
       headers: {
@@ -96,15 +96,15 @@ function HomePage() {
   // setting the initial loading state to false
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [courses, setCourses] = useState();
+  const [courseIdDescs, setCourseIdDescs] = useState();
 
   // useEffect first time it is rendering
   useEffect(() => {
     // get all courses
-    GetAllCourses()
+    GetAllCourseIdDescs()
       .then((res) => {
         // use promise to set courses
-        setCourses(res);
+        setCourseIdDescs(res);
         setLoading(false);
       })
       .catch((err) => {
@@ -112,6 +112,7 @@ function HomePage() {
         setError(true);
       });
   }, []);
+  // console.log("courseIdDescs in homepage: ", courseIdDescs);
 
   // take user information from global context
   // TODO: remove the prop, since userSession is global OR make it all one prop
@@ -149,7 +150,7 @@ function HomePage() {
     CreateCourse(courseName, courseDescription, userSession.id)
       .then((newCourse) => {
         // use promise to add new course to list of all courses
-        setCourses([...courses, newCourse]);
+        setCourseIdDescs([...courseIdDescs, newCourse]);
         setLoading(false);
       })
       .catch((err) => {
@@ -216,9 +217,9 @@ function HomePage() {
           {/* allow backend to do its magic */}
           {loading && <></>}
           {error && <></>}
-          {courses && (
+          {courseIdDescs && (
             <>
-              <Courses user={user} courses={courses}></Courses>
+              <Courses user={user} courseIdDescs={courseIdDescs}></Courses>
             </>
           )}
         </Grid>

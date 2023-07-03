@@ -11,10 +11,6 @@ const MilestoneSchema = new mongoose.Schema({
     default: "Lecture",
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
   data: {
     type: Date,
     required: true,

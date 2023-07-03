@@ -7,7 +7,7 @@ import { TabPanel, TabContext } from "@mui/lab";
 
 export default function RegisterLogInPage() {
   // state related to using Tabs
-  const [value, setValue] = useState("Register");
+  const [value, setValue] = useState("SignIn");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -42,14 +42,14 @@ export default function RegisterLogInPage() {
             >
               <TabContext value={value}>
                 <Tabs value={value} onChange={handleChange} centered>
-                  <Tab value="Register" label="Register"></Tab>
                   <Tab value="SignIn" label="Sign-In"></Tab>
+                  <Tab value="Register" label="Register"></Tab>
                 </Tabs>
-                <TabPanel value="Register" sx={{ p: 0, m: 2, mr: 4, ml: 4 }}>
-                  <Register></Register>
-                </TabPanel>
                 <TabPanel value="SignIn" sx={{ p: 0, m: 2, mr: 4, ml: 4 }}>
                   <Login></Login>
+                </TabPanel>
+                <TabPanel value="Register" sx={{ p: 0, m: 2, mr: 4, ml: 4 }}>
+                  <Register></Register>
                 </TabPanel>
               </TabContext>
             </Grid>
