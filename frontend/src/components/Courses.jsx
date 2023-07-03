@@ -75,7 +75,7 @@ function Courses(props) {
                 border: "1.5px solid #5CDB95",
                 borderRadius: "5px",
               }}
-              onClick={() => handleOnClick(course)}
+              onClick={() => handleOnClick(courseIdDescs)}
             >
               <CardContent>
                 <Typography
