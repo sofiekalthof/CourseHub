@@ -67,7 +67,7 @@ function Courses(props) {
         </Grid>
         {/* Show one card for each course */}
         {filteredData.map((courseIdDescs) => (
-          <Grid item xs={4} key={courseIdDescs._id}>
+          <Grid item xs={4} lg={4} key={courseIdDescs._id}>
             <Card
               sx={{
                 height: 300,
@@ -77,18 +77,36 @@ function Courses(props) {
               }}
               onClick={() => handleOnClick(courseIdDescs)}
             >
+              <Box sx={{ backgroundColor: "primary.main", minHeight: 50 }}>
+                <Tooltip title={courseIdDescs.name}>
+                  <Typography
+                    variant="h6"
+                    align="center"
+                    height={50}
+                    gutterBottom
+                    sx={{ paddingTop: 1 }}
+                    noWrap
+                  >
+                    {courseIdDescs.name}
+                  </Typography>
+                </Tooltip>
+              </Box>
               <CardContent>
-                <Typography
-                  gutterBottom
-                  height={50}
-                  variant="h6"
-                  align="center"
-                >
-                  {courseIdDescs.name}
-                </Typography>
-                <Typography variant="body2" align="center">
-                  {courseIdDescs.description}
-                </Typography>
+                <Box sx={{ height: 300 }}>
+                  <Tooltip title={courseIdDescs.description}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        paddingLeft: 3,
+                        paddingRight: 3,
+                        paddingTop: 3,
+                        paddingBottom: 3,
+                      }}
+                    >
+                      {courseIdDescs.description}
+                    </Typography>
+                  </Tooltip>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
