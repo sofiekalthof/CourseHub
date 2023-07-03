@@ -1,7 +1,3 @@
-import * as React from "react";
-import Timeline from "./Timeline";
-import ApexTimeline from "./ApexTimeline";
-import ApexTimelineScatter from "./ApexTimelineScatter";
 import {
   Grid,
   Box,
@@ -21,20 +17,23 @@ import {
   Checkbox,
   Typography,
   Card,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
 } from "@mui/material";
-import AssignmentList from "./AssignmentList";
+import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 
 // Function for showing the create new button
-function CreateTask({ isOwner }) {
+function CreateTask(props) {
   // Quizz Creation start
   // State variables
   const [openQuiz, setQuizOpen] = useState(false);
@@ -294,7 +293,29 @@ function CreateTask({ isOwner }) {
       files,
       deadline,
     };
-    onAssignmentCreated(assignment);
+    // onAssignmentCreated(assignment);
+
+    // create form data to give to backend (needed for uploading files)
+    const formData = new FormData();
+    formData.append("type", "Assignment");
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("data", deadline);
+    formData.append("files", files);
+    formData.append("timeline", props.selectedCourseTimelineId);
+    formData.append("subscriberTimelines", props.subscriberTimelines);
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
+    props
+      .createAndSaveAssignment(props.selectedCourseTimelineId, formData)
+      .then((res) => {
+        props.coursePageRerender(true);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+
     setTitle("");
     setDescription("");
     setFiles([]);
@@ -313,7 +334,7 @@ function CreateTask({ isOwner }) {
     setAnchorEl(null); // close drop-down
   };
   // AssignmentCreation end
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   // Function for showing the dropdown list for creating new task
@@ -327,7 +348,7 @@ function CreateTask({ isOwner }) {
   };
 
   // Show Create New button only when user is owner of the course
-  if (isOwner) {
+  if (props.isOwner) {
     return (
       <>
         <Button

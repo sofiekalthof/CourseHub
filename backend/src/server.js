@@ -1,6 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const multer = require("multer"); // for parsing FormData which is type multipart-bodies
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+const upload = multer({ storage: storage }); // middleware for multer
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const MongoDBstore = require("connect-mongodb-session")(session);
@@ -20,6 +31,9 @@ const port = 3600;
 // Create Express app
 const app = express();
 
+// Add body parser (for parsing FormData from frontend)
+// app.use(bodyParser.urlencoded({ extended: true }));
+
 // CORS configuration
 const corsOptions = {
   origin: "http://localhost:5173",
@@ -32,6 +46,11 @@ app.use(cors(corsOptions));
 
 // Enable parsing of JSON bodies
 app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 // allow connect-mongodb-session library to save sessions under mySessions collection
 const mongoDBstore = new MongoDBstore({
@@ -484,6 +503,84 @@ app.route("/register").post(async (req, res) => {
 // Update milestone(autom.)?
 
 // Take task
+
+// Create Assignment
+app
+  .route("/courseAddAssignment/:timelineId")
+  .post(checkAuth, upload.none(), async (req, res) => {
+    // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly
+    // MAKE-SURE: req.body has type, desc and data
+    // EXAMPLE: {
+    //     "type": "Assignment",
+    //     "title": "Test"
+    //     "description": "test",
+    //     "data": "2023-07-15",
+    //     "timeline": "64993b0b326b752cc8f3e421"
+    // }
+    let assignmentData = {
+      type: req.body.type,
+      title: req.body.title,
+      description: req.body.description,
+      data: req.body.data,
+      files: fs.readFileSync(
+        path.join(__dirname + "/uploads/" + req.file.filename)
+      ),
+      timeline: req.params.timelineId,
+    };
+    let subscriberTimelines = req.body.subscriberTimelines;
+    let newAssignment;
+    console.log("aasignmentData: ", assignmentData);
+    try {
+      // create new task
+      newAssignment = new TaskModel(assignmentData);
+
+      // save task in db
+      await newAssignment.save();
+
+      // find timeline and add task to it
+      const result = await TimelineModel.findByIdAndUpdate(
+        req.params.timelineId,
+        {
+          $push: {
+            tasks: newAssignment,
+          },
+        }
+      );
+
+      if (!result) {
+        res
+          .status(400)
+          .json({ msg: "Timeline not updated (assignment was not added)" });
+      }
+
+      // parse each subscriber's timeline
+      for (var subscriberTimeline in subscriberTimelines) {
+        let subscriberTimelineId = subscriberTimelines[subscriberTimeline];
+
+        // add new task status to the user's timeline
+        const result = await TimelineUserModel.findByIdAndUpdate(
+          subscriberTimelineId,
+          {
+            $push: {
+              userTasksStats: {
+                originalTaskId: newAssignment._id,
+                userTaskSatus: newAssignment.status,
+                userTaskScore: 0,
+              },
+            },
+          }
+        );
+        if (!result) {
+          res.status(400).json({
+            msg: "User Timeline not updated (assignment was not added)",
+          });
+        }
+      }
+      res.status(200).json({ msg: "Assignment created" });
+    } catch (err) {
+      res.status(500).send("Server error. Request could not be fulfilled.");
+    }
+  });
 
 // Create task (POSTMAN checked)
 app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {

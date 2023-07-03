@@ -3,8 +3,8 @@ import RegisterLogInPage from "./components/RegisterLogInPage";
 import HomePage from "./components/HomePage";
 import CoursePage from "./components/CoursePage";
 import React, { createContext, useState, useEffect } from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Route, Routes } from "react-router-dom";
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";

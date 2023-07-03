@@ -2,7 +2,7 @@ import * as React from "react";
 import Navbar from "./Navbar";
 import GeneralView from "./GeneralView";
 import HomePage from "./HomePage";
-import { Box, Tabs, Tab, Grid, Typography, Button, Card } from "@mui/material";
+import { Tabs, Tab, Grid, Typography, Button, Card } from "@mui/material";
 import { TabPanel, TabContext } from "@mui/lab";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -14,6 +14,40 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 
 // Function to take a course
+async function CreateAndSaveAssignment(courseTimelineId, formData) {
+  // make API call to subscribe user to the course
+  try {
+    // send POST request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courseAddAssignment/${courseTimelineId}`,
+      {
+        method: "POST",
+        body: formData,
+        // header neccessary for correct sending of information
+        // headers: {
+        //   Accept: "application/json",
+        //   "Content-Type": "application/x-www-form-urlencoded",
+        // },
+        credentials: "include",
+      }
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      alert(resJson.msg);
+      return;
+    } else {
+      // some debug commands
+      alert(resJson.msg);
+    }
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
+// Function to save a milestone in DB
 async function CreateAndSaveMileStone(
   courseTimelieId,
   type,
@@ -321,6 +355,7 @@ function CoursePage() {
                       userDataForCourse={userDataForCourse}
                       subscriberTimelines={subscriberTimelines}
                       createAndSaveMilestone={CreateAndSaveMileStone}
+                      createAndSaveAssignment={CreateAndSaveAssignment}
                       coursePageRerender={setGetDataAfterPost}
                     ></GeneralView>
                   </TabPanel>

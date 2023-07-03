@@ -42,7 +42,7 @@ function Courses(props) {
     }
   });
 
-  console.log("filteredData in courses.jsx: ", filteredData);
+  // console.log("filteredData in courses.jsx: ", filteredData);
 
   return (
     <>

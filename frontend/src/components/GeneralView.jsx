@@ -69,7 +69,13 @@ function GeneralView(props) {
         </Grid>
         {/* Button for creating a new task */}
         <Grid item xs={1.75}>
-          <CreateTask isOwner={isOwner}></CreateTask>
+          <CreateTask
+            selectedCourseTimelineId={props.selectedCourse.timeline._id}
+            subscriberTimelines={props.subscriberTimelines}
+            createAndSaveAssignment={props.createAndSaveAssignment}
+            coursePageRerender={props.coursePageRerender}
+            isOwner={isOwner}
+          ></CreateTask>
         </Grid>
         {/* Showing Assignmentlist */}
         <Grid item xs={12}>
