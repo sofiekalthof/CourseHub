@@ -1,5 +1,6 @@
 import Welcome from "./Welcome";
 import LandingPageDesign from "../assets/LandingPage.png";
+import LandingPageBackground from "../assets/LandingPageBackground.png"
 import { Button, Grid, Typography, Box } from "@mui/material";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
@@ -11,18 +12,19 @@ export default function LandingPage() {
   };
   return (
     <>
-      <Grid container direction="column">
+      <Grid container direction="column"xs={12} sx={{backgroundImage: `url(${LandingPageBackground})`, backgroundPosition: 'center', backgroundSize:'cover', height: '100%', flexGrow:1}}>
         <Grid item xs={12}>
-          <Grid container direction="row" justifyContent="flex-end">
+          <Grid container direction="row" justifyContent="flex-start">
             <Grid item xs={5.25}>
               <Grid
                 container
                 direction="column"
                 justifyContent="space-around"
                 alignItems="flex-start"
-                height={700}
+                minHeight={700}
+                
               >
-                <Grid item sx={{ paddingTop: 20, paddingLeft: 8 }}>
+                <Grid item sx={{ paddingTop: 13, paddingLeft: 6 }}>
                   <Typography variant="h3" sx={{ fontWeight: "bold" }}>
                     Experience a new way to
                   </Typography>
@@ -34,6 +36,7 @@ export default function LandingPage() {
                     {" "}
                     manage your studies
                   </Typography>
+                  
                 </Grid>
                 <Grid item sx={{ paddingLeft: 8 }}>
                   <Typography variant="h6">
@@ -65,9 +68,7 @@ export default function LandingPage() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6.75}>
-              <img src={LandingPageDesign} width={800} height={700}></img>
-            </Grid>
+           
           </Grid>
         </Grid>
       </Grid>

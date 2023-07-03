@@ -67,7 +67,7 @@ function Courses(props) {
         </Grid>
         {/* Show one card for each course */}
         {filteredData.map((courseIdDescs) => (
-          <Grid item xs={4} lg={4} key={courseIdDescs._id}>
+          <Grid item xs={12} sm={6} md={6} lg={4} key={courseIdDescs._id}>
             <Card
               sx={{
                 height: 300,
