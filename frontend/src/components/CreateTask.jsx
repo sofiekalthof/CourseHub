@@ -231,7 +231,9 @@ function CreateTask(props) {
   };
 
   const handleFileChange = (event) => {
+    // console.log(event.target.files);
     const uploadedFiles = Array.from(event.target.files);
+    // console.log(uploadedFiles);
 
     // Check the file conditions before adding to the state
     const validFiles = uploadedFiles.filter((file) => {
@@ -261,6 +263,7 @@ function CreateTask(props) {
     });
 
     setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    // console.log(files);
   };
 
   const handleDeleteFile = (file) => {
@@ -301,7 +304,10 @@ function CreateTask(props) {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("data", deadline);
-    formData.append("allFiles", files);
+    // The following loop was the solution
+    for (const file of files) {
+      formData.append("allFiles", file);
+    }
     formData.append("timeline", props.selectedCourseTimelineId);
     formData.append("subscriberTimelines", props.subscriberTimelines);
     // for (var pair of formData.entries()) {

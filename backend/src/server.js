@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 // file storage stuff  ---> currently based-on https://github.com/ThomasFoydel/MERN-image-upload/blob/main/routes/image.js
 const fs = require("fs");
+const path = require("path");
 const multer = require("multer"); // for parsing FormData which is type multipart-bodies
 const GridFsStorage = require("multer-gridfs-storage").GridFsStorage;
 const { mongoose, gridFSBucket } = require("./dbConnection.js");
@@ -96,7 +97,7 @@ const store = multer({
 function checkFileType(file, cb) {
   console.log("file in checkFileType: ", file);
   // define a regex that includes the file types we accept
-  const filetypes = /jpeg|jpg|pdf|msword/;
+  const filetypes = /png|jpeg|jpg|pdf|msword/;
   // check the file extention of incoming file
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   // more importantly, check the mimetype
@@ -111,7 +112,8 @@ function checkFileType(file, cb) {
 const uploadMiddleware = (req, res, next) => {
   console.log("req.body of uploadMiddleware: ", req.body);
   console.log("req.body.allFiles of uploadMiddleware: ", req.body.allFiles);
-  const upload = store.array("allFiles", 3);
+  console.log("req.allFiles of uploadMiddleware: ", req.allFiles);
+  const upload = store.any("allFiles");
   upload(req, res, function (err) {
     // catch any multer error
     if (err instanceof multer.MulterError) {
