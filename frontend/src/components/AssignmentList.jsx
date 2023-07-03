@@ -214,7 +214,7 @@ function AssignmentList(props) {
                 {/* One table row for each task */}
                 {dates.length == 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={4}>
                       <Alert severity="info">
                         No assignments/quizzes available for this course
                       </Alert>
