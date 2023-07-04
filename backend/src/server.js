@@ -10,28 +10,18 @@ let storage = multer.diskStorage({
     cb(null, "./public");
   },
   filename: function (req, file, cb) {
-    // console.log("multer storage called");
-    // console.log("req.assignment in multer storage: ", req.assignment);
-    // save file, only if there is a new assignment
-    if (req.task) {
-      // extract type of data
-      let extArray = file.mimetype.split("/");
-      let extension = extArray[extArray.length - 1];
+    // extract type of data
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
 
-      // console.log(
-      //   req.assignment._id.toString() + "_" + Date.now() + "." + extension
-      // );
-      var filename =
-        req.assignment._id.toString() + "_" + Date.now() + "." + extension;
-      // use id of assignment and extension type to save the file
-      cb(null, filename);
-    }
+    var filename = file.fieldname + "_" + Date.now() + "." + extension;
+    // use id of assignment and extension type to save the file
+    cb(null, filename);
   },
 });
 
 const upload = multer({
   storage: storage,
-  fileFilter: createTask,
 });
 // user authentification stuff
 const bcrypt = require("bcrypt");
@@ -87,7 +77,6 @@ app.use(
     store: mongoDBstore,
     cookie: {
       maxAge: parseInt(process.env.SESSION_MAX_LENGTH), // Max. session length
-      expires: parseInt(process.env.SESSION_INACTIVITY_MAX_LENGTH), // Session expires after 1 min of inactivity.
       sameSite: false, // same-site and cross-site(diff. schemes, domain or sub-domain) requests
       secure: false, // need an HTTPS enabled browser (true-> in prod.)
     },
@@ -104,10 +93,10 @@ app.listen(port, () => {
 
 // Function to check auth
 const checkAuth = function (req, res, next) {
-  console.log(
-    "checkAuth Called, userSession in session-store: ",
-    req.session.user
-  );
+  // console.log(
+  //   "checkAuth Called, userSession in session-store: ",
+  //   req.session.user
+  // );
   if (req.session.user) {
     // console.log("session exists");
     next();
@@ -118,10 +107,10 @@ const checkAuth = function (req, res, next) {
 
 // Route to check auth and return user info in cookie
 app.route("/isAuth").get((req, res) => {
-  console.log(
-    "isAuth Called, userSession(req.session.user) in session-store: ",
-    req.session.user
-  );
+  // console.log(
+  //   "isAuth Called, userSession(req.session.user) in session-store: ",
+  //   req.session.user
+  // );
   // console.log("isAuth Called, req.session in session-store: ", req.session);
   if (req.session.user) {
     return res.status(200).json(req.session.user);
@@ -387,7 +376,7 @@ app.route("/courseIdDescs").get(checkAuth, async (req, res) => {
   }
 });
 
-// Get all information of a course (parsed to the needs of a frontend) (POSTMAN Checked)
+// Get all information of a course (parsed to the needs of a frontend)
 app.route("/courseAllInfo/:courseId").get(checkAuth, async (req, res) => {
   let course = [];
   try {
@@ -537,67 +526,66 @@ app.route("/register").post(async (req, res) => {
 
 // Update milestone(autom.)?
 
-// Take task
-
-// Function to create Assignment without any files
-async function createTask(req, cb) {
-  // EXAMPLE: {
-  //     "type": "Assignment",
-  //     "title": "Test"
-  //     "description": "test",
-  //     "data": "2023-07-15",
-  //     "timeline": "64993b0b326b752cc8f3e421"
-  // }
-  // console.log("req.body in createAssignment: ", req.body);
-  let taskData = {
-    type: req.body.type,
-    title: req.body.title,
-    description: req.body.description,
-    data: new Date(req.body.data),
-    timeline: req.params.timelineId,
-  };
-  if (req.body.type === "Quiz") {
-    taskData.questions = req.body.questions;
-    tasksData.answers = req.body.answers;
-    taskData.correctAnswers = req.body.correctAnswerIndices;
-  }
-  let newTask;
-  console.log("taskData: ", taskData);
-  try {
-    // create new task
-    newTask = new TaskModel(taskData);
-
-    // save task in db
-    await newTask.save();
-
-    req.task = newTask;
-    cb(null, true);
-  } catch (err) {
-    cb("error creating new assignment", false);
-  }
-}
-
-// Create Assignment
+// Create Task
 app
   .route("/courseAddTask/:timelineId")
   .post(checkAuth, upload.array("allFiles"), uploadFiles, async (req, res) => {
+    let taskData = {
+      type: req.body.type,
+      title: req.body.title,
+      description: req.body.description,
+      data: new Date(req.body.data),
+      timeline: req.params.timelineId,
+    };
+    if (req.body.type === "Quiz") {
+      taskData.questions = req.body.questions;
+      taskData.answers = req.body.answers;
+      taskData.correctAnswers = req.body.correctAnswerIndices;
+    }
+    let newTask;
     let subscriberTimelines = req.body.subscriberTimelines;
-    let newAssignment = req.assignment;
     try {
-      // extract names of files
-      const fileNames = req.files.map((file) => file.filename);
+      // create new task
+      newTask = new TaskModel(taskData);
 
-      // console.log("fileNames: ", fileNames);
+      // save task in db
+      const resultNewTask = await newTask.save();
 
+      if (!resultNewTask) {
+        res.status(400).json({ msg: "New Task not created" });
+      }
+
+      let newFileNames = [];
+      // extract names of saved files
+      const currFileNames = req.files.map((file) => file.filename);
+
+      // console.log("currFileNames: ", currFileNames);
+      currFileNames.forEach((fileName) => {
+        var oldFileNameArr = fileName.split("_");
+        // console.log("oldFileName: ", `./public/${fileName}`);
+        // console.log(
+        //   "newFileName: ",
+        //   `./public/${resultNewTask._id}_${oldFileNameArr[1]}`
+        // );
+        newFileNames = [
+          ...newFileNames,
+          `${resultNewTask._id}_${oldFileNameArr[1]}`,
+        ];
+        fs.rename(
+          `./public/${fileName}`,
+          `./public/${resultNewTask._id}_${oldFileNameArr[1]}`,
+          function (err) {
+            if (err) console.log("ERROR: " + err);
+          }
+        );
+      });
+      // console.log("done");
       // find task model and update the list of filenames
-      const resultUpdateTask = await TaskModel.findByIdAndUpdate(
-        newAssignment._id,
-        {
-          $push: {
-            files: { $each: fileNames },
-          },
-        }
-      );
+      const resultUpdateTask = await TaskModel.findByIdAndUpdate(newTask._id, {
+        $push: {
+          files: { $each: newFileNames },
+        },
+      });
 
       if (!resultUpdateTask) {
         res
@@ -610,7 +598,7 @@ app
         req.params.timelineId,
         {
           $push: {
-            tasks: newAssignment,
+            tasks: newTask,
           },
         }
       );
@@ -620,7 +608,7 @@ app
           .json({ msg: "Timeline not updated (assignment was not added)" });
       }
 
-      // console.log(resultUpdateTask);
+      console.log(resultUpdateTask);
       // console.log(result);
       // console.log("subscriberTimelines: ", subscriberTimelines);
       let subscriberTimelineId;
@@ -633,7 +621,7 @@ app
           subscriberTimelineId = subscriberTimelines;
         }
 
-        console.log("subscriberTimelineId: ", subscriberTimelineId);
+        // console.log("subscriberTimelineId: ", subscriberTimelineId);
 
         // add new task status to the user's timeline
         const result = await TimelineUserModel.findByIdAndUpdate(
@@ -641,8 +629,8 @@ app
           {
             $push: {
               userTasksStats: {
-                originalTaskId: newAssignment._id,
-                userTaskSatus: newAssignment.status,
+                originalTaskId: newTask._id,
+                userTaskSatus: newTask.status,
                 userTaskScore: 0,
               },
             },
