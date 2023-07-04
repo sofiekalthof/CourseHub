@@ -49,7 +49,7 @@ function GeneralView(props) {
           <CreateMileStone
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
-            createAndSaveMilestone={props.createAndSaveMilestone}
+            createAndSaveTaskMilestone={props.createAndSaveMilestone}
             coursePageRerender={props.coursePageRerender}
             isOwner={isOwner}
           ></CreateMileStone>
@@ -72,7 +72,7 @@ function GeneralView(props) {
           <CreateTask
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
-            createAndSaveAssignment={props.createAndSaveAssignment}
+            createAndSaveTask={props.createAndSaveTask}
             coursePageRerender={props.coursePageRerender}
             isOwner={isOwner}
           ></CreateTask>

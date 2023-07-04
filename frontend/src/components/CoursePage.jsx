@@ -14,12 +14,12 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 
 // Function to take a course
-async function CreateAndSaveAssignment(courseTimelineId, formData) {
+async function CreateAndSaveTask(courseTimelineId, formData) {
   // make API call to subscribe user to the course
   try {
     // send POST request to REST API
     let res = await fetch(
-      `${import.meta.env.VITE_API_URL}/courseAddAssignment/${courseTimelineId}`,
+      `${import.meta.env.VITE_API_URL}/courseAddTask/${courseTimelineId}`,
       {
         method: "POST",
         body: formData,
@@ -38,6 +38,9 @@ async function CreateAndSaveAssignment(courseTimelineId, formData) {
     if (res.status === 200) {
       alert(resJson.msg);
       return;
+    } else if (res.status === 401) {
+      // some debug commands
+      alert(resJson.msg);
     } else {
       // some debug commands
       alert(resJson.msg);
@@ -355,7 +358,7 @@ function CoursePage() {
                       userDataForCourse={userDataForCourse}
                       subscriberTimelines={subscriberTimelines}
                       createAndSaveMilestone={CreateAndSaveMileStone}
-                      createAndSaveAssignment={CreateAndSaveAssignment}
+                      createAndSaveTask={CreateAndSaveTask}
                       coursePageRerender={setGetDataAfterPost}
                     ></GeneralView>
                   </TabPanel>

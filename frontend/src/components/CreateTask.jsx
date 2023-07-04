@@ -118,18 +118,51 @@ function CreateTask(props) {
   // Function to handle question file change
   const handleQuestionFileChange = (event, questionId) => {
     // Read and update the image file of the specific question
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const updatedQuestions = questions.map((question) => {
-        if (question.id === questionId) {
-          return { ...question, image: e.target.result };
-        }
-        return question;
-      });
-      setQuestions(updatedQuestions);
-    };
-    reader.readAsDataURL(file);
+    // const file = event.target.files[0];
+    // const reader = new FileReader();
+    // reader.onload = (e) => {
+    //   const updatedQuestions = questions.map((question) => {
+    //     if (question.id === questionId) {
+    //       return { ...question, image: e.target.result };
+    //     }
+    //     return question;
+    //   });
+    //   setQuestions(updatedQuestions);
+    // };
+    // reader.readAsDataURL(file);
+    // console.log(event.target.files);
+    const uploadedFile = event.target.files[0];
+    // console.log(uploadedFiles);
+
+    // Check the file conditions before adding to the state
+    // Check the file type
+    const fileType = uploadedFile.type;
+    const allowedFileTypes = ["application/pdf", "image/jpeg", "image/png"];
+    if (!allowedFileTypes.includes(fileType)) {
+      console.log(`Invalid file type: ${fileType}`);
+      setQuizError(`Invalid file type: ${fileType}`);
+      return;
+    }
+
+    // Check the file size (in bytes)
+    const fileSize = uploadedFile.size;
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    if (fileSize > maxFileSize) {
+      console.log(`File size exceeds the limit: ${fileSize}`);
+      setQuizError(`File size exceeds the limit: ${fileSize}`);
+      return;
+    }
+
+    // File meets the conditions
+    const updatedQuestions = questions.map((question) => {
+      if (question.id === questionId) {
+        return { ...question, image: uploadedFile };
+      }
+      return question;
+    });
+    setQuestions(updatedQuestions);
+    console.log(updatedQuestions);
+    console.log(updatedQuestions[0].image);
   };
 
   // Function to add a new question
@@ -155,17 +188,21 @@ function CreateTask(props) {
 
   // Function to handle quiz creation
   const handleCreateQuiz = () => {
+    console.log("handleCreateQuiz called");
+    // console.log(quizTitle.trim() === "");
+    // console.log(deadlineQuiz === null);
     // Validate quiz data before creating
     if (quizTitle.trim() === "") {
       setQuizError("Please enter a quiz title");
       return;
     }
-    if (deadline === null) {
+    if (deadlineQuiz === null) {
       setQuizError("Please select a deadline");
       return;
     }
 
     for (const question of questions) {
+      console.log(question.text.trim() === "");
       if (question.text.trim() === "") {
         setQuizError("Please fill in all the question fields");
         return;
@@ -179,25 +216,51 @@ function CreateTask(props) {
     }
 
     // Create the quiz object
-    const quiz = {
-      title: quizTitle,
-      questions: questions.map(
-        ({ id, text, answers, correctAnswerIndices, image, deadline }) => ({
-          id,
-          text,
-          answers,
-          correctAnswerIndices,
-          image,
-          deadline,
-        })
-      ),
-    };
-
+    // const quiz = {
+    //   title: quizTitle,
+    //   questions: questions.map(
+    //     ({ id, text, answers, correctAnswerIndices, image, deadline }) => ({
+    //       id,
+    //       text,
+    //       answers,
+    //       correctAnswerIndices,
+    //       image,
+    //       deadline,
+    //     })
+    //   ),
+    // };
+    // console.log("formData being formed: ");
     // Pass the created quiz to the parent component
-    onQuizCreated(quiz);
+    // onQuizCreated(quiz);
+
+    // create form data to give to backend (needed for uploading files)
+    const formData = new FormData();
+    formData.append("type", "Quiz");
+    formData.append("title", quizTitle);
+    formData.append("data", deadlineQuiz);
+    for (const question of questions) {
+      formData.append("text", question.text);
+      formData.append("answers", question.answers);
+      formData.append("correctAnswerIndices", question.correctAnswerIndices);
+      formData.append("allFiles", question.img);
+    }
+    formData.append("timeline", props.selectedCourseTimelineId);
+    formData.append("subscriberTimelines", props.subscriberTimelines);
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+    props
+      .createAndSaveTask(props.selectedCourseTimelineId, formData)
+      .then((res) => {
+        props.coursePageRerender(true);
+      })
+      .catch((err) => {
+        alert(err);
+      });
 
     // Reset form fields and error
     setQuizTitle("");
+    setQuizDeadline(null);
     setQuestions([
       {
         id: uuidv4(),
@@ -239,13 +302,7 @@ function CreateTask(props) {
     const validFiles = uploadedFiles.filter((file) => {
       // Check the file type
       const fileType = file.type;
-      const allowedFileTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "image/jpeg",
-        "image/png",
-      ];
+      const allowedFileTypes = ["application/pdf", "image/jpeg", "image/png"];
       if (!allowedFileTypes.includes(fileType)) {
         console.log(`Invalid file type: ${fileType}`);
         return false;
@@ -314,7 +371,7 @@ function CreateTask(props) {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
     props
-      .createAndSaveAssignment(props.selectedCourseTimelineId, formData)
+      .createAndSaveTask(props.selectedCourseTimelineId, formData)
       .then((res) => {
         props.coursePageRerender(true);
       })

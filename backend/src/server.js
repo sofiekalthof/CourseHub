@@ -13,7 +13,7 @@ let storage = multer.diskStorage({
     // console.log("multer storage called");
     // console.log("req.assignment in multer storage: ", req.assignment);
     // save file, only if there is a new assignment
-    if (req.assignment) {
+    if (req.task) {
       // extract type of data
       let extArray = file.mimetype.split("/");
       let extension = extArray[extArray.length - 1];
@@ -21,17 +21,17 @@ let storage = multer.diskStorage({
       // console.log(
       //   req.assignment._id.toString() + "_" + Date.now() + "." + extension
       // );
-      var test =
+      var filename =
         req.assignment._id.toString() + "_" + Date.now() + "." + extension;
       // use id of assignment and extension type to save the file
-      cb(null, test);
+      cb(null, filename);
     }
   },
 });
 
 const upload = multer({
   storage: storage,
-  fileFilter: createAssignment,
+  fileFilter: createTask,
 });
 // user authentification stuff
 const bcrypt = require("bcrypt");
@@ -536,7 +536,7 @@ app.route("/register").post(async (req, res) => {
 // Take task
 
 // Function to create Assignment without any files
-async function createAssignment(req, file, cb) {
+async function createTask(req, cb) {
   // EXAMPLE: {
   //     "type": "Assignment",
   //     "title": "Test"
@@ -545,23 +545,28 @@ async function createAssignment(req, file, cb) {
   //     "timeline": "64993b0b326b752cc8f3e421"
   // }
   // console.log("req.body in createAssignment: ", req.body);
-  let assignmentData = {
+  let taskData = {
     type: req.body.type,
     title: req.body.title,
     description: req.body.description,
     data: new Date(req.body.data),
     timeline: req.params.timelineId,
   };
-  let newAssignment;
-  // console.log("assignmentData: ", assignmentData);
+  if (req.body.type === "Quiz") {
+    taskData.questions = req.body.questions;
+    tasksData.answers = req.body.answers;
+    taskData.correctAnswers = req.body.correctAnswerIndices;
+  }
+  let newTask;
+  console.log("taskData: ", taskData);
   try {
     // create new task
-    newAssignment = new TaskModel(assignmentData);
+    newTask = new TaskModel(taskData);
 
     // save task in db
-    await newAssignment.save();
+    await newTask.save();
 
-    req.assignment = newAssignment;
+    req.task = newTask;
     cb(null, true);
   } catch (err) {
     cb("error creating new assignment", false);
@@ -570,7 +575,7 @@ async function createAssignment(req, file, cb) {
 
 // Create Assignment
 app
-  .route("/courseAddAssignment/:timelineId")
+  .route("/courseAddTask/:timelineId")
   .post(checkAuth, upload.array("allFiles"), uploadFiles, async (req, res) => {
     let subscriberTimelines = req.body.subscriberTimelines;
     let newAssignment = req.assignment;
