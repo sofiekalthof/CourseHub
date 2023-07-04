@@ -267,6 +267,7 @@ function CreateTask(props) {
         }
       })
       .catch((err) => {
+        console.log("A");
         alert(err);
       });
 
@@ -394,6 +395,7 @@ function CreateTask(props) {
         }
       })
       .catch((err) => {
+        console.log("B");
         alert(err);
       });
 

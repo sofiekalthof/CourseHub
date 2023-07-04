@@ -608,7 +608,7 @@ app
           .json({ msg: "Timeline not updated (assignment was not added)" });
       }
 
-      console.log(resultUpdateTask);
+      // console.log(resultUpdateTask);
       // console.log(result);
       // console.log("subscriberTimelines: ", subscriberTimelines);
       let subscriberTimelineId;

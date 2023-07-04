@@ -24,11 +24,6 @@ async function CreateAndSaveTask(courseTimelineId, formData) {
       {
         method: "POST",
         body: formData,
-        // header neccessary for correct sending of information
-        // headers: {
-        //   Accept: "application/json",
-        //   "Content-Type": "application/x-www-form-urlencoded",
-        // },
         credentials: "include",
       }
     );
@@ -38,11 +33,12 @@ async function CreateAndSaveTask(courseTimelineId, formData) {
 
     if (res.status === 200) {
       alert(resJson.msg);
-      return;
+      return resJson.msg;
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }
@@ -80,11 +76,12 @@ async function CreateAndSaveMileStone(
 
     if (res.status === 200) {
       alert(resJson.msg);
-      return;
+      return resJson.msg;
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }
@@ -120,6 +117,7 @@ async function TakeCourse(courseId, userId) {
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }
@@ -153,6 +151,7 @@ async function GetAllCourseInfo(courseId) {
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }
@@ -186,6 +185,7 @@ async function GetAllCourseSubscriberData(courseId) {
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }

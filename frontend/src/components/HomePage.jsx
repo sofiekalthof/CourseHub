@@ -55,6 +55,7 @@ async function CreateCourse(courseName, courseDescription, ownerID) {
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }
@@ -83,6 +84,7 @@ async function GetAllCourseIdDescs() {
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
     }
+    return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
   }

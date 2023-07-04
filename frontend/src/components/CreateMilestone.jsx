@@ -79,6 +79,7 @@ function CreateMileStone(props) {
         }
       })
       .catch((err) => {
+        console.log("C");
         alert(err);
       });
   };
