@@ -42,7 +42,7 @@ dayjs.extend(localizedFormat);
 
 // Determine status of one task
 function ShowTaskStatus(taskStatus) {
-  console.log(taskStatus);
+  // console.log(taskStatus);
   if (taskStatus.taskStatus == undefined) {
     return;
   }

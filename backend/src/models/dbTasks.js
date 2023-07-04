@@ -32,7 +32,7 @@ const TaskSchema = new mongoose.Schema({
   },
   files: [
     {
-      type: mongoose.Types.ObjectId,
+      type: String,
     },
   ],
   // belonging timeline
