@@ -86,7 +86,8 @@ app.use(
     name: "session-id", // name of the cookies (key field)
     store: mongoDBstore,
     cookie: {
-      maxAge: parseInt(process.env.SESSION_MAX_LENGTH),
+      maxAge: parseInt(process.env.SESSION_MAX_LENGTH), // Max. session length
+      expires: parseInt(process.env.SESSION_INACTIVITY_MAX_LENGTH), // Session expires after 1 min of inactivity.
       sameSite: false, // same-site and cross-site(diff. schemes, domain or sub-domain) requests
       secure: false, // need an HTTPS enabled browser (true-> in prod.)
     },
@@ -103,10 +104,10 @@ app.listen(port, () => {
 
 // Function to check auth
 const checkAuth = function (req, res, next) {
-  // console.log(
-  //   "checkAuth Called, userSession in session-store: ",
-  //   req.session.user
-  // );
+  console.log(
+    "checkAuth Called, userSession in session-store: ",
+    req.session.user
+  );
   if (req.session.user) {
     // console.log("session exists");
     next();
@@ -117,10 +118,10 @@ const checkAuth = function (req, res, next) {
 
 // Route to check auth and return user info in cookie
 app.route("/isAuth").get((req, res) => {
-  // console.log(
-  //   "isAuth Called, userSession(req.session.user) in session-store: ",
-  //   req.session.user
-  // );
+  console.log(
+    "isAuth Called, userSession(req.session.user) in session-store: ",
+    req.session.user
+  );
   // console.log("isAuth Called, req.session in session-store: ", req.session);
   if (req.session.user) {
     return res.status(200).json(req.session.user);
@@ -204,7 +205,7 @@ app
   });
 
 // Take course
-app.route("/takeCourse/:courseId").post(async (req, res) => {
+app.route("/takeCourse/:courseId").post(checkAuth, async (req, res) => {
   // IMPROVEMENT: user data could be received from req.session.user directly (to check)
   // IMPROVEMENT: would be better if we send timeline id directly
   let currTaskStats = [];
@@ -446,8 +447,11 @@ app.route("/courseAllInfo/:courseId").get(checkAuth, async (req, res) => {
 // Simple route to destory session
 app.route("/logout").get(async (req, res) => {
   try {
+    // delete user's specific session
+    delete req.session.user;
+
     // destroy session all together
-    await req.session.destroy();
+    req.session.destroy();
 
     // delete session from db
     req.session = null;

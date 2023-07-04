@@ -31,9 +31,15 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
+import { useContext } from "react";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 // Function for showing the create new button
 function CreateTask(props) {
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
+  const navigate = useNavigate();
   // Quizz Creation start
   // State variables
   const [openQuiz, setQuizOpen] = useState(false);
@@ -252,7 +258,13 @@ function CreateTask(props) {
     props
       .createAndSaveTask(props.selectedCourseTimelineId, formData)
       .then((res) => {
-        props.coursePageRerender(true);
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          props.coursePageRerender(true);
+        }
       })
       .catch((err) => {
         alert(err);
@@ -373,7 +385,13 @@ function CreateTask(props) {
     props
       .createAndSaveTask(props.selectedCourseTimelineId, formData)
       .then((res) => {
-        props.coursePageRerender(true);
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          props.coursePageRerender(true);
+        }
       })
       .catch((err) => {
         alert(err);

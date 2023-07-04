@@ -44,7 +44,7 @@ export default function Navbar() {
     setAnchorEl(null);
 
     // destroy the session in backend
-    const res = await fetch(`${API_URL}/logout`);
+    const res = await fetch(`${API_URL}/logout`, { credentials: "include" });
 
     // parse return statement from backend
     let resJson = await res.json();

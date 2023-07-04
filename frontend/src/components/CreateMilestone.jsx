@@ -34,9 +34,15 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import CreateTask from "./CreateTask";
+import { useContext } from "react";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 // Function for Showing the Add Milestone button
 function CreateMileStone(props) {
+  const navigate = useNavigate();
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [milestoneType, setMilestoneType] = useState("");
   const [date, setDate] = useState(dayjs());
@@ -63,8 +69,14 @@ function CreateMileStone(props) {
         props.subscriberTimelines
       )
       .then((res) => {
-        props.coursePageRerender(true);
-        setOpen(false);
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          props.coursePageRerender(true);
+          setOpen(false);
+        }
       })
       .catch((err) => {
         alert(err);
@@ -90,7 +102,7 @@ function CreateMileStone(props) {
             <Grid container spacing={3}>
               {/* Dropdown Menu for selecting the Milestone Type */}
               <Grid item xs={12}>
-                <FormControl fullWidth sx={{marginTop: 1}}>
+                <FormControl fullWidth sx={{ marginTop: 1 }}>
                   <InputLabel>Milestone Type</InputLabel>
                   <Select
                     value={milestoneType}

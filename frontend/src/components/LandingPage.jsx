@@ -3,11 +3,16 @@ import LandingPageDesign from "../assets/LandingPage.png";
 import { Button, Grid, Typography, Box } from "@mui/material";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 export default function LandingPage() {
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
   const navigate = useNavigate();
   const handleRegister = () => {
-    navigate("/registerlogin");
+    if (userSession.id) navigate("/home");
+    else navigate("/registerlogin");
   };
   return (
     <>

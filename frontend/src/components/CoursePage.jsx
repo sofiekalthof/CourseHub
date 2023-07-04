@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import Analytics from "./Analytics";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
@@ -38,12 +39,9 @@ async function CreateAndSaveTask(courseTimelineId, formData) {
     if (res.status === 200) {
       alert(resJson.msg);
       return;
-    } else if (res.status === 401) {
-      // some debug commands
-      alert(resJson.msg);
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -83,9 +81,9 @@ async function CreateAndSaveMileStone(
     if (res.status === 200) {
       alert(resJson.msg);
       return;
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -117,10 +115,10 @@ async function TakeCourse(courseId, userId) {
 
     if (res.status === 200) {
       alert(resJson.msg);
-      return;
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+      return resJson.msg;
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -151,11 +149,9 @@ async function GetAllCourseInfo(courseId) {
     if (res.status === 200) {
       // console.log("resJson in GetAllCourseInfo: ", resJson);
       return resJson;
-    } else if (res.status === 401) {
-      alert(resJson.msg);
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -186,9 +182,9 @@ async function GetAllCourseSubscriberData(courseId) {
 
     if (res.status === 200) {
       return resJson;
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -203,7 +199,10 @@ async function GetAllCourseSubscriberData(courseId) {
 // }
 
 function CoursePage() {
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
   // console.log("rendered coursepage");
+  const navigate = useNavigate();
   // Get user and selected course from route parameters
   const location = useLocation();
   const user = location.state.user;
@@ -252,9 +251,20 @@ function CoursePage() {
       GetAllCourseInfo(courseId),
     ])
       .then(([res1, res2]) => {
-        setDataOfAllUsersForThisCourse(res1.subscribers);
-        setSelectedCourse(res2);
-        setLoading(false);
+        if (
+          res1.status === 401 &&
+          res1.msg === "Unauthorized" &&
+          res2.status === 401 &&
+          res2.msg === "Unauthorized"
+        ) {
+          alert(res1.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          setDataOfAllUsersForThisCourse(res1.subscribers);
+          setSelectedCourse(res2);
+          setLoading(false);
+        }
       })
       .catch((err) => {
         setError(true);
@@ -300,9 +310,15 @@ function CoursePage() {
 
   const handleTakeCourse = (courseId, userId) => {
     TakeCourse(courseId, userId)
-      .then(() => {
-        // using setGetDataAfterPost to call useEffect which will update information
-        setGetDataAfterPost(true);
+      .then((res) => {
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          // using setGetDataAfterPost to call useEffect which will update information
+          setGetDataAfterPost(true);
+        }
       })
       .catch((err) => {
         setError(true);

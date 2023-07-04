@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
 
 // Function to create a course in database (parsed for frontend)
@@ -50,9 +51,9 @@ async function CreateCourse(courseName, courseDescription, ownerID) {
     if (res.status === 200) {
       alert(resJson.msg);
       return resJson.newCourse;
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -78,11 +79,9 @@ async function GetAllCourseIdDescs() {
 
     if (res.status === 200) {
       return resJson;
-    } else if (res.status === 401) {
-      alert(resJson.msg);
-    } else {
-      // some debug commands
-      alert(resJson.msg);
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
     }
   } catch (err) {
     console.log("Frontend error. Get request could not be sent. Check API!");
@@ -92,6 +91,7 @@ async function GetAllCourseIdDescs() {
 function HomePage() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
+  const navigate = useNavigate();
 
   // setting the initial loading state to false
   const [loading, setLoading] = useState(false);
@@ -103,9 +103,15 @@ function HomePage() {
     // get all courses
     GetAllCourseIdDescs()
       .then((res) => {
-        // use promise to set courses
-        setCourseIdDescs(res);
-        setLoading(false);
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          // use promise to set courses
+          setCourseIdDescs(res);
+          setLoading(false);
+        }
       })
       .catch((err) => {
         setLoading(false);
@@ -149,11 +155,18 @@ function HomePage() {
     // create new course in db
     CreateCourse(courseName, courseDescription, userSession.id)
       .then((newCourse) => {
-        // use promise to add new course to list of all courses
-        setCourseIdDescs([...courseIdDescs, newCourse]);
-        setLoading(false);
+        if (newCourse.status === 401 && newCourse.msg === "Unauthorized") {
+          alert(newCourse.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          // use promise to add new course to list of all courses
+          setCourseIdDescs([...courseIdDescs, newCourse]);
+          setLoading(false);
+        }
       })
       .catch((err) => {
+        navigate("/");
         setLoading(false);
         setError(true);
       });
