@@ -69,11 +69,13 @@ function CreateMileStone(props) {
         props.subscriberTimelines
       )
       .then((res) => {
+        console.log(res);
         if (res.status === 401 && res.msg === "Unauthorized") {
           alert(res.msg);
           setUserSession(false);
           navigate("/");
         } else {
+          console.log("I landed here");
           props.coursePageRerender(true);
           setOpen(false);
         }

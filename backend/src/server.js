@@ -540,14 +540,22 @@ app
     if (req.body.type === "Quiz") {
       taskData.description = "quizDesc";
       taskData.questions = req.body.text;
-      taskData.answers = req.body.answers.map((answer) => {
-        return JSON.parse(answer);
-      });
-      taskData.correctAnswers = req.body.correctAnswerIndices.map(
-        (correctIndex) => {
-          return JSON.parse(correctIndex);
-        }
-      );
+      if (Array.isArray(req.body.answers)) {
+        taskData.answers = req.body.answers.map((answer) => {
+          return JSON.parse(answer);
+        });
+      } else {
+        taskData.answers = [JSON.parse(req.body.answers)];
+      }
+      if (Array.isArray(req.body.answers)) {
+        taskData.correctAnswers = req.body.correctAnswerIndices.map(
+          (correctIndex) => {
+            return JSON.parse(correctIndex);
+          }
+        );
+      } else {
+        taskData.correctAnswers = [JSON.parse(req.body.correctAnswerIndices)];
+      }
     }
     let newTask;
     let subscriberTimelines = req.body.subscriberTimelines;

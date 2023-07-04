@@ -246,6 +246,7 @@ function CoursePage() {
     //   .catch((err) => {
     //     setError(true);
     //   });
+    console.log("re-rendering?");
     Promise.all([
       GetAllCourseSubscriberData(courseId),
       GetAllCourseInfo(courseId),
@@ -294,7 +295,7 @@ function CoursePage() {
     });
   }
 
-  // console.log("all course data in coursepage: ", selectedCourse);
+  console.log("all course data in coursepage: ", selectedCourse);
   // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
   // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
   // console.log("courseId: ", courseId);
