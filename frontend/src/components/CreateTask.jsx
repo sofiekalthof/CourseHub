@@ -244,20 +244,30 @@ function CreateTask(props) {
     formData.append("type", "Quiz");
     formData.append("title", quizTitle);
     formData.append("data", deadlineQuiz);
+    // console.log(questions);
     for (const question of questions) {
+      // console.log(question);
       formData.append("text", question.text);
-      formData.append("answers", question.answers);
-      formData.append("correctAnswerIndices", question.correctAnswerIndices);
-      formData.append("allFiles", question.img);
+      // question.answers.forEach((answer) => formData.append("answers", answer));
+      // formData.append("answers", question.answers);
+      formData.append("answers", JSON.stringify(question.answers));
+      formData.append(
+        "correctAnswerIndices",
+        JSON.stringify(question.correctAnswerIndices)
+      );
+      formData.append("allFiles", question.image);
     }
     formData.append("timeline", props.selectedCourseTimelineId);
     formData.append("subscriberTimelines", props.subscriberTimelines);
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
     props
       .createAndSaveTask(props.selectedCourseTimelineId, formData)
       .then((res) => {
+        console.log(res);
+        console.log(res.status);
+        console.log(res.msg);
         if (res.status === 401 && res.msg === "Unauthorized") {
           alert(res.msg);
           setUserSession(false);

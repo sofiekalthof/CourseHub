@@ -33,7 +33,7 @@ async function CreateAndSaveTask(courseTimelineId, formData) {
 
     if (res.status === 200) {
       alert(resJson.msg);
-      return resJson.msg;
+      return { status: 200, msg: resJson.msg };
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
@@ -294,8 +294,8 @@ function CoursePage() {
     });
   }
 
-  console.log("all course data in coursepage: ", selectedCourse);
-  console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
+  // console.log("all course data in coursepage: ", selectedCourse);
+  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
   // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
   // console.log("courseId: ", courseId);
   // console.log("first: ", dataOfAllUsersForThisCourse[0].course);

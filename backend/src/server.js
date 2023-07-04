@@ -538,12 +538,27 @@ app
       timeline: req.params.timelineId,
     };
     if (req.body.type === "Quiz") {
-      taskData.questions = req.body.questions;
-      taskData.answers = req.body.answers;
-      taskData.correctAnswers = req.body.correctAnswerIndices;
+      taskData.description = "quizDesc";
+      taskData.questions = req.body.text;
+      taskData.answers = req.body.answers.map((answer) => {
+        return JSON.parse(answer);
+      });
+      taskData.correctAnswers = req.body.correctAnswerIndices.map(
+        (correctIndex) => {
+          return JSON.parse(correctIndex);
+        }
+      );
     }
     let newTask;
     let subscriberTimelines = req.body.subscriberTimelines;
+    // console.log("req.files: ", req.files);
+    // console.log("req.body: ", req.body);
+    // console.log("taskData: ", taskData);
+    // console.log("req.body.answers: ", req.body.answers);
+    // var test = req.body.answers.map((answer) => {
+    //   return JSON.parse(answer);
+    // });
+    // console.log("JSON.parse(req.body.answers) in a map: ", test);
     try {
       // create new task
       newTask = new TaskModel(taskData);
@@ -554,10 +569,12 @@ app
       if (!resultNewTask) {
         res.status(400).json({ msg: "New Task not created" });
       }
-
+      // console.log("resultNewTask: ", resultNewTask);
       let newFileNames = [];
       // extract names of saved files
       const currFileNames = req.files.map((file) => file.filename);
+
+      // console.log("currFileNames: ", currFileNames);
 
       // console.log("currFileNames: ", currFileNames);
       currFileNames.forEach((fileName) => {
@@ -592,6 +609,7 @@ app
           .status(400)
           .json({ msg: "Taskmodel not updated (filenames were not added)" });
       }
+      // console.log("resultUpdateTask: ", resultUpdateTask);
 
       // find timeline and add the new task to it
       const result = await TimelineModel.findByIdAndUpdate(
@@ -644,6 +662,7 @@ app
       }
       res.status(200).json({ msg: "Assignment created" });
     } catch (err) {
+      console.log(err);
       res.status(500).send("Server error. Request could not be fulfilled.");
     }
   });

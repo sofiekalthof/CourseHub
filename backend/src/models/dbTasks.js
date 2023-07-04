@@ -5,6 +5,14 @@ const File = require("../schemas/dbFileUploadSchema.js");
 // initialize parameters
 collectionName = process.env.DB_COLLECTION_TASKS;
 
+const answerSchema = new mongoose.Schema({
+  type: String,
+});
+
+const correctAnswerSchema = new mongoose.Schema({
+  type: Number,
+});
+
 // create mongoose schema
 const TaskSchema = new mongoose.Schema({
   type: {
@@ -45,6 +53,7 @@ const TaskSchema = new mongoose.Schema({
     type: [String],
   },
   answers: {
+    //type: [{ String, String, String, String }],
     type: [[String]],
   },
   // array of correct answers for each question
