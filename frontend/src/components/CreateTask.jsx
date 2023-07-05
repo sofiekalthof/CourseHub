@@ -143,7 +143,7 @@ function CreateTask(props) {
     // Check the file conditions before adding to the state
     // Check the file type
     const fileType = uploadedFile.type;
-    const allowedFileTypes = ["application/pdf", "image/jpeg", "image/png"];
+    const allowedFileTypes = ["image/jpg", "image/jpeg", "image/png"];
     if (!allowedFileTypes.includes(fileType)) {
       console.log(`Invalid file type: ${fileType}`);
       setQuizError(`Invalid file type: ${fileType}`);
