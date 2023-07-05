@@ -40,7 +40,7 @@ export default function ApexTimelineScatter(props) {
   // Second for all milestones
   let lectureDates = [];
   let examDates = [];
-  let exerciseDates = [];
+  //let exerciseDates = [];
   milestones.map((milestone) => {
     // convert mongodb data string to date
     let milestoneTime = new Date(milestone.data);
@@ -73,7 +73,7 @@ export default function ApexTimelineScatter(props) {
     ) {
       examDates.push({ x: milestoneTime.getTime(), y: 2 });
     }
-    if (
+    /*if (
       milestone.type == "Exercise" &&
       milestoneTime.getTime() <= today.getTime()
     ) {
@@ -88,11 +88,11 @@ export default function ApexTimelineScatter(props) {
         y: 3,
         fillColor: "#D3D3D3",
       });
-    }
+    }*/
   });
   // push all conveted data to dataForChart Array
   dataForChart.push({ name: "Lecture", data: lectureDates });
-  dataForChart.push({ name: "Exercise", data: exerciseDates });
+  //dataForChart.push({ name: "Exercise", data: exerciseDates });
   dataForChart.push({ name: "Exam", data: examDates });
   // add a point for today to chart
   dataForChart.push({
@@ -148,10 +148,10 @@ export default function ApexTimelineScatter(props) {
         ],
       },
       markers: {
-        colors: ["#1E90FF", "#FFD700", "#00EE76", "#FF3030", "#8B008B"],
+        colors: ["#1E90FF", "#FFD700", "#00EE76", "#FF3030"],
         shape: "circle",
         size: 8,
-        strokeColor: ["#1E90FF", "#FFD700", "#00EE76", "#FF3030", "#8B008B"],
+        strokeColor: ["#1E90FF", "#FFD700", "#00EE76", "#FF3030"],
         strokeWidth: 3,
         strokeOpacity: 1,
       },
@@ -162,7 +162,6 @@ export default function ApexTimelineScatter(props) {
             "#FFD700",
             "#00EE76",
             "#FF3030",
-            "#8B008B",
             "#000000",
           ],
         },
