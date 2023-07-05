@@ -119,13 +119,157 @@ app.route("/isAuth").get((req, res) => {
   }
 });
 
-function uploadFiles(req, res, next) {
-  // console.log(req.body);
-  // console.log(req.files);
-  next();
-}
-
 //////////////////////// below are tested and working routes
+
+// Create Task
+app
+  .route("/courseAddTask/:timelineId")
+  .post(checkAuth, upload.array("allFiles"), async (req, res) => {
+    let taskData = {
+      type: req.body.type,
+      title: req.body.title,
+      description: req.body.description,
+      data: new Date(req.body.data),
+      timeline: req.params.timelineId,
+    };
+    if (req.body.type === "Quiz") {
+      taskData.description = "quizDesc";
+      taskData.questions = req.body.text;
+      if (Array.isArray(req.body.answers)) {
+        taskData.answers = req.body.answers.map((answer) => {
+          return JSON.parse(answer);
+        });
+      } else {
+        taskData.answers = [JSON.parse(req.body.answers)];
+      }
+      if (Array.isArray(req.body.answers)) {
+        taskData.correctAnswers = req.body.correctAnswerIndices.map(
+          (correctIndex) => {
+            return JSON.parse(correctIndex);
+          }
+        );
+      } else {
+        taskData.correctAnswers = [JSON.parse(req.body.correctAnswerIndices)];
+      }
+    }
+    let newTask;
+    let subscriberTimelines = req.body.subscriberTimelines;
+    // console.log("req.files: ", req.files);
+    // console.log("req.body: ", req.body);
+    // console.log("taskData: ", taskData);
+    // console.log("req.body.answers: ", req.body.answers);
+    // var test = req.body.answers.map((answer) => {
+    //   return JSON.parse(answer);
+    // });
+    // console.log("JSON.parse(req.body.answers) in a map: ", test);
+    try {
+      // create new task
+      newTask = new TaskModel(taskData);
+
+      // save task in db
+      const resultNewTask = await newTask.save();
+
+      if (!resultNewTask) {
+        res.status(400).json({ msg: "New Task not created" });
+      }
+      // console.log("resultNewTask: ", resultNewTask);
+      let newFileNames = [];
+      // extract names of saved files
+      const currFileNames = req.files.map((file) => file.filename);
+
+      // console.log("currFileNames: ", currFileNames);
+
+      // console.log("currFileNames: ", currFileNames);
+      currFileNames.forEach((fileName) => {
+        var oldFileNameArr = fileName.split("_");
+        // console.log("oldFileName: ", `./public/${fileName}`);
+        // console.log(
+        //   "newFileName: ",
+        //   `./public/${resultNewTask._id}_${oldFileNameArr[1]}`
+        // );
+        newFileNames = [
+          ...newFileNames,
+          `${resultNewTask._id}_${oldFileNameArr[1]}`,
+        ];
+        fs.rename(
+          `./public/${fileName}`,
+          `./public/${resultNewTask._id}_${oldFileNameArr[1]}`,
+          function (err) {
+            if (err) console.log("ERROR: " + err);
+          }
+        );
+      });
+      // console.log("done");
+      // find task model and update the list of filenames
+      const resultUpdateTask = await TaskModel.findByIdAndUpdate(newTask._id, {
+        $push: {
+          files: { $each: newFileNames },
+        },
+      });
+
+      if (!resultUpdateTask) {
+        res
+          .status(400)
+          .json({ msg: "Taskmodel not updated (filenames were not added)" });
+      }
+      // console.log("resultUpdateTask: ", resultUpdateTask);
+
+      // find timeline and add the new task to it
+      const result = await TimelineModel.findByIdAndUpdate(
+        req.params.timelineId,
+        {
+          $push: {
+            tasks: newTask,
+          },
+        }
+      );
+      if (!result) {
+        res
+          .status(400)
+          .json({ msg: "Timeline not updated (assignment was not added)" });
+      }
+
+      // console.log(resultUpdateTask);
+      // console.log(result);
+      // console.log("subscriberTimelines: ", subscriberTimelines);
+      let subscriberTimelineId;
+      // parse each subscriber's timeline
+      for (var subscriberTimeline in subscriberTimelines) {
+        // get id of each subscriberTimelineId (if-statement needed for the case of only 1 subscriber)
+        if (Array.isArray(subscriberTimelines)) {
+          subscriberTimelineId = subscriberTimelines[subscriberTimeline];
+        } else {
+          subscriberTimelineId = subscriberTimelines;
+        }
+
+        // console.log("subscriberTimelineId: ", subscriberTimelineId);
+
+        // add new task status to the user's timeline
+        const result = await TimelineUserModel.findByIdAndUpdate(
+          subscriberTimelineId,
+          {
+            $push: {
+              userTasksStats: {
+                originalTaskId: newTask._id,
+                userTaskSatus: newTask.status,
+                userTaskScore: 0,
+              },
+            },
+          }
+        );
+        if (!result) {
+          res.status(400).json({
+            msg: "User Timeline not updated (assignment was not added)",
+          });
+        }
+      }
+      res.status(200).json({ msg: "Assignment created" });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Server error. Request could not be fulfilled.");
+    }
+  });
+
 // Create milestone
 app
   .route("/courseAddMilestone/:timelineId")
@@ -524,205 +668,125 @@ app.route("/register").post(async (req, res) => {
 
 //////////////////////// below are to-be-tested/to-be-implemented routes
 
-// Update milestone(autom.)?
-
-// Create Task
-app
-  .route("/courseAddTask/:timelineId")
-  .post(checkAuth, upload.array("allFiles"), uploadFiles, async (req, res) => {
-    let taskData = {
-      type: req.body.type,
-      title: req.body.title,
-      description: req.body.description,
-      data: new Date(req.body.data),
-      timeline: req.params.timelineId,
-    };
-    if (req.body.type === "Quiz") {
-      taskData.description = "quizDesc";
-      taskData.questions = req.body.text;
-      if (Array.isArray(req.body.answers)) {
-        taskData.answers = req.body.answers.map((answer) => {
-          return JSON.parse(answer);
-        });
-      } else {
-        taskData.answers = [JSON.parse(req.body.answers)];
-      }
-      if (Array.isArray(req.body.answers)) {
-        taskData.correctAnswers = req.body.correctAnswerIndices.map(
-          (correctIndex) => {
-            return JSON.parse(correctIndex);
-          }
-        );
-      } else {
-        taskData.correctAnswers = [JSON.parse(req.body.correctAnswerIndices)];
-      }
-    }
-    let newTask;
-    let subscriberTimelines = req.body.subscriberTimelines;
-    // console.log("req.files: ", req.files);
-    // console.log("req.body: ", req.body);
-    // console.log("taskData: ", taskData);
-    // console.log("req.body.answers: ", req.body.answers);
-    // var test = req.body.answers.map((answer) => {
-    //   return JSON.parse(answer);
-    // });
-    // console.log("JSON.parse(req.body.answers) in a map: ", test);
-    try {
-      // create new task
-      newTask = new TaskModel(taskData);
-
-      // save task in db
-      const resultNewTask = await newTask.save();
-
-      if (!resultNewTask) {
-        res.status(400).json({ msg: "New Task not created" });
-      }
-      // console.log("resultNewTask: ", resultNewTask);
-      let newFileNames = [];
-      // extract names of saved files
-      const currFileNames = req.files.map((file) => file.filename);
-
-      // console.log("currFileNames: ", currFileNames);
-
-      // console.log("currFileNames: ", currFileNames);
-      currFileNames.forEach((fileName) => {
-        var oldFileNameArr = fileName.split("_");
-        // console.log("oldFileName: ", `./public/${fileName}`);
-        // console.log(
-        //   "newFileName: ",
-        //   `./public/${resultNewTask._id}_${oldFileNameArr[1]}`
-        // );
-        newFileNames = [
-          ...newFileNames,
-          `${resultNewTask._id}_${oldFileNameArr[1]}`,
-        ];
-        fs.rename(
-          `./public/${fileName}`,
-          `./public/${resultNewTask._id}_${oldFileNameArr[1]}`,
-          function (err) {
-            if (err) console.log("ERROR: " + err);
-          }
-        );
-      });
-      // console.log("done");
-      // find task model and update the list of filenames
-      const resultUpdateTask = await TaskModel.findByIdAndUpdate(newTask._id, {
-        $push: {
-          files: { $each: newFileNames },
-        },
-      });
-
-      if (!resultUpdateTask) {
-        res
-          .status(400)
-          .json({ msg: "Taskmodel not updated (filenames were not added)" });
-      }
-      // console.log("resultUpdateTask: ", resultUpdateTask);
-
-      // find timeline and add the new task to it
-      const result = await TimelineModel.findByIdAndUpdate(
-        req.params.timelineId,
-        {
-          $push: {
-            tasks: newTask,
-          },
-        }
-      );
-      if (!result) {
-        res
-          .status(400)
-          .json({ msg: "Timeline not updated (assignment was not added)" });
-      }
-
-      // console.log(resultUpdateTask);
-      // console.log(result);
-      // console.log("subscriberTimelines: ", subscriberTimelines);
-      let subscriberTimelineId;
-      // parse each subscriber's timeline
-      for (var subscriberTimeline in subscriberTimelines) {
-        // get id of each subscriberTimelineId (if-statement needed for the case of only 1 subscriber)
-        if (Array.isArray(subscriberTimelines)) {
-          subscriberTimelineId = subscriberTimelines[subscriberTimeline];
-        } else {
-          subscriberTimelineId = subscriberTimelines;
-        }
-
-        // console.log("subscriberTimelineId: ", subscriberTimelineId);
-
-        // add new task status to the user's timeline
-        const result = await TimelineUserModel.findByIdAndUpdate(
-          subscriberTimelineId,
-          {
-            $push: {
-              userTasksStats: {
-                originalTaskId: newTask._id,
-                userTaskSatus: newTask.status,
-                userTaskScore: 0,
-              },
-            },
-          }
-        );
-        if (!result) {
-          res.status(400).json({
-            msg: "User Timeline not updated (assignment was not added)",
-          });
-        }
-      }
-      res.status(200).json({ msg: "Assignment created" });
-    } catch (err) {
-      console.log(err);
-      res.status(500).send("Server error. Request could not be fulfilled.");
-    }
-  });
-
-// Create task (POSTMAN checked)
-app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {
-  // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly
-  // MAKE-SURE: req.body has type, desc and data
-  // EXAMPLE: {
-  //     "type": "Quiz",
-  //     "description": "test",
-  //     "data": "2023-07-15",
-  //     "questions": ["What is the capital of Germany?", "What does the fox say?"],
-  //     "answers": [["Berlin", "Berlin", "Berlin", "Berlin"], ["No idea", "No idea", "No idea", "No idea"]],
-  //     "correctAnswers": [[0,3], [1]],
-  //     "timeline": "64993b0b326b752cc8f3e421"
-  // }
-  let newTask;
+// Update Task Info of User
+app.route("/courseTakeTask/:taskId").post(checkAuth, async (req, res) => {
+  const taskId = req.params.taskId;
+  const dataToUpdate = { userTaskSatus: "done" };
   try {
-    // create new task
-    newTask = new TaskModel(req.body);
-
-    // save task in db
-    await newTask.save();
-
-    console.log(req.params.id);
-    // find the course the task belongs to
-    const course = await CourseModel.find({ _id: req.params.id });
-
-    // extract timeline of the course
-    const courseTimelineId = course[0].timeline;
-
-    // find timeline and add task to it
-    const result = await TimelineModel.findByIdAndUpdate(courseTimelineId, {
-      $push: {
-        tasks: newTask,
+    const userTimeline = await TimelineUserModel.findOneAndUpdate(
+      {
+        userId: req.session.user.id,
+        origin: req.body.timelineId,
+        "userTasksStats._id": taskId,
       },
-    });
+      { $set: { "userTasksStats.$": dataToUpdate } }
+    );
 
-    if (!result) {
-      res
-        .status(400)
-        .json({ msg: "Timeline not updated (task was not added)" });
+    if (!userTimeline) {
+      res.status(400).json({ msg: "Timeline could not be updated" });
+      return;
     }
-
-    // TODO: update all subs timelines
-
-    res.status(200).json(result);
   } catch (err) {
-    res.status(500).send("Server error. Request could not be fulfilled.");
+    res.status(500).send("Something really bad happened");
   }
 });
+
+// Get Task Info
+app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
+  var taskToReturn = {};
+  const taskId = req.params.taskId;
+  try {
+    // get task from db
+    const task = await TaskModel.findOne({ _id: taskId });
+
+    if (!task) {
+      res.status(400).json({ msg: "A task with that id doesn't exist yet" });
+      return;
+    }
+
+    // set common task fields
+    taskToReturn._id = task._id;
+    taskToReturn.title = task.title;
+    taskToReturn.deadline = task.description;
+
+    // set different fields
+    if (task.type === "Assignment") {
+      taskToReturn.description = task.description;
+      taskToReturn.files = task.files;
+    } else {
+      // meaning task has a Quiz type
+      taskToReturn.questions = [];
+
+      for (let i = 0; i < task.questions.length; i++) {
+        taskToReturn.questions = [
+          ...taskToReturn.questions,
+          {
+            // possible option: JSON.stringfy array values
+            // current: naive solution
+            text: task.questions[i],
+            answers: task.answers[i],
+            correctAnswerIndices: task.correctAnswers[i],
+            image: i >= task.files.length ? null : task.files[i],
+          },
+        ];
+      }
+    }
+    res
+      .status(200)
+      .json({ task: taskToReturn, msg: "Task returned successfully" });
+  } catch (err) {
+    res.status(500).send("Something really bad happened");
+  }
+});
+
+// // Create task (POSTMAN checked)
+// app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {
+//   // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly
+//   // MAKE-SURE: req.body has type, desc and data
+//   // EXAMPLE: {
+//   //     "type": "Quiz",
+//   //     "description": "test",
+//   //     "data": "2023-07-15",
+//   //     "questions": ["What is the capital of Germany?", "What does the fox say?"],
+//   //     "answers": [["Berlin", "Berlin", "Berlin", "Berlin"], ["No idea", "No idea", "No idea", "No idea"]],
+//   //     "correctAnswers": [[0,3], [1]],
+//   //     "timeline": "64993b0b326b752cc8f3e421"
+//   // }
+//   let newTask;
+//   try {
+//     // create new task
+//     newTask = new TaskModel(req.body);
+
+//     // save task in db
+//     await newTask.save();
+
+//     console.log(req.params.id);
+//     // find the course the task belongs to
+//     const course = await CourseModel.find({ _id: req.params.id });
+
+//     // extract timeline of the course
+//     const courseTimelineId = course[0].timeline;
+
+//     // find timeline and add task to it
+//     const result = await TimelineModel.findByIdAndUpdate(courseTimelineId, {
+//       $push: {
+//         tasks: newTask,
+//       },
+//     });
+
+//     if (!result) {
+//       res
+//         .status(400)
+//         .json({ msg: "Timeline not updated (task was not added)" });
+//     }
+
+//     // TODO: update all subs timelines
+
+//     res.status(200).json(result);
+//   } catch (err) {
+//     res.status(500).send("Server error. Request could not be fulfilled.");
+//   }
+// });
 
 // For debugging user authentification
 // TODO: delete later
