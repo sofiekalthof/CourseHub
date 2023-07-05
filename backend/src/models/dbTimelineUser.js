@@ -1,5 +1,4 @@
-const dbModule = require("../dbConnection.js");
-const mongoose = dbModule.mongoose;
+const mongoose = require("../dbConnection.js");
 const userTaskSatusSchema = require("../schemas/dbUserTaskStatus.js");
 const userMilestoneSatusSchema = require("../schemas/dbUserMilestoneStatus.js");
 

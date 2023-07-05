@@ -1,5 +1,4 @@
-const dbModule = require("../dbConnection.js");
-const mongoose = dbModule.mongoose;
+const mongoose = require("../dbConnection.js");
 
 // Initialize parameters
 const collectionName = process.env.DB_COLLECTION_USERS;
