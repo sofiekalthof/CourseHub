@@ -292,7 +292,7 @@ function QuizCreation({ onQuizCreated }) {
                   </Grid>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png"
                     onChange={(event) =>
                       handleQuestionFileChange(event, question.id)
                     }
