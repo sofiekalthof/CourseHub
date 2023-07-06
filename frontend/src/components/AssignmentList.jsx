@@ -38,6 +38,8 @@ import { useState } from "react";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import CreateTask from "./CreateTask";
+import QuizTaking from "./QuizTaking";
 dayjs.extend(localizedFormat);
 
 // Determine status of one task
@@ -76,6 +78,37 @@ function ShowTaskStatus(taskStatus) {
 }
 
 function AssignmentList(props) {
+  const [loadTakeQuizz, setLoadTakeQuizz] = useState(
+    Array(props.tasks.length).fill(false)
+  );
+  function ShowTask(event, idx) {
+    // shallow copy of loadTakeQuizz
+    let items = [...loadTakeQuizz];
+    // shallow copy of the item to mutate
+    let item = { ...loadTakeQuizz[idx] };
+    // new value
+    item = true;
+    // 4. Put it back into our array. N.B. we *are* mutating the array here,
+    //    but that's why we made a copy first
+    items[1] = item;
+    event.preventDefault();
+    // 5. Set the state to our new copy
+    setLoadTakeQuizz(items);
+  }
+  function CloseTask(idx) {
+    // shallow copy of loadTakeQuizz
+    let items = [...loadTakeQuizz];
+    // shallow copy of the item to mutate
+    let item = { ...loadTakeQuizz[idx] };
+    // new value
+    item = false;
+    // 4. Put it back into our array. N.B. we *are* mutating the array here,
+    //    but that's why we made a copy first
+    items[1] = item;
+    event.preventDefault();
+    // 5. Set the state to our new copy
+    setLoadTakeQuizz(items);
+  }
   // get CourseDates as a prop from GeneralView
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
@@ -230,7 +263,26 @@ function AssignmentList(props) {
                         </TableCell>
                         <TableCell>{task.dateToString}</TableCell>
                         <TableCell>{task.type}</TableCell>
-                        <TableCell></TableCell>
+                        <TableCell>
+                          {/* TODO: if time over, then show button
+                          TODO: differentiate between quiz taking and assignment taking component */}
+
+                          <Button
+                            variant="contained"
+                            onClick={(e) => ShowTask(e, index)}
+                          >
+                            Take Quizz
+                            {loadTakeQuizz[index] && (
+                              <QuizTaking
+                                takeTask={props.takeTask}
+                                coursePageRerender={props.coursePageRerender}
+                                quizId={task.id}
+                                closeTask={CloseTask}
+                                index={index}
+                              ></QuizTaking>
+                            )}
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                 )}
