@@ -14,6 +14,42 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
+// Function to
+async function TakeTask(courseTimelineId, taskId) {
+  // make API call to subscribe user to the course
+  try {
+    // send POST request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courseTakeTask/${taskId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          timelineId: courseTimelineId,
+        }),
+        // header neccessary for correct sending of information
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        credentials: "include",
+      }
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      alert(resJson.msg);
+      return resJson.msg;
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
+    }
+    return { status: 500, msg: "Not successful and authorized" };
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
 // Function to take a course
 async function CreateAndSaveTask(courseTimelineId, formData) {
   // make API call to subscribe user to the course
@@ -377,6 +413,7 @@ function CoursePage() {
                       createAndSaveMilestone={CreateAndSaveMileStone}
                       createAndSaveTask={CreateAndSaveTask}
                       coursePageRerender={setGetDataAfterPost}
+                      takeTask={TakeTask}
                     ></GeneralView>
                   </TabPanel>
                   <TabPanel value="two">

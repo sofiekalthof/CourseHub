@@ -84,6 +84,8 @@ function GeneralView(props) {
               tasks={props.selectedCourse.timeline.tasks}
               user={props.user}
               userDataForCourse={props.userDataForCourse}
+              coursePageRerender={props.coursePageRerender}
+              takeTask={props.takeTask}
             />
           </Card>
         </Grid>
