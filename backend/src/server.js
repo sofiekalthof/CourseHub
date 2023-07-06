@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 // file storage stuff
+const path = require("path");
 const fs = require("fs");
 const multer = require("multer"); // for parsing FormData which is type multipart-bodies
 // storage configuration for multer
@@ -61,6 +62,9 @@ app.use(
     extended: true,
   })
 );
+
+// enable static content content
+app.use("/public", express.static(path.join(__dirname, "..", "public")));
 
 // allow connect-mongodb-session library to save sessions under mySessions collection
 const mongoDBstore = new MongoDBstore({
@@ -707,7 +711,7 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
     // set common task fields
     taskToReturn._id = task._id;
     taskToReturn.title = task.title;
-    taskToReturn.deadline = task.description;
+    taskToReturn.deadline = task.data;
 
     // set different fields
     if (task.type === "Assignment") {
