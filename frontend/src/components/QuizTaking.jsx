@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -11,15 +11,73 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import { useContext } from "react";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 dayjs.extend(localizedFormat);
 
-function QuizTaking({ quiz, onBackToQuizList }) {
+// Function to return all courses in database (parsed for frontend)
+async function GetTask(taskId) {
+  // make API call to get all courses
+  try {
+    // send get request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courseGetTask/${taskId}`,
+      {
+        method: "GET",
+        // header neccessary for correct sending of information
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        credentials: "include",
+      }
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      return resJson;
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
+    }
+    return { status: 500, msg: "Not successful and authorized" };
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
+function QuizTaking(props) {
+  // console.log("QuizTaking called wit Id: ", props.quizId);
+  const navigate = useNavigate();
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
+  const [userAnswers, setUserAnswers] = useState();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState(
-    Array(quiz.questions.length).fill([])
-  );
+
   const [showSummary, setShowSummary] = useState(false);
   const [quizStarted, setQuizStarted] = useState(false); // Added quizStarted state
+
+  const quizId = props.quizId;
+  const [quiz, setQuiz] = useState();
+
+  useEffect(() => {
+    // console.log("inUseEffect of QuizTaking");
+    GetTask(quizId)
+      .then((res) => {
+        console.log("res in QuizTaking: ", res);
+        // console.log(
+        //   "Array(quiz.questions.length).fill([]) in QuizTaking: ",
+        //   Array(quiz.questions.length).fill([])
+        // );
+        setQuiz(res.task);
+        setUserAnswers(Array(res.task.questions.length).fill([]));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleAnswerChange = (event) => {
     const answerIndex = parseInt(event.target.value);
@@ -60,9 +118,9 @@ function QuizTaking({ quiz, onBackToQuizList }) {
     }
   };
 
-  const handleBackToQuizList = () => {
-    onBackToQuizList();
-  };
+  // const handleBackToQuizList = () => {
+  //   onBackToQuizList();
+  // };
 
   const calculateScore = () => {
     let score = 0;
@@ -83,6 +141,7 @@ function QuizTaking({ quiz, onBackToQuizList }) {
   };
 
   const renderQuizQuestions = () => {
+    console.log("quiz: ", quiz);
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
     const isFirstQuestion = currentQuestionIndex === 0;
@@ -101,7 +160,9 @@ function QuizTaking({ quiz, onBackToQuizList }) {
           {currentQuestion.image && (
             <Box mb={2} display="flex" justifyContent="center">
               <img
-                src={currentQuestion.image}
+                src={`${import.meta.env.VITE_API_URL}/public/${
+                  currentQuestion.image
+                }`}
                 alt={`Question ${currentQuestionIndex + 1}`}
                 style={{
                   width: "500px",
@@ -217,59 +278,86 @@ function QuizTaking({ quiz, onBackToQuizList }) {
     );
   };
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    props
+      .takeTask(props.selectedCourseTimelineId, props.taskId)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          console.log("I landed here");
+          props.coursePageRerender(true);
+          props.CloseTask(props.index);
+        }
+      })
+      .catch((err) => {
+        console.log("D");
+        alert(err);
+      });
+  };
+
   return (
     <div>
-      <Modal
-        open={true}
-        onClose={handleBackToQuizList}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={true}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "80%",
-              maxWidth: 600,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 2,
-              outline: "none",
-            }}
-          >
-            {quizStarted ? (
-              showSummary ? (
-                renderQuizSummary()
+      {quiz && (
+        <Modal
+          open={true}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={true}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "80%",
+                maxWidth: 600,
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 2,
+                outline: "none",
+              }}
+            >
+              {quizStarted ? (
+                showSummary ? (
+                  renderQuizSummary()
+                ) : (
+                  renderQuizQuestions()
+                )
               ) : (
-                renderQuizQuestions()
-              )
-            ) : (
-              <Box>
-                <Typography variant="h5" gutterBottom>
-                  Quiz Information
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Deadline: {dayjs(quiz.deadline).format("LLL")}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Number of Questions: {quiz.questions.length}
-                </Typography>
-                <Box mt={2}>
-                  <Button variant="contained" onClick={handleStartQuiz}>
-                    Start Quiz
-                  </Button>
+                <Box>
+                  <Typography variant="h5" gutterBottom>
+                    Quiz Information
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Deadline: {dayjs(quiz.deadline).format("LLL")}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Number of Questions: {quiz.questions.length}
+                  </Typography>
+                  <Box mt={2}>
+                    <Button variant="contained" onClick={handleStartQuiz}>
+                      Start Quiz
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-            )}
-          </Box>
-        </Fade>
-      </Modal>
+              )}
+            </Box>
+          </Fade>
+        </Modal>
+      )}
     </div>
   );
 }
