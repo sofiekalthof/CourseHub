@@ -80,8 +80,11 @@ function QuizTaking(props) {
   }, []);
 
   const handleAnswerChange = (event) => {
+    // console.log("handleAnswerChange called");
     const answerIndex = parseInt(event.target.value);
     const isChecked = event.target.checked;
+    // console.log("answerIndex: ", answerIndex);
+    // console.log("isChecked: ", isChecked);
 
     setUserAnswers((prevUserAnswers) => {
       const updatedUserAnswers = prevUserAnswers.map((userAnswer, index) => {
@@ -141,8 +144,12 @@ function QuizTaking(props) {
   };
 
   const renderQuizQuestions = () => {
-    console.log("quiz: ", quiz);
+    // console.log("quiz: ", quiz);
+    // console.log("currentQuestionIndex: ", currentQuestionIndex);
+    // console.log("userAnswers: ", userAnswers);
     const currentQuestion = quiz.questions[currentQuestionIndex];
+
+    // console.log("currentQuestion: ", currentQuestion);
     const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
     const isFirstQuestion = currentQuestionIndex === 0;
 
@@ -179,7 +186,8 @@ function QuizTaking(props) {
               control={
                 <Checkbox
                   checked={userAnswers[currentQuestionIndex].includes(index)}
-                  onChange={handleAnswerChange}
+                  // changed to onClick, since onChange doesnt always work
+                  onClick={handleAnswerChange}
                   value={index}
                 />
               }
