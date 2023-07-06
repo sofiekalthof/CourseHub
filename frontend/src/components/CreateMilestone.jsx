@@ -117,8 +117,8 @@ function CreateMileStone(props) {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClickSave}>Save</Button>
             <Button onClick={handleClickCancel}>Cancel</Button>
+            <Button onClick={handleClickSave}>Save</Button>
           </DialogActions>
         </Dialog>
       </>

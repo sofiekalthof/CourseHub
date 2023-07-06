@@ -178,9 +178,9 @@ function HomePage() {
                 Create New
               </Button>
               {/* Dialog for creating a new course */}
-              <Dialog open={open}>
-                <DialogContent>
-                  <Grid container spacing={2}>
+              <Dialog open={open} >
+                <DialogContent sx={{ m : 2 }}>
+                  <Grid container spacing={2} >
                     <DialogContentText>Create a new course</DialogContentText>
                     <Grid item xs={12}>
                       <TextField
