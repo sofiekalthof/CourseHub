@@ -235,7 +235,7 @@ app
 
       // console.log(resultUpdateTask);
       // console.log(result);
-      // console.log("subscriberTimelines: ", subscriberTimelines);
+      console.log("subscriberTimelines: ", subscriberTimelines);
       let subscriberTimelineId;
       // parse each subscriber's timeline
       for (var subscriberTimeline in subscriberTimelines) {
@@ -244,6 +244,9 @@ app
           subscriberTimelineId = subscriberTimelines[subscriberTimeline];
         } else {
           subscriberTimelineId = subscriberTimelines;
+        }
+        if (subscriberTimelineId === "") {
+          break;
         }
 
         // console.log("subscriberTimelineId: ", subscriberTimelineId);
