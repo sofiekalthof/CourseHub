@@ -157,7 +157,7 @@ app
       }
     }
     let newTask;
-    let subscriberTimelines = req.body.subscriberTimelines;
+    let subscriberTimelines = req.body.subscriberTimelines.split(",");
     // console.log("req.files: ", req.files);
     // console.log("req.body: ", req.body);
     // console.log("taskData: ", taskData);
@@ -707,7 +707,7 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
       res.status(400).json({ msg: "A task with that id doesn't exist yet" });
       return;
     }
-
+    console.log("task: ", task);
     // set common task fields
     taskToReturn._id = task._id;
     taskToReturn.title = task.title;
@@ -720,8 +720,9 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
     } else {
       // meaning task has a Quiz type
       taskToReturn.questions = [];
-
+      console.log("task.correctAnswers: ", task.correctAnswers);
       for (let i = 0; i < task.questions.length; i++) {
+        console.log("task.correctAnswers[i]: ", task.correctAnswers[i]);
         taskToReturn.questions = [
           ...taskToReturn.questions,
           {
