@@ -118,7 +118,7 @@ function CreateMileStone(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClickCancel}>Cancel</Button>
-            <Button onClick={handleClickSave}>Save</Button>
+            <Button variant="contained" onClick={handleClickSave}>Save</Button>
           </DialogActions>
         </Dialog>
       </>

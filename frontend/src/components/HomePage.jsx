@@ -205,8 +205,8 @@ function HomePage() {
                   </Grid>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClickSave}>Save</Button>
                   <Button onClick={handleClickCancel}>Cancel</Button>
+                  <Button variant="contained" onClick={handleClickSave}>Save</Button>
                 </DialogActions>
               </Dialog>
             </Grid>
