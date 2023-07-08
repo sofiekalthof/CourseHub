@@ -65,6 +65,8 @@ function CreateMileStone(props) {
       .then((res) => {
         props.coursePageRerender(true);
         setOpen(false);
+        setMilestoneType("");
+        setDate(dayjs());
       })
       .catch((err) => {
         alert(err);
