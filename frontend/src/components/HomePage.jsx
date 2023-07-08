@@ -158,6 +158,8 @@ function HomePage() {
         setError(true);
       });
     setOpen(false);
+    setCourseName("");
+    setCourseDescription("");
   };
 
   return (
