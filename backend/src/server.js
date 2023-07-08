@@ -158,7 +158,7 @@ app
     }
     let newTask;
     let subscriberTimelines = req.body.subscriberTimelines.split(",");
-    console.log("req.files: ", req.files);
+    // console.log("req.files: ", req.files);
     // console.log("req.body: ", req.body);
     // console.log("taskData: ", taskData);
     // console.log("req.body.answers: ", req.body.answers);
@@ -215,7 +215,7 @@ app
       });
       // console.log("done");
       // console.log("original filenames: ", originalFileNames);
-      console.log("toPush: ", toPush);
+      // console.log("toPush: ", toPush);
       // find task model and update the list of filenames
       const resultUpdateTask = await TaskModel.findByIdAndUpdate(newTask._id, {
         $push: {
@@ -690,36 +690,70 @@ app.route("/register").post(async (req, res) => {
 //////////////////////// below are to-be-tested/to-be-implemented routes
 
 // Update Task Info of User
-app.route("/courseTakeTask/:taskId").post(checkAuth, async (req, res) => {
-  const taskId = req.params.taskId;
-  // const dataToUpdate = { userTaskSatus: "done" };
-  // console.log("dataToUpdate: ", dataToUpdate);
-  console.log("req.body: ", req.body);
-  console.log("userID: ", req.session.user.id);
-  try {
-    const userTimeline = await TimelineUserModel.findOneAndUpdate(
-      {
-        userId: req.session.user.id,
-        origin: req.body.timelineId,
-        "userTasksStats.originalTaskId": taskId,
-      },
-      {
-        $set: {
+app
+  .route("/courseTakeTask/:taskId")
+  .post(checkAuth, upload.array("allFiles"), async (req, res) => {
+    if (req.files && req.files.length > 0) {
+      console.log("req.files: ", req.files);
+      console.log("req.files.length > 0: ", req.files.length > 0);
+      fs.rename(
+        `./public/${req.files[0].filename}`,
+        `./public/${req.params.taskId}_${
+          req.files[0].filename.split("_")[1].split(".")[0]
+        }_uploaded`,
+        function (err) {
+          if (err) console.log("ERROR: " + err);
+        }
+      );
+    }
+    const setParams = req.files
+      ? {
           "userTasksStats.$.userTaskSatus": "done",
           "userTasksStats.$.userTaskScore": req.body.score,
+          "userTasksStats.$.uploadedFile": {
+            originalFileName:
+              req.files.length > 0 ? req.files[0].originalname : undefined,
+            fileName:
+              req.files.length > 0
+                ? `${req.params.taskId}_${
+                    req.files[0].filename.split("_")[1].split(".")[0]
+                  }_uploaded`
+                : undefined,
+          },
+          "userTasksStats.$.uploadedAssignmentDescription":
+            req.body.uploadedAssignmentDescription,
+        }
+      : {
+          "userTasksStats.$.userTaskSatus": "done",
+          "userTasksStats.$.userTaskScore": req.body.score,
+        };
+    const taskId = req.params.taskId;
+    console.log("setParams: ", setParams);
+    // const dataToUpdate = { userTaskSatus: "done" };
+    // console.log("dataToUpdate: ", dataToUpdate);
+    console.log("req.body: ", req.body);
+    console.log("userID: ", req.session.user.id);
+    try {
+      const userTimeline = await TimelineUserModel.findOneAndUpdate(
+        {
+          userId: req.session.user.id,
+          origin: req.body.timelineId,
+          "userTasksStats.originalTaskId": taskId,
         },
+        {
+          $set: setParams,
+        }
+      );
+      // console.log(userTimeline);
+      if (!userTimeline) {
+        res.status(400).json({ msg: "Timeline could not be updated" });
+        return;
       }
-    );
-    console.log(userTimeline);
-    if (!userTimeline) {
-      res.status(400).json({ msg: "Timeline could not be updated" });
-      return;
+      res.status(200).json({ msg: "User took the task" });
+    } catch (err) {
+      res.status(500).send("Something really bad happened");
     }
-    res.status(200).json({ msg: "User took the task" });
-  } catch (err) {
-    res.status(500).send("Something really bad happened");
-  }
-});
+  });
 
 // Get Task Info
 app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
@@ -771,18 +805,20 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
 });
 
 // Download File
-app.route("/download/:filename").get(checkAuth, async (req, res) => {
-  const filePath = path.join(__dirname, "..", "public", req.params.filename);
-  res.download(
-    filePath,
-    "downloaded-book.png", // alternate name for the file when user downloads it
-    (err) => {
-      if (err) {
-        res.status(500).send("Problem downloading the file");
+app
+  .route("/download/:filename/:originalfilename")
+  .get(checkAuth, async (req, res) => {
+    const filePath = path.join(__dirname, "..", "public", req.params.filename);
+    res.download(
+      filePath,
+      req.params.originalfilename, // alternate name for the file when user downloads it
+      (err) => {
+        if (err) {
+          res.status(500).send("Problem downloading the file");
+        }
       }
-    }
-  );
-});
+    );
+  });
 
 // // Create task (POSTMAN checked)
 // app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {

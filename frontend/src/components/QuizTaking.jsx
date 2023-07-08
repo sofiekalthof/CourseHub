@@ -129,7 +129,7 @@ function QuizTaking(props) {
     // console.log("score: ", score);
     // console.log("inUseEffect of QuizTaking");
     props
-      .takeTask(props.selectedCourseTimelineId, props.quizId, score)
+      .takeTask(props.selectedCourseTimelineId, props.quizId, score, null)
       .then((res) => {
         console.log("res: ", res);
         if (res.status === 401 && res.msg === "Unauthorized") {
@@ -176,6 +176,7 @@ function QuizTaking(props) {
     // console.log("currentQuestionIndex: ", currentQuestionIndex);
     // console.log("userAnswers: ", userAnswers);
     const currentQuestion = quiz.questions[currentQuestionIndex];
+    console.log("currentQuestion: ", currentQuestion);
 
     // console.log("currentQuestion: ", currentQuestion);
     const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
@@ -196,7 +197,7 @@ function QuizTaking(props) {
             <Box mb={2} display="flex" justifyContent="center">
               <img
                 src={`${import.meta.env.VITE_API_URL}/public/${
-                  currentQuestion.image
+                  currentQuestion.image.fileName
                 }`}
                 alt={`Question ${currentQuestionIndex + 1}`}
                 style={{

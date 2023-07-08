@@ -15,29 +15,39 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 
 // Function to
-async function TakeTask(courseTimelineId, taskId, score) {
-  // console.log("TakeTask in coursePage called: ");
+async function TakeTask(courseTimelineId, taskId, score, formData) {
+  console.log("TakeTask in coursePage called: ");
   // console.log("courseTimelineId: ", courseTimelineId);
   // console.log("taskId: ", taskId);
   // console.log("score: ", score);
-
+  // if formData -> takeAssignment (with uploaded file)
+  // else -> takeQuiz (with normal data)
+  let apiCallParameters =
+    formData !== null
+      ? {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      : {
+          method: "POST",
+          body: JSON.stringify({
+            timelineId: courseTimelineId,
+            score: score,
+          }),
+          // header neccessary for correct sending of information
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          credentials: "include",
+        };
+  console.log("apiCallParameters: ", apiCallParameters);
   // make API call to subscribe user to the course
   try {
     // send POST request to REST API
     let res = await fetch(
       `${import.meta.env.VITE_API_URL}/courseTakeTask/${taskId}`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          timelineId: courseTimelineId,
-          score: score,
-        }),
-        // header neccessary for correct sending of information
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        credentials: "include",
-      }
+      apiCallParameters
     );
 
     // parse return statement from backend

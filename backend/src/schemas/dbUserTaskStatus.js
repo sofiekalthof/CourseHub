@@ -31,6 +31,9 @@ const userTaskSatusSchema = new mongoose.Schema({
   uploadedFile: {
     type: fileSchema,
   },
+  uploadedAssignmentDescription: {
+    type: String,
+  },
 });
 
 // export schema only, since it is needed for defining the TimelineUser

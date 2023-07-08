@@ -91,16 +91,24 @@ function AssignmentTaking(props) {
     setDescription(event.target.value);
   };
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   setFile(event.target.files[0]);
+  // };
 
   const handleFinishAssignment = () => {
     console.log("handleFinishAssignment in AssignmentTaking called");
     // console.log("score: ", score);
     // console.log("inUseEffect of QuizTaking");
+    // create form data to give to backend (needed for uploading files)
+    const formData = new FormData();
+    formData.append("timelineId", props.selectedCourseTimelineId);
+    formData.append("taskId", props.assignmentId);
+    formData.append("uploadedAssignmentDescription", description);
+    formData.append("score", 0);
+    // The following loop was the solution
+    formData.append("allFiles", answerFile);
     props
-      .takeTask(props.selectedCourseTimelineId, props.assignmentId, 0)
+      .takeTask(props.selectedCourseTimelineId, props.assignmentId, 0, formData)
       .then((res) => {
         console.log("res: ", res);
         if (res.status === 401 && res.msg === "Unauthorized") {
@@ -219,13 +227,13 @@ function AssignmentTaking(props) {
                               <DescriptionIcon />
                             </ListItemIcon>
                             <ListItemText
-                              primary={file.split(".")[0]}
-                              secondary={file.split(".")[1]}
+                              primary={file.originalFileName.split(".")[0]}
+                              secondary={file.originalFileName.split(".")[1]}
                             />
                             <IconButton
-                              href={`${
-                                import.meta.env.VITE_API_URL
-                              }/download/${file}`}
+                              href={`${import.meta.env.VITE_API_URL}/download/${
+                                file.fileName
+                              }/${file.originalFileName}`}
                               download
                             >
                               <GetAppIcon />
