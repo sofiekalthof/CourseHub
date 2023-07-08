@@ -148,10 +148,10 @@ export default function ApexTimelineScatter(props) {
         ],
       },
       markers: {
-        colors: ["#1E90FF", "#FFD700", "#00EE76", "#FF3030", "#8B008B"],
+        colors: ["#1E90FF", "#00e4f0", "#f000d0", "#FF3030", "#8B008B"],
         shape: "circle",
         size: 8,
-        strokeColor: ["#1E90FF", "#FFD700", "#00EE76", "#FF3030", "#8B008B"],
+        strokeColor: ["#1E90FF", "#00e4f0", "#f000d0", "#FF3030", "#8B008B"],
         strokeWidth: 3,
         strokeOpacity: 1,
       },
@@ -159,8 +159,8 @@ export default function ApexTimelineScatter(props) {
         markers: {
           fillColors: [
             "#1E90FF",
-            "#FFD700",
-            "#00EE76",
+            "#00e4f0", //"#FFD700",
+            "#f000d0", // "#00EE76",
             "#FF3030",
             "#8B008B",
             "#000000",
