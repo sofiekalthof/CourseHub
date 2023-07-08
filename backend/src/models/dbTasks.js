@@ -3,8 +3,14 @@ const mongoose = require("../dbConnection.js");
 // initialize parameters
 collectionName = process.env.DB_COLLECTION_TASKS;
 
-const answerSchema = new mongoose.Schema({
-  type: String,
+const fileSchema = new mongoose.Schema({
+  originalFileName: {
+    type: String,
+  },
+  fileName: {
+    type: String,
+    required: true,
+  },
 });
 
 const correctAnswerSchema = new mongoose.Schema({
@@ -36,11 +42,7 @@ const TaskSchema = new mongoose.Schema({
     enum: ["due", "missed", "done"],
     default: "due",
   },
-  files: [
-    {
-      type: String,
-    },
-  ],
+  files: [fileSchema],
   // belonging timeline
   timeline: {
     type: mongoose.Types.ObjectId,

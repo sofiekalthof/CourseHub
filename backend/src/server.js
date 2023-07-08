@@ -158,7 +158,7 @@ app
     }
     let newTask;
     let subscriberTimelines = req.body.subscriberTimelines.split(",");
-    // console.log("req.files: ", req.files);
+    console.log("req.files: ", req.files);
     // console.log("req.body: ", req.body);
     // console.log("taskData: ", taskData);
     // console.log("req.body.answers: ", req.body.answers);
@@ -177,23 +177,33 @@ app
         res.status(400).json({ msg: "New Task not created" });
       }
       // console.log("resultNewTask: ", resultNewTask);
-      let newFileNames = [];
+      // let newFileNames = [];
+      // let originalFileNames = [];
+      let toPush = [];
       // extract names of saved files
       const currFileNames = req.files.map((file) => file.filename);
 
       // console.log("currFileNames: ", currFileNames);
 
       // console.log("currFileNames: ", currFileNames);
-      currFileNames.forEach((fileName) => {
+      currFileNames.forEach((fileName, idx) => {
         var oldFileNameArr = fileName.split("_");
         // console.log("oldFileName: ", `./public/${fileName}`);
         // console.log(
         //   "newFileName: ",
         //   `./public/${resultNewTask._id}_${oldFileNameArr[1]}`
         // );
-        newFileNames = [
-          ...newFileNames,
-          `${resultNewTask._id}_${oldFileNameArr[1]}`,
+        // newFileNames = [
+        //   ...newFileNames,
+        //   `${resultNewTask._id}_${oldFileNameArr[1]}`,
+        // ];
+
+        toPush = [
+          ...toPush,
+          {
+            originalFileName: req.files[idx].originalname,
+            fileName: `${resultNewTask._id}_${oldFileNameArr[1]}`,
+          },
         ];
         fs.rename(
           `./public/${fileName}`,
@@ -204,10 +214,14 @@ app
         );
       });
       // console.log("done");
+      // console.log("original filenames: ", originalFileNames);
+      console.log("toPush: ", toPush);
       // find task model and update the list of filenames
       const resultUpdateTask = await TaskModel.findByIdAndUpdate(newTask._id, {
         $push: {
-          files: { $each: newFileNames },
+          files: {
+            $each: toPush,
+          },
         },
       });
 
@@ -216,7 +230,7 @@ app
           .status(400)
           .json({ msg: "Taskmodel not updated (filenames were not added)" });
       }
-      // console.log("resultUpdateTask: ", resultUpdateTask);
+      console.log("resultUpdateTask: ", resultUpdateTask);
 
       // find timeline and add the new task to it
       const result = await TimelineModel.findByIdAndUpdate(

@@ -1,6 +1,16 @@
 const dbModule = require("../dbConnection.js");
 const mongoose = dbModule.mongoose;
 
+const fileSchema = new mongoose.Schema({
+  originalFileName: {
+    type: String,
+  },
+  fileName: {
+    type: String,
+    required: true,
+  },
+});
+
 // create mongoose schema
 const userTaskSatusSchema = new mongoose.Schema({
   // reference to original task
@@ -17,6 +27,9 @@ const userTaskSatusSchema = new mongoose.Schema({
   userTaskScore: {
     type: Number,
     default: 0,
+  },
+  uploadedFile: {
+    type: fileSchema,
   },
 });
 
