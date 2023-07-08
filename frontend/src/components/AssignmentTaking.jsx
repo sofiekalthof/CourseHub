@@ -19,6 +19,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import { useEffect } from "react";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
@@ -95,11 +96,11 @@ function AssignmentTaking(props) {
   };
 
   const handleFinishAssignment = () => {
-    console.log("handleBackToQuizList in QuizTaking called");
+    console.log("handleFinishAssignment in AssignmentTaking called");
     // console.log("score: ", score);
     // console.log("inUseEffect of QuizTaking");
     props
-      .takeTask(props.selectedCourseTimelineId, props.quizId, score)
+      .takeTask(props.selectedCourseTimelineId, props.assignmentId, 0)
       .then((res) => {
         console.log("res: ", res);
         if (res.status === 401 && res.msg === "Unauthorized") {
@@ -151,6 +152,7 @@ function AssignmentTaking(props) {
   const handleClick = () => {
     setOpen(true);
   };
+
   return (
     <div>
       <Button variant="contained" onClick={handleClick}>
@@ -217,10 +219,15 @@ function AssignmentTaking(props) {
                               <DescriptionIcon />
                             </ListItemIcon>
                             <ListItemText
-                              primary={file.name}
-                              secondary={file.type}
+                              primary={file.split(".")[0]}
+                              secondary={file.split(".")[1]}
                             />
-                            <IconButton href={file.url} download>
+                            <IconButton
+                              href={`${
+                                import.meta.env.VITE_API_URL
+                              }/download/${file}`}
+                              download
+                            >
                               <GetAppIcon />
                             </IconButton>
                           </ListItem>

@@ -756,6 +756,20 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
   }
 });
 
+// Download File
+app.route("/download/:filename").get(checkAuth, async (req, res) => {
+  const filePath = path.join(__dirname, "..", "public", req.params.filename);
+  res.download(
+    filePath,
+    "downloaded-book.png", // alternate name for the file when user downloads it
+    (err) => {
+      if (err) {
+        res.status(500).send("Problem downloading the file");
+      }
+    }
+  );
+});
+
 // // Create task (POSTMAN checked)
 // app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {
 //   // IMPROVEMENT: Currently works with sending only the course id, but would be better if we send timeline id directly

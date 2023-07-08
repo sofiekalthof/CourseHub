@@ -337,7 +337,7 @@ function CoursePage() {
   }
 
   console.log("all course data in coursepage: ", selectedCourse);
-  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
+  console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
   // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
   // console.log("courseId: ", courseId);
   // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
