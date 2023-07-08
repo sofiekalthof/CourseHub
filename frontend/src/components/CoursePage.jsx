@@ -15,7 +15,12 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 
 // Function to
-async function TakeTask(courseTimelineId, taskId) {
+async function TakeTask(courseTimelineId, taskId, score) {
+  // console.log("TakeTask in coursePage called: ");
+  // console.log("courseTimelineId: ", courseTimelineId);
+  // console.log("taskId: ", taskId);
+  // console.log("score: ", score);
+
   // make API call to subscribe user to the course
   try {
     // send POST request to REST API
@@ -25,6 +30,7 @@ async function TakeTask(courseTimelineId, taskId) {
         method: "POST",
         body: JSON.stringify({
           timelineId: courseTimelineId,
+          score: score,
         }),
         // header neccessary for correct sending of information
         headers: {
@@ -39,7 +45,7 @@ async function TakeTask(courseTimelineId, taskId) {
 
     if (res.status === 200) {
       alert(resJson.msg);
-      return resJson.msg;
+      return { status: 200, msg: resJson.msg };
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
       return { status: 401, msg: "Unauthorized" };
@@ -289,15 +295,14 @@ function CoursePage() {
     ])
       .then(([res1, res2]) => {
         if (
-          res1.status === 401 &&
-          res1.msg === "Unauthorized" &&
-          res2.status === 401 &&
-          res2.msg === "Unauthorized"
+          (res1.status === 401 && res1.msg === "Unauthorized") ||
+          (res2.status === 401 && res2.msg === "Unauthorized")
         ) {
           alert(res1.msg);
           setUserSession(false);
           navigate("/");
         } else {
+          console.log("getting new data");
           setDataOfAllUsersForThisCourse(res1.subscribers);
           setSelectedCourse(res2);
           setLoading(false);
@@ -410,6 +415,7 @@ function CoursePage() {
                       user={user}
                       userDataForCourse={userDataForCourse}
                       subscriberTimelines={subscriberTimelines}
+                      dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}
                       createAndSaveMilestone={CreateAndSaveMileStone}
                       createAndSaveTask={CreateAndSaveTask}
                       coursePageRerender={setGetDataAfterPost}

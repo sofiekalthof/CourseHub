@@ -81,11 +81,14 @@ function GeneralView(props) {
         <Grid item xs={12}>
           <Card variant="outlined" sx={{ justifyContent: "center" }}>
             <AssignmentList
+              dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}
               tasks={props.selectedCourse.timeline.tasks}
               user={props.user}
               userDataForCourse={props.userDataForCourse}
               coursePageRerender={props.coursePageRerender}
+              selectedCourseTimelineId={props.selectedCourse.timeline._id}
               takeTask={props.takeTask}
+              isOwner={isOwner}
             />
           </Card>
         </Grid>

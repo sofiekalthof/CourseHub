@@ -208,7 +208,7 @@ function CreateTask(props) {
     }
 
     for (const question of questions) {
-      console.log(question.text.trim() === "");
+      // console.log(question.text.trim() === "");
       if (question.text.trim() === "") {
         setQuizError("Please fill in all the question fields");
         return;

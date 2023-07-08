@@ -235,7 +235,7 @@ app
 
       // console.log(resultUpdateTask);
       // console.log(result);
-      console.log("subscriberTimelines: ", subscriberTimelines);
+      // console.log("subscriberTimelines: ", subscriberTimelines);
       let subscriberTimelineId;
       // parse each subscriber's timeline
       for (var subscriberTimeline in subscriberTimelines) {
@@ -678,21 +678,30 @@ app.route("/register").post(async (req, res) => {
 // Update Task Info of User
 app.route("/courseTakeTask/:taskId").post(checkAuth, async (req, res) => {
   const taskId = req.params.taskId;
-  const dataToUpdate = { userTaskSatus: "done" };
+  // const dataToUpdate = { userTaskSatus: "done" };
+  // console.log("dataToUpdate: ", dataToUpdate);
+  console.log("req.body: ", req.body);
+  console.log("userID: ", req.session.user.id);
   try {
     const userTimeline = await TimelineUserModel.findOneAndUpdate(
       {
         userId: req.session.user.id,
         origin: req.body.timelineId,
-        "userTasksStats._id": taskId,
+        "userTasksStats.originalTaskId": taskId,
       },
-      { $set: { "userTasksStats.$": dataToUpdate } }
+      {
+        $set: {
+          "userTasksStats.$.userTaskSatus": "done",
+          "userTasksStats.$.userTaskScore": req.body.score,
+        },
+      }
     );
-
+    console.log(userTimeline);
     if (!userTimeline) {
       res.status(400).json({ msg: "Timeline could not be updated" });
       return;
     }
+    res.status(200).json({ msg: "User took the task" });
   } catch (err) {
     res.status(500).send("Something really bad happened");
   }

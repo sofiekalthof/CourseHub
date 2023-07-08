@@ -78,38 +78,51 @@ function ShowTaskStatus(taskStatus) {
 }
 
 function AssignmentList(props) {
-  const [loadTakeQuizz, setLoadTakeQuizz] = useState(
-    Array(props.tasks.length).fill(false)
-  );
-  function ShowTask(event, idx) {
-    // shallow copy of loadTakeQuizz
-    let items = [...loadTakeQuizz];
-    // shallow copy of the item to mutate
-    let item = { ...loadTakeQuizz[idx] };
-    // new value
-    item = true;
-    // 4. Put it back into our array. N.B. we *are* mutating the array here,
-    //    but that's why we made a copy first
-    items[1] = item;
-    event.preventDefault();
-    // 5. Set the state to our new copy
-    setLoadTakeQuizz(items);
-  }
-  function CloseTask(idx) {
-    // shallow copy of loadTakeQuizz
-    let items = [...loadTakeQuizz];
-    // shallow copy of the item to mutate
-    let item = { ...loadTakeQuizz[idx] };
-    // new value
-    item = false;
-    // 4. Put it back into our array. N.B. we *are* mutating the array here,
-    //    but that's why we made a copy first
-    items[1] = item;
-    event.preventDefault();
-    // 5. Set the state to our new copy
-    setLoadTakeQuizz(items);
-  }
+  // const [loadTakeTask, setLoadTakeTask] = useState(
+  //   Array(props.tasks.length).fill([false, 0])
+  // );
+  // function ShowTask(event, idx) {
+  //   console.log("event: ", event);
+  //   event.preventDefault();
+  //   console.log("ShowTask in AssignmentList called");
+  //   // console.log("idx: ", idx);
+  //   // shallow copy of loadTakeQuizz
+  //   let items = [...loadTakeTask];
+  //   // console.log("items: ", items);
+  //   // shallow copy of the item to mutate
+  //   let item = { ...loadTakeTask[idx] };
+
+  //   if (item[0] === true && item[1] > 0) return;
+  //   // console.log("item: ", item);
+  //   // new value
+  //   item[0] = true;
+  //   item[1] = item[1] + 1;
+  //   // 4. Put it back into our array. N.B. we *are* mutating the array here,
+  //   //    but that's why we made a copy first
+  //   items[idx] = item;
+  //   // console.log("items: ", items);
+  //   // 5. Set the state to our new copy
+  //   setLoadTakeTask(items);
+  // }
+  // function CloseTask(idx) {
+  //   console.log("CloseTask called");
+  //   // shallow copy of loadTakeQuizz
+  //   let items = [...loadTakeTask];
+  //   // shallow copy of the item to mutate
+  //   let item = { ...loadTakeTask[idx] };
+  //   // new value
+  //   item = false;
+  //   // 4. Put it back into our array. N.B. we *are* mutating the array here,
+  //   //    but that's why we made a copy first
+  //   items[idx] = item;
+  //   console.log("items: ", items);
+  //   // 5. Set the state to our new copy
+  //   setLoadTakeTask(items);
+  // }
+  //console.log("loadTakeQuizz in AssignmentList: ", loadTakeQuizz);
   // get CourseDates as a prop from GeneralView
+
+  const today = new Date();
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
   const taskStatusData =
@@ -147,6 +160,7 @@ function AssignmentList(props) {
         quizstatus: task.quizstatus,
         taskstatus: taskStatusData,
       });
+      console.log("taskstatus1: ", taskStatusData);
     } else {
       filteredDatesWithConvertedDates.push({
         type: task.type,
@@ -157,6 +171,11 @@ function AssignmentList(props) {
         quizstatus: task.quizstatus,
         taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
       });
+
+      console.log(
+        "taskstatus2: ",
+        taskStatusData.userTasksStats[index].userTaskSatus
+      );
     }
   });
   filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
@@ -266,22 +285,33 @@ function AssignmentList(props) {
                         <TableCell>
                           {/* TODO: if time over, then show button
                           TODO: differentiate between quiz taking and assignment taking component */}
-
-                          <Button
-                            variant="contained"
-                            onClick={(e) => ShowTask(e, index)}
-                          >
-                            Take Quizz
-                            {loadTakeQuizz[index] && (
+                          {/* {loadTakeTask[index] && (
                               <QuizTaking
                                 takeTask={props.takeTask}
                                 coursePageRerender={props.coursePageRerender}
+                                courseTimelineId={props.courseTimelineId}
+                                selectedCourseTimelineId={
+                                  props.selectedCourseTimelineId
+                                }
                                 quizId={task.id}
                                 closeTask={CloseTask}
                                 index={index}
                               ></QuizTaking>
+                            )} */}
+                          {task.type === "Quiz" &&
+                            !props.isOwner &&
+                            task.data.getTime() > today.getTime() &&
+                            task.taskstatus === "due" && (
+                              <QuizTaking
+                                takeTask={props.takeTask}
+                                coursePageRerender={props.coursePageRerender}
+                                courseTimelineId={props.courseTimelineId}
+                                selectedCourseTimelineId={
+                                  props.selectedCourseTimelineId
+                                }
+                                quizId={task.id}
+                              ></QuizTaking>
                             )}
-                          </Button>
                         </TableCell>
                       </TableRow>
                     ))

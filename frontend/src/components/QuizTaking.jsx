@@ -58,8 +58,10 @@ function QuizTaking(props) {
 
   const [showSummary, setShowSummary] = useState(false);
   const [quizStarted, setQuizStarted] = useState(false); // Added quizStarted state
+  const [open, setOpen] = useState(false);
 
   const quizId = props.quizId;
+  // console.log("quizId in QuizTaking: ", quizId);
   const [quiz, setQuiz] = useState();
 
   useEffect(() => {
@@ -121,11 +123,36 @@ function QuizTaking(props) {
     }
   };
 
-  // const handleBackToQuizList = () => {
-  //   onBackToQuizList();
-  // };
+  const handleBackToQuizList = (score) => {
+    console.log("handleBackToQuizList in QuizTaking called");
+    // console.log("score: ", score);
+    // console.log("inUseEffect of QuizTaking");
+    props
+      .takeTask(props.selectedCourseTimelineId, props.quizId, score)
+      .then((res) => {
+        console.log("res: ", res);
+        if (res.status === 401 && res.msg === "Unauthorized") {
+          alert(res.msg);
+          setUserSession(false);
+          navigate("/");
+        } else {
+          console.log("closing the modal: ");
+          setOpen(false);
+          console.log("re-rendering");
+          props.coursePageRerender(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const calculateScore = () => {
+    // console.log("calculateScore");
+    // console.log("userAnswers: ", userAnswers);
+    // console.log("quiz: ", quiz);
+    // console.log("quiz.questions: ", quiz.questions);
+
     let score = 0;
     userAnswers.forEach((userAnswer, index) => {
       if (
@@ -213,6 +240,7 @@ function QuizTaking(props) {
   };
 
   const renderQuizSummary = () => {
+    console.log("renderQuizSummary");
     const score = calculateScore();
 
     return (
@@ -277,7 +305,10 @@ function QuizTaking(props) {
           </Box>
 
           <Box mt={2}>
-            <Button variant="contained" onClick={handleBackToQuizList}>
+            <Button
+              variant="contained"
+              onClick={() => handleBackToQuizList(score)}
+            >
               Back to Quiz List
             </Button>
           </Box>
@@ -290,40 +321,21 @@ function QuizTaking(props) {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    props
-      .takeTask(props.selectedCourseTimelineId, props.taskId)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 401 && res.msg === "Unauthorized") {
-          alert(res.msg);
-          setUserSession(false);
-          navigate("/");
-        } else {
-          console.log("I landed here");
-          props.coursePageRerender(true);
-          props.CloseTask(props.index);
-        }
-      })
-      .catch((err) => {
-        console.log("D");
-        alert(err);
-      });
-  };
-
   return (
     <div>
+      <Button variant="contained" onClick={handleClick}>
+        Take Quiz
+      </Button>
       {quiz && (
         <Modal
-          open={true}
-          onClose={handleClose}
+          open={open}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
             timeout: 500,
           }}
         >
-          <Fade in={true}>
+          <Fade in={open}>
             <Box
               sx={{
                 position: "absolute",
