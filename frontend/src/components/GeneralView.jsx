@@ -70,6 +70,7 @@ function GeneralView(props) {
         {/* Button for creating a new task */}
         <Grid item xs={1.75}>
           <CreateTask
+            dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
             createAndSaveTask={props.createAndSaveTask}

@@ -40,6 +40,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CreateTask from "./CreateTask";
 import QuizTaking from "./QuizTaking";
+import AssignmentTaking from "./AssignmentTaking";
 dayjs.extend(localizedFormat);
 
 // Determine status of one task
@@ -303,6 +304,9 @@ function AssignmentList(props) {
                             task.data.getTime() > today.getTime() &&
                             task.taskstatus === "due" && (
                               <QuizTaking
+                                dataOfAllUsersForThisCourse={
+                                  props.dataOfAllUsersForThisCourse
+                                }
                                 takeTask={props.takeTask}
                                 coursePageRerender={props.coursePageRerender}
                                 courseTimelineId={props.courseTimelineId}
@@ -311,6 +315,23 @@ function AssignmentList(props) {
                                 }
                                 quizId={task.id}
                               ></QuizTaking>
+                            )}
+                          {task.type === "Assignment" &&
+                            !props.isOwner &&
+                            task.data.getTime() > today.getTime() &&
+                            task.taskstatus === "due" && (
+                              <AssignmentTaking
+                                dataOfAllUsersForThisCourse={
+                                  props.dataOfAllUsersForThisCourse
+                                }
+                                takeTask={props.takeTask}
+                                coursePageRerender={props.coursePageRerender}
+                                courseTimelineId={props.courseTimelineId}
+                                selectedCourseTimelineId={
+                                  props.selectedCourseTimelineId
+                                }
+                                assignmentId={task.id}
+                              ></AssignmentTaking>
                             )}
                         </TableCell>
                       </TableRow>

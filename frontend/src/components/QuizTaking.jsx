@@ -49,6 +49,7 @@ async function GetTask(taskId) {
 }
 
 function QuizTaking(props) {
+  const testRerender = props.dataOfAllUsersForThisCourse;
   // console.log("QuizTaking called wit Id: ", props.quizId);
   const navigate = useNavigate();
   // use existing session
