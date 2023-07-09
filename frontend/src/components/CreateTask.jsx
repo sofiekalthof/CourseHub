@@ -273,12 +273,13 @@ function CreateTask(props) {
           setUserSession(false);
           navigate("/");
         } else {
-          props.coursePageRerender(true);
+          props.coursePageRerender(!props.coursePageRerenderValue);
         }
       })
       .catch((err) => {
         console.log("A");
-        alert(err);
+        console.log(err);
+        // alert(err);
       });
 
     // Reset form fields and error
@@ -401,12 +402,13 @@ function CreateTask(props) {
           setUserSession(false);
           navigate("/");
         } else {
-          props.coursePageRerender(true);
+          props.coursePageRerender(!props.coursePageRerenderValue);
         }
       })
       .catch((err) => {
         console.log("B");
-        alert(err);
+        console.log(err);
+        // alert(err);
       });
 
     setTitle("");
@@ -653,7 +655,11 @@ function CreateTask(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleQuizClose}>Cancel</Button>
-            <Button variant="contained" onClick={handleCreateQuiz} color="primary">
+            <Button
+              variant="contained"
+              onClick={handleCreateQuiz}
+              color="primary"
+            >
               Create
             </Button>
           </DialogActions>

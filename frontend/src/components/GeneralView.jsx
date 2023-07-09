@@ -50,6 +50,7 @@ function GeneralView(props) {
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
             createAndSaveMilestone={props.createAndSaveMilestone}
+            coursePageRerenderValue={props.coursePageRerenderValue}
             coursePageRerender={props.coursePageRerender}
             isOwner={isOwner}
           ></CreateMileStone>
@@ -74,6 +75,7 @@ function GeneralView(props) {
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
             createAndSaveTask={props.createAndSaveTask}
+            coursePageRerenderValue={props.coursePageRerenderValue}
             coursePageRerender={props.coursePageRerender}
             isOwner={isOwner}
           ></CreateTask>
@@ -86,6 +88,7 @@ function GeneralView(props) {
               tasks={props.selectedCourse.timeline.tasks}
               user={props.user}
               userDataForCourse={props.userDataForCourse}
+              coursePageRerenderValue={props.coursePageRerenderValue}
               coursePageRerender={props.coursePageRerender}
               selectedCourseTimelineId={props.selectedCourse.timeline._id}
               takeTask={props.takeTask}

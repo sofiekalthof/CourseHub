@@ -54,9 +54,10 @@ export default function Register() {
         setPassword("");
         // some debug commands
         console.log("Form done.");
-        alert("User added");
+        //alert("User added");
       } else if (res.status === 400) {
-        alert(resJson.msg);
+        //alert(resJson.msg);
+        console.log(resJson.msg);
       } else {
         // some debug commands
         console.log("Form returned error from backend.");

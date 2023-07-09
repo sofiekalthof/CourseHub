@@ -60,16 +60,17 @@ export default function Login() {
         // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
         await setUserSession(resJson.userInfo);
         console.log("Login form done.");
-        alert(resJson.msg);
+        // alert(resJson.msg);
         // route to homepage
         handleHome();
       } else if (res.status === 400) {
-        alert(resJson.msg);
+        // alert(resJson.msg);
+        console.log(resJson.msg);
       } else {
         // some debug commands
         console.log("Form returned error from backend.");
         console.log(resJson);
-        alert(resJson.msg);
+        // alert(resJson.msg);
       }
     } catch (err) {
       console.log("Frontend error. Post request could not be sent. Check API!");

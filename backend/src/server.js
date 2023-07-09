@@ -284,7 +284,7 @@ app
           });
         }
       }
-      res.status(200).json({ msg: "Assignment created" });
+      res.status(200).json({ msg: "Task created" });
     } catch (err) {
       console.log(err);
       res.status(500).send("Server error. Request could not be fulfilled.");

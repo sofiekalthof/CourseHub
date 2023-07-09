@@ -54,7 +54,7 @@ async function TakeTask(courseTimelineId, taskId, score, formData) {
     let resJson = await res.json();
 
     if (res.status === 200) {
-      alert(resJson.msg);
+      // alert(resJson.msg);
       return { status: 200, msg: resJson.msg };
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
@@ -163,7 +163,7 @@ async function TakeCourse(courseId, userId) {
     let resJson = await res.json();
 
     if (res.status === 200) {
-      alert(resJson.msg);
+      // alert(resJson.msg);
       return resJson.msg;
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
@@ -347,7 +347,7 @@ function CoursePage() {
   }
 
   console.log("all course data in coursepage: ", selectedCourse);
-  console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
+  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
   // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
   // console.log("courseId: ", courseId);
   // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
@@ -428,6 +428,7 @@ function CoursePage() {
                       dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}
                       createAndSaveMilestone={CreateAndSaveMileStone}
                       createAndSaveTask={CreateAndSaveTask}
+                      coursePageRerenderValue={getDataAfterPost}
                       coursePageRerender={setGetDataAfterPost}
                       takeTask={TakeTask}
                     ></GeneralView>

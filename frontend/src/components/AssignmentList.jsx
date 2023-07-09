@@ -179,9 +179,12 @@ function AssignmentList(props) {
       );
     }
   });
+  console.log("tasks in AssignmentList: ", tasks);
   filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
 
-  const [dates, setDates] = useState(filteredDatesWithConvertedDates);
+  // const [dates, setDates] = useState(filteredDatesWithConvertedDates);
+  let dates = filteredDatesWithConvertedDates;
+  console.log("dates in AssignmentList: ", dates);
 
   const filterDates = () => {
     if (areDatesDescending) {
@@ -308,6 +311,9 @@ function AssignmentList(props) {
                                   props.dataOfAllUsersForThisCourse
                                 }
                                 takeTask={props.takeTask}
+                                coursePageRerenderValue={
+                                  props.coursePageRerenderValue
+                                }
                                 coursePageRerender={props.coursePageRerender}
                                 courseTimelineId={props.courseTimelineId}
                                 selectedCourseTimelineId={
@@ -325,6 +331,9 @@ function AssignmentList(props) {
                                   props.dataOfAllUsersForThisCourse
                                 }
                                 takeTask={props.takeTask}
+                                coursePageRerenderValue={
+                                  props.coursePageRerenderValue
+                                }
                                 coursePageRerender={props.coursePageRerender}
                                 courseTimelineId={props.courseTimelineId}
                                 selectedCourseTimelineId={

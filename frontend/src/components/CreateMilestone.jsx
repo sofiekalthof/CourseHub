@@ -76,7 +76,7 @@ function CreateMileStone(props) {
           navigate("/");
         } else {
           console.log("I landed here");
-          props.coursePageRerender(true);
+          props.coursePageRerender(!props.coursePageRerenderValue);
           setOpen(false);
         }
         setMilestoneType("");
@@ -84,7 +84,8 @@ function CreateMileStone(props) {
       })
       .catch((err) => {
         console.log("C");
-        alert(err);
+        console.log(err);
+        //alert(err);
       });
   };
 

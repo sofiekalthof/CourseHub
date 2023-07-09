@@ -57,7 +57,7 @@ async function GetTask(taskId) {
 }
 
 function AssignmentTaking(props) {
-  const testRerender = props.dataOfAllUsersForThisCourse;
+  // const testRerender = props.dataOfAllUsersForThisCourse;
   // console.log("QuizTaking called wit Id: ", props.quizId);
   const navigate = useNavigate();
   // use existing session
@@ -133,7 +133,7 @@ function AssignmentTaking(props) {
     console.log("closing the modal: ");
     setOpen(false);
     console.log("re-rendering");
-    props.coursePageRerender(false);
+    props.coursePageRerender(!props.coursePageRerenderValue);
   };
 
   const renderAssignmentSummary = () => {
