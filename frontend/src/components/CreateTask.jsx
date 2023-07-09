@@ -653,7 +653,7 @@ function CreateTask(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleQuizClose}>Cancel</Button>
-            <Button onClick={handleCreateQuiz} color="primary">
+            <Button variant="contained" onClick={handleCreateQuiz} color="primary">
               Create
             </Button>
           </DialogActions>
