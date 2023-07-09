@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
 import { courseUser } from "../data/coursesMongoose";
-import l from "../assets/L.svg";
 
 export default function ApexTimelineScatter(props) {
   const tasks = props.tasks;
