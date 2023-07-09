@@ -13,6 +13,7 @@ import {
   IconButton,
   ListItemIcon,
   Divider,
+  DialogActions,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -161,9 +162,13 @@ function AssignmentTaking(props) {
     setOpen(true);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
-      <Button variant="contained" onClick={handleClick}>
+      <Button variant="text" onClick={handleClick}>
         Take Assignment
       </Button>
       {assignment && (
@@ -266,7 +271,7 @@ function AssignmentTaking(props) {
                   />
                   <label htmlFor="upload-answer">
                     <Button
-                      variant="contained"
+                      variant="outlined"
                       component="span"
                       startIcon={<CloudUploadIcon />}
                     >
@@ -278,14 +283,15 @@ function AssignmentTaking(props) {
                       Selected Answer File: {answerFile.name}
                     </Typography>
                   )}
-                  <Box mt={2}>
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>{" "}
                     <Button
                       variant="contained"
                       onClick={handleFinishAssignment}
                     >
                       Finish Assignment
                     </Button>
-                  </Box>
+                  </DialogActions>
                 </Box>
               )}
             </Box>

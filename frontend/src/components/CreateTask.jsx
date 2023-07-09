@@ -23,6 +23,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -64,7 +65,18 @@ function CreateTask(props) {
   // Function to close the dialog
   const handleQuizClose = () => {
     setQuizOpen(false);
+    setQuizTitle("");
+    setQuestions([
+      {
+        id: uuidv4(),
+        text: "",
+        answers: ["", "", "", ""],
+        correctAnswerIndices: [],
+        image: null,
+      },
+    ]);
     setQuizError("");
+    setAnchorEl(null); // close drop-down
   };
 
   // Function to handle quiz title change
@@ -218,6 +230,12 @@ function CreateTask(props) {
           "Please select at least one correct answer for each question"
         );
         return;
+      }
+      for (const answer of question.answers) {
+        if (answer.trim() === "") {
+          setQuizError("Please fill in all the answer fields");
+          return;
+        }
       }
     }
 
@@ -425,6 +443,10 @@ function CreateTask(props) {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
+    setTitle("");
+    setDescription("");
+    setFiles([]);
+    setDeadline(null);
     setError(""); // Clear the error when closing the dialog
     setAnchorEl(null); // close drop-down
   };
@@ -472,56 +494,78 @@ function CreateTask(props) {
           <DialogTitle>Create new Assignment</DialogTitle>
           <DialogContent>
             <Box sx={{ p: 2 }}>
-              <TextField
-                label="Title"
-                value={title}
-                onChange={handleTitleChange}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Description"
-                value={description}
-                onChange={handleDescriptionChange}
-                fullWidth
-                multiline
-                rows={4}
-                margin="normal"
-              />
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                onChange={handleFileChange}
-                style={{ marginBottom: "16px" }}
-                multiple
-              />
-              {files.length > 0 && (
-                <List>
-                  {files.map((file, index) => (
-                    <ListItem key={index}>
-                      <ListItemText primary={file.name} />
-                      <IconButton onClick={() => handleDeleteFile(file)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItem>
-                  ))}
-                </List>
-              )}
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoItem label="DateTimePicker">
-                  <DateTimePicker
-                    value={deadline}
-                    onChange={handleDeadlineChange}
-                    disablePast
-                    views={["year", "month", "day", "hours", "minutes"]}
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Title"
+                    value={title}
+                    onChange={handleTitleChange}
+                    fullWidth
+                    margin="normal"
                   />
-                </DemoItem>
-              </LocalizationProvider>
-              {error && (
-                <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-                  {error}
-                </Typography>
-              )}
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateTimePicker
+                        label="Deadline"
+                        value={deadline}
+                        onChange={handleDeadlineChange}
+                        disablePast
+                        views={["year", "month", "day", "hours", "minutes"]}
+                      />
+                    </LocalizationProvider>
+
+                    {error && (
+                      <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                        {error}
+                      </Typography>
+                    )}
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Description"
+                    value={description}
+                    onChange={handleDescriptionChange}
+                    fullWidth
+                    multiline
+                    rows={4}
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    onChange={handleFileChange}
+                    style={{ display: "none", marginBottom: "16px" }}
+                    multiple
+                    id="upload-answer"
+                  />
+                  <label htmlFor="upload-answer">
+                    <Button
+                      variant="outlined"
+                      component="span"
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload File
+                    </Button>
+                  </label>
+                  {files.length > 0 && (
+                    <List>
+                      {files.map((file, index) => (
+                        <ListItem key={index}>
+                          <ListItemText primary={file.name} />
+                          <IconButton onClick={() => handleDeleteFile(file)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  )}
+                </Grid>
+              </Grid>
             </Box>
           </DialogContent>
           <DialogActions>
@@ -538,32 +582,38 @@ function CreateTask(props) {
           fullWidth
         >
           <DialogTitle>Create New Quiz</DialogTitle>
+
           <DialogContent dividers>
-            {errorQuiz && (
-              <Typography variant="body1" color="error" gutterBottom>
-                {errorQuiz}
-              </Typography>
-            )}
-            <TextField
-              label="Quiz Title"
-              value={quizTitle}
-              onChange={handleQuizTitleChange}
-              fullWidth
-              sx={{ mb: 2 }}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoItem label="deadline">
-                <DateTimePicker
-                  value={deadlineQuiz}
-                  onChange={handleQuizDeadlineChange}
-                  disablePast
-                  views={["year", "month", "day", "hours", "minutes"]}
-                />
-              </DemoItem>
-            </LocalizationProvider>
             <Grid container spacing={2}>
-              {questions.map((question) => (
-                <Grid item xs={12} key={question.id}>
+              <Grid item xs={12}>
+                {errorQuiz && (
+                  <Typography variant="body1" color="error" gutterBottom>
+                    {errorQuiz}
+                  </Typography>
+                )}
+                <TextField
+                  label="Quiz Title"
+                  value={quizTitle}
+                  onChange={handleQuizTitleChange}
+                  fullWidth
+                  sx={{ mb: 2 }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateTimePicker
+                      label="Deadline"
+                      value={deadlineQuiz}
+                      onChange={handleQuizDeadlineChange}
+                      disablePast
+                      views={["year", "month", "day", "hours", "minutes"]}
+                    />
+                  </LocalizationProvider>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                {questions.map((question) => (
                   <Box
                     sx={{
                       border: 1,
@@ -574,84 +624,104 @@ function CreateTask(props) {
                       overflow: "auto",
                     }}
                   >
-                    <TextField
-                      label="Question"
-                      value={question.text}
-                      onChange={(event) =>
-                        handleQuestionTextChange(
-                          event.target.value,
-                          question.id
-                        )
-                      }
-                      fullWidth
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      sx={{ mb: 2 }}
-                    />
-                    <Grid container spacing={2}>
-                      {question.answers.map((answer, answerIndex) => (
-                        <Grid item xs={12} key={answerIndex}>
-                          <TextField
-                            label={`Answer ${answerIndex + 1}`}
-                            value={answer}
-                            onChange={(event) =>
-                              handleAnswerTextChange(
-                                event,
-                                question.id,
-                                answerIndex
-                              )
-                            }
-                            fullWidth
-                            sx={{ mb: 1 }}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={question.correctAnswerIndices.includes(
-                                  answerIndex
-                                )}
+                    <Grid container>
+                      <Grid item xs={12} key={question.id}>
+                        <TextField
+                          label="Question"
+                          value={question.text}
+                          onChange={(event) =>
+                            handleQuestionTextChange(
+                              event.target.value,
+                              question.id
+                            )
+                          }
+                          fullWidth
+                          multiline
+                          rows={4}
+                          variant="outlined"
+                          sx={{ mb: 2 }}
+                        />
+                        <Grid container spacing={2}>
+                          {question.answers.map((answer, answerIndex) => (
+                            <Grid item xs={12} key={answerIndex}>
+                              <TextField
+                                label={`Answer ${answerIndex + 1}`}
+                                value={answer}
                                 onChange={(event) =>
-                                  handleCorrectAnswerChange(
+                                  handleAnswerTextChange(
                                     event,
                                     question.id,
                                     answerIndex
                                   )
                                 }
+                                fullWidth
+                                sx={{ mb: 1 }}
                               />
-                            }
-                            label="Correct Answer"
-                            sx={{ ml: 1 }}
-                          />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={question.correctAnswerIndices.includes(
+                                      answerIndex
+                                    )}
+                                    onChange={(event) =>
+                                      handleCorrectAnswerChange(
+                                        event,
+                                        question.id,
+                                        answerIndex
+                                      )
+                                    }
+                                  />
+                                }
+                                label="Correct Answer"
+                                sx={{ ml: 1 }}
+                              />
+                            </Grid>
+                          ))}
                         </Grid>
-                      ))}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) =>
+                            handleQuestionFileChange(event, question.id)
+                          }
+                          style={{ mt: 2, display: "none" }}
+                          id="upload-file"
+                        />
+                        <label htmlFor="upload-file">
+                          <Button
+                            variant="outlined"
+                            component="span"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            Upload Answer
+                          </Button>
+                        </label>
+                        {question.image && (
+                          <Typography variant="body1" gutterBottom>
+                            Selected Question File: {question.image.name}
+                          </Typography>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} key={question.id + "0"}>
+                        {questions.length > 1 && (
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => removeQuestion(question.id)}
+                            sx={{ mt: 2 }}
+                          >
+                            Remove Question
+                          </Button>
+                        )}
+                      </Grid>
                     </Grid>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(event) =>
-                        handleQuestionFileChange(event, question.id)
-                      }
-                      sx={{ mt: 2 }}
-                    />
-
-                    {questions.length > 1 && (
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => removeQuestion(question.id)}
-                        sx={{ mt: 2 }}
-                      >
-                        Remove Question
-                      </Button>
-                    )}
                   </Box>
-                </Grid>
-              ))}
+                ))}
+              </Grid>
+              <Button variant="outlined" onClick={addQuestion}>
+                Add Question
+              </Button>
             </Grid>
-            <Button variant="outlined" onClick={addQuestion}>
-              Add Question
-            </Button>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleQuizClose}>Cancel</Button>

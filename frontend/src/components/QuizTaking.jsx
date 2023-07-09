@@ -8,6 +8,7 @@ import {
   Modal,
   Backdrop,
   Fade,
+  DialogActions,
 } from "@mui/material";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -323,9 +324,13 @@ function QuizTaking(props) {
     setOpen(true);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
-      <Button variant="contained" onClick={handleClick}>
+      <Button variant="text" onClick={handleClick}>
         Take Quiz
       </Button>
       {quiz && (
@@ -369,11 +374,12 @@ function QuizTaking(props) {
                   <Typography variant="body1" gutterBottom>
                     Number of Questions: {quiz.questions.length}
                   </Typography>
-                  <Box mt={2}>
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>{" "}
                     <Button variant="contained" onClick={handleStartQuiz}>
                       Start Quiz
                     </Button>
-                  </Box>
+                  </DialogActions>
                 </Box>
               )}
             </Box>

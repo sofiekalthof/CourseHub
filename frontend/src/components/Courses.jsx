@@ -99,7 +99,6 @@ function Courses(props) {
                       sx={{
                         paddingLeft: 3,
                         paddingRight: 3,
-                        paddingTop: 3,
                         paddingBottom: 3,
                       }}
                     >
