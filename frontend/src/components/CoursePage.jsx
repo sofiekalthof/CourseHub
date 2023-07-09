@@ -14,6 +14,58 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
+// Function to
+async function TakeTask(courseTimelineId, taskId, score, formData) {
+  console.log("TakeTask in coursePage called: ");
+  // console.log("courseTimelineId: ", courseTimelineId);
+  // console.log("taskId: ", taskId);
+  // console.log("score: ", score);
+  // if formData -> takeAssignment (with uploaded file)
+  // else -> takeQuiz (with normal data)
+  let apiCallParameters =
+    formData !== null
+      ? {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      : {
+          method: "POST",
+          body: JSON.stringify({
+            timelineId: courseTimelineId,
+            score: score,
+          }),
+          // header neccessary for correct sending of information
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          credentials: "include",
+        };
+  console.log("apiCallParameters: ", apiCallParameters);
+  // make API call to subscribe user to the course
+  try {
+    // send POST request to REST API
+    let res = await fetch(
+      `${import.meta.env.VITE_API_URL}/courseTakeTask/${taskId}`,
+      apiCallParameters
+    );
+
+    // parse return statement from backend
+    let resJson = await res.json();
+
+    if (res.status === 200) {
+      alert(resJson.msg);
+      return { status: 200, msg: resJson.msg };
+    }
+    if (res.status === 401 && resJson.msg === "Unauthorized") {
+      return { status: 401, msg: "Unauthorized" };
+    }
+    return { status: 500, msg: "Not successful and authorized" };
+  } catch (err) {
+    console.log("Frontend error. Get request could not be sent. Check API!");
+  }
+}
+
 // Function to take a course
 async function CreateAndSaveTask(courseTimelineId, formData) {
   // make API call to subscribe user to the course
@@ -253,15 +305,14 @@ function CoursePage() {
     ])
       .then(([res1, res2]) => {
         if (
-          res1.status === 401 &&
-          res1.msg === "Unauthorized" &&
-          res2.status === 401 &&
-          res2.msg === "Unauthorized"
+          (res1.status === 401 && res1.msg === "Unauthorized") ||
+          (res2.status === 401 && res2.msg === "Unauthorized")
         ) {
           alert(res1.msg);
           setUserSession(false);
           navigate("/");
         } else {
+          console.log("getting new data");
           setDataOfAllUsersForThisCourse(res1.subscribers);
           setSelectedCourse(res2);
           setLoading(false);
@@ -296,7 +347,7 @@ function CoursePage() {
   }
 
   console.log("all course data in coursepage: ", selectedCourse);
-  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
+  console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
   // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
   // console.log("courseId: ", courseId);
   // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
@@ -374,9 +425,11 @@ function CoursePage() {
                       user={user}
                       userDataForCourse={userDataForCourse}
                       subscriberTimelines={subscriberTimelines}
+                      dataOfAllUsersForThisCourse={dataOfAllUsersForThisCourse}
                       createAndSaveMilestone={CreateAndSaveMileStone}
                       createAndSaveTask={CreateAndSaveTask}
                       coursePageRerender={setGetDataAfterPost}
+                      takeTask={TakeTask}
                     ></GeneralView>
                   </TabPanel>
                   <TabPanel value="two">

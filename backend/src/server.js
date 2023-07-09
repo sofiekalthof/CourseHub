@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 // file storage stuff
+const path = require("path");
 const fs = require("fs");
 const multer = require("multer"); // for parsing FormData which is type multipart-bodies
 // storage configuration for multer
@@ -62,6 +63,9 @@ app.use(
   })
 );
 
+// enable static content content
+app.use("/public", express.static(path.join(__dirname, "..", "public")));
+
 // allow connect-mongodb-session library to save sessions under mySessions collection
 const mongoDBstore = new MongoDBstore({
   uri: process.env.MONGODB_URL,
@@ -78,7 +82,7 @@ app.use(
     cookie: {
       maxAge: parseInt(process.env.SESSION_MAX_LENGTH), // Max. session length
       sameSite: false, // same-site and cross-site(diff. schemes, domain or sub-domain) requests
-      secure: false, // need an HTTPS enabled browser (true-> in prod.)
+      secure: parseInt(process.env.PROD) === 0 ? false : true, // need an HTTPS enabled browser (true-> in prod.)
     },
     resave: true, // !!! true - force session to be saved in session store, even if it was not modified during a request
     saveUninitialized: false, // dont save session if it was not modified (i.e. no login yet)
@@ -153,7 +157,7 @@ app
       }
     }
     let newTask;
-    let subscriberTimelines = req.body.subscriberTimelines;
+    let subscriberTimelines = req.body.subscriberTimelines.split(",");
     // console.log("req.files: ", req.files);
     // console.log("req.body: ", req.body);
     // console.log("taskData: ", taskData);
@@ -173,23 +177,33 @@ app
         res.status(400).json({ msg: "New Task not created" });
       }
       // console.log("resultNewTask: ", resultNewTask);
-      let newFileNames = [];
+      // let newFileNames = [];
+      // let originalFileNames = [];
+      let toPush = [];
       // extract names of saved files
       const currFileNames = req.files.map((file) => file.filename);
 
       // console.log("currFileNames: ", currFileNames);
 
       // console.log("currFileNames: ", currFileNames);
-      currFileNames.forEach((fileName) => {
+      currFileNames.forEach((fileName, idx) => {
         var oldFileNameArr = fileName.split("_");
         // console.log("oldFileName: ", `./public/${fileName}`);
         // console.log(
         //   "newFileName: ",
         //   `./public/${resultNewTask._id}_${oldFileNameArr[1]}`
         // );
-        newFileNames = [
-          ...newFileNames,
-          `${resultNewTask._id}_${oldFileNameArr[1]}`,
+        // newFileNames = [
+        //   ...newFileNames,
+        //   `${resultNewTask._id}_${oldFileNameArr[1]}`,
+        // ];
+
+        toPush = [
+          ...toPush,
+          {
+            originalFileName: req.files[idx].originalname,
+            fileName: `${resultNewTask._id}_${oldFileNameArr[1]}`,
+          },
         ];
         fs.rename(
           `./public/${fileName}`,
@@ -200,10 +214,14 @@ app
         );
       });
       // console.log("done");
+      // console.log("original filenames: ", originalFileNames);
+      // console.log("toPush: ", toPush);
       // find task model and update the list of filenames
       const resultUpdateTask = await TaskModel.findByIdAndUpdate(newTask._id, {
         $push: {
-          files: { $each: newFileNames },
+          files: {
+            $each: toPush,
+          },
         },
       });
 
@@ -212,7 +230,7 @@ app
           .status(400)
           .json({ msg: "Taskmodel not updated (filenames were not added)" });
       }
-      // console.log("resultUpdateTask: ", resultUpdateTask);
+      console.log("resultUpdateTask: ", resultUpdateTask);
 
       // find timeline and add the new task to it
       const result = await TimelineModel.findByIdAndUpdate(
@@ -240,6 +258,9 @@ app
           subscriberTimelineId = subscriberTimelines[subscriberTimeline];
         } else {
           subscriberTimelineId = subscriberTimelines;
+        }
+        if (subscriberTimelineId === "") {
+          break;
         }
 
         // console.log("subscriberTimelineId: ", subscriberTimelineId);
@@ -669,27 +690,70 @@ app.route("/register").post(async (req, res) => {
 //////////////////////// below are to-be-tested/to-be-implemented routes
 
 // Update Task Info of User
-app.route("/courseTakeTask/:taskId").post(checkAuth, async (req, res) => {
-  const taskId = req.params.taskId;
-  const dataToUpdate = { userTaskSatus: "done" };
-  try {
-    const userTimeline = await TimelineUserModel.findOneAndUpdate(
-      {
-        userId: req.session.user.id,
-        origin: req.body.timelineId,
-        "userTasksStats._id": taskId,
-      },
-      { $set: { "userTasksStats.$": dataToUpdate } }
-    );
-
-    if (!userTimeline) {
-      res.status(400).json({ msg: "Timeline could not be updated" });
-      return;
+app
+  .route("/courseTakeTask/:taskId")
+  .post(checkAuth, upload.array("allFiles"), async (req, res) => {
+    if (req.files && req.files.length > 0) {
+      console.log("req.files: ", req.files);
+      console.log("req.files.length > 0: ", req.files.length > 0);
+      fs.rename(
+        `./public/${req.files[0].filename}`,
+        `./public/${req.params.taskId}_${
+          req.files[0].filename.split("_")[1].split(".")[0]
+        }_uploaded`,
+        function (err) {
+          if (err) console.log("ERROR: " + err);
+        }
+      );
     }
-  } catch (err) {
-    res.status(500).send("Something really bad happened");
-  }
-});
+    const setParams = req.files
+      ? {
+          "userTasksStats.$.userTaskSatus": "done",
+          "userTasksStats.$.userTaskScore": req.body.score,
+          "userTasksStats.$.uploadedFile": {
+            originalFileName:
+              req.files.length > 0 ? req.files[0].originalname : undefined,
+            fileName:
+              req.files.length > 0
+                ? `${req.params.taskId}_${
+                    req.files[0].filename.split("_")[1].split(".")[0]
+                  }_uploaded`
+                : undefined,
+          },
+          "userTasksStats.$.uploadedAssignmentDescription":
+            req.body.uploadedAssignmentDescription,
+        }
+      : {
+          "userTasksStats.$.userTaskSatus": "done",
+          "userTasksStats.$.userTaskScore": req.body.score,
+        };
+    const taskId = req.params.taskId;
+    console.log("setParams: ", setParams);
+    // const dataToUpdate = { userTaskSatus: "done" };
+    // console.log("dataToUpdate: ", dataToUpdate);
+    console.log("req.body: ", req.body);
+    console.log("userID: ", req.session.user.id);
+    try {
+      const userTimeline = await TimelineUserModel.findOneAndUpdate(
+        {
+          userId: req.session.user.id,
+          origin: req.body.timelineId,
+          "userTasksStats.originalTaskId": taskId,
+        },
+        {
+          $set: setParams,
+        }
+      );
+      // console.log(userTimeline);
+      if (!userTimeline) {
+        res.status(400).json({ msg: "Timeline could not be updated" });
+        return;
+      }
+      res.status(200).json({ msg: "User took the task" });
+    } catch (err) {
+      res.status(500).send("Something really bad happened");
+    }
+  });
 
 // Get Task Info
 app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
@@ -703,11 +767,11 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
       res.status(400).json({ msg: "A task with that id doesn't exist yet" });
       return;
     }
-
+    console.log("task: ", task);
     // set common task fields
     taskToReturn._id = task._id;
     taskToReturn.title = task.title;
-    taskToReturn.deadline = task.description;
+    taskToReturn.deadline = task.data;
 
     // set different fields
     if (task.type === "Assignment") {
@@ -716,8 +780,9 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
     } else {
       // meaning task has a Quiz type
       taskToReturn.questions = [];
-
+      console.log("task.correctAnswers: ", task.correctAnswers);
       for (let i = 0; i < task.questions.length; i++) {
+        console.log("task.correctAnswers[i]: ", task.correctAnswers[i]);
         taskToReturn.questions = [
           ...taskToReturn.questions,
           {
@@ -738,6 +803,22 @@ app.route("/courseGetTask/:taskId").get(checkAuth, async (req, res) => {
     res.status(500).send("Something really bad happened");
   }
 });
+
+// Download File
+app
+  .route("/download/:filename/:originalfilename")
+  .get(checkAuth, async (req, res) => {
+    const filePath = path.join(__dirname, "..", "public", req.params.filename);
+    res.download(
+      filePath,
+      req.params.originalfilename, // alternate name for the file when user downloads it
+      (err) => {
+        if (err) {
+          res.status(500).send("Problem downloading the file");
+        }
+      }
+    );
+  });
 
 // // Create task (POSTMAN checked)
 // app.route("/courses/:id/createtask").post(checkAuth, async (req, res) => {

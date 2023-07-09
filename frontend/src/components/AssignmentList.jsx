@@ -38,6 +38,9 @@ import { useState } from "react";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import CreateTask from "./CreateTask";
+import QuizTaking from "./QuizTaking";
+import AssignmentTaking from "./AssignmentTaking";
 dayjs.extend(localizedFormat);
 
 // Determine status of one task
@@ -76,7 +79,51 @@ function ShowTaskStatus(taskStatus) {
 }
 
 function AssignmentList(props) {
+  // const [loadTakeTask, setLoadTakeTask] = useState(
+  //   Array(props.tasks.length).fill([false, 0])
+  // );
+  // function ShowTask(event, idx) {
+  //   console.log("event: ", event);
+  //   event.preventDefault();
+  //   console.log("ShowTask in AssignmentList called");
+  //   // console.log("idx: ", idx);
+  //   // shallow copy of loadTakeQuizz
+  //   let items = [...loadTakeTask];
+  //   // console.log("items: ", items);
+  //   // shallow copy of the item to mutate
+  //   let item = { ...loadTakeTask[idx] };
+
+  //   if (item[0] === true && item[1] > 0) return;
+  //   // console.log("item: ", item);
+  //   // new value
+  //   item[0] = true;
+  //   item[1] = item[1] + 1;
+  //   // 4. Put it back into our array. N.B. we *are* mutating the array here,
+  //   //    but that's why we made a copy first
+  //   items[idx] = item;
+  //   // console.log("items: ", items);
+  //   // 5. Set the state to our new copy
+  //   setLoadTakeTask(items);
+  // }
+  // function CloseTask(idx) {
+  //   console.log("CloseTask called");
+  //   // shallow copy of loadTakeQuizz
+  //   let items = [...loadTakeTask];
+  //   // shallow copy of the item to mutate
+  //   let item = { ...loadTakeTask[idx] };
+  //   // new value
+  //   item = false;
+  //   // 4. Put it back into our array. N.B. we *are* mutating the array here,
+  //   //    but that's why we made a copy first
+  //   items[idx] = item;
+  //   console.log("items: ", items);
+  //   // 5. Set the state to our new copy
+  //   setLoadTakeTask(items);
+  // }
+  //console.log("loadTakeQuizz in AssignmentList: ", loadTakeQuizz);
   // get CourseDates as a prop from GeneralView
+
+  const today = new Date();
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
   const taskStatusData =
@@ -114,6 +161,7 @@ function AssignmentList(props) {
         quizstatus: task.quizstatus,
         taskstatus: taskStatusData,
       });
+      console.log("taskstatus1: ", taskStatusData);
     } else {
       filteredDatesWithConvertedDates.push({
         type: task.type,
@@ -124,6 +172,11 @@ function AssignmentList(props) {
         quizstatus: task.quizstatus,
         taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
       });
+
+      console.log(
+        "taskstatus2: ",
+        taskStatusData.userTasksStats[index].userTaskSatus
+      );
     }
   });
   filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
@@ -230,7 +283,57 @@ function AssignmentList(props) {
                         </TableCell>
                         <TableCell>{task.dateToString}</TableCell>
                         <TableCell>{task.type}</TableCell>
-                        <TableCell></TableCell>
+                        <TableCell>
+                          {/* TODO: if time over, then show button
+                          TODO: differentiate between quiz taking and assignment taking component */}
+                          {/* {loadTakeTask[index] && (
+                              <QuizTaking
+                                takeTask={props.takeTask}
+                                coursePageRerender={props.coursePageRerender}
+                                courseTimelineId={props.courseTimelineId}
+                                selectedCourseTimelineId={
+                                  props.selectedCourseTimelineId
+                                }
+                                quizId={task.id}
+                                closeTask={CloseTask}
+                                index={index}
+                              ></QuizTaking>
+                            )} */}
+                          {task.type === "Quiz" &&
+                            !props.isOwner &&
+                            task.data.getTime() > today.getTime() &&
+                            task.taskstatus === "due" && (
+                              <QuizTaking
+                                dataOfAllUsersForThisCourse={
+                                  props.dataOfAllUsersForThisCourse
+                                }
+                                takeTask={props.takeTask}
+                                coursePageRerender={props.coursePageRerender}
+                                courseTimelineId={props.courseTimelineId}
+                                selectedCourseTimelineId={
+                                  props.selectedCourseTimelineId
+                                }
+                                quizId={task.id}
+                              ></QuizTaking>
+                            )}
+                          {task.type === "Assignment" &&
+                            !props.isOwner &&
+                            task.data.getTime() > today.getTime() &&
+                            task.taskstatus === "due" && (
+                              <AssignmentTaking
+                                dataOfAllUsersForThisCourse={
+                                  props.dataOfAllUsersForThisCourse
+                                }
+                                takeTask={props.takeTask}
+                                coursePageRerender={props.coursePageRerender}
+                                courseTimelineId={props.courseTimelineId}
+                                selectedCourseTimelineId={
+                                  props.selectedCourseTimelineId
+                                }
+                                assignmentId={task.id}
+                              ></AssignmentTaking>
+                            )}
+                        </TableCell>
                       </TableRow>
                     ))
                 )}
