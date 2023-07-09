@@ -693,7 +693,7 @@ function CreateTask(props) {
                             component="span"
                             startIcon={<CloudUploadIcon />}
                           >
-                            Upload Answer
+                            Upload File
                           </Button>
                         </label>
                         {question.image && (
