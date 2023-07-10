@@ -615,7 +615,7 @@ function CreateTask(props) {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                {questions.map((question) => (
+                {questions.map((question, index) => (
                   <Box
                     sx={{
                       border: 1,
@@ -687,9 +687,9 @@ function CreateTask(props) {
                             handleQuestionFileChange(event, question.id)
                           }
                           style={{ mt: 2, display: "none" }}
-                          id="upload-file"
+                          id={index}
                         />
-                        <label htmlFor="upload-file">
+                        <label htmlFor={index}>
                           <Button
                             variant="outlined"
                             component="span"
