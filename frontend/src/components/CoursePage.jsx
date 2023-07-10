@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // Function to
 async function TakeTask(courseTimelineId, taskId, score, formData) {
@@ -379,6 +380,10 @@ function CoursePage() {
       });
   };
 
+  const handleNavigateBack = () => {
+    navigate("/home");
+  };
+
   return (
     <>
       {/* allow backend to do its magic */}
@@ -389,6 +394,9 @@ function CoursePage() {
           <Grid container spacing={2} sx={{ justifyContent: "center" }}>
             <Grid item xs={12}>
               <Navbar></Navbar>
+            </Grid>
+            <Grid item xs={10.5}>
+              <Button variant="text" onClick={handleNavigateBack}><ArrowBackIcon/>Back to Homepage</Button>
             </Grid>
             {/* Show name of selected course */}
             <Grid item xs={8.75}>
