@@ -8,7 +8,9 @@ const multer = require("multer"); // for parsing FormData which is type multipar
 // storage configuration for multer
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public");
+    var path = "./public";
+    fs.mkdirSync(path, { recursive: true });
+    cb(null, path);
   },
   filename: function (req, file, cb) {
     // extract type of data
