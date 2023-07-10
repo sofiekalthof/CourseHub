@@ -1,6 +1,4 @@
 import * as React from "react";
-import Timeline from "./Timeline";
-import ApexTimeline from "./ApexTimeline";
 import ApexTimelineScatter from "./ApexTimelineScatter";
 import {
   Grid,
