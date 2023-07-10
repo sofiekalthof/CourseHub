@@ -292,6 +292,7 @@ function CreateTask(props) {
           navigate("/");
         } else {
           props.coursePageRerender(!props.coursePageRerenderValue);
+          setAnchorEl(null);
         }
       })
       .catch((err) => {
@@ -421,6 +422,7 @@ function CreateTask(props) {
           navigate("/");
         } else {
           props.coursePageRerender(!props.coursePageRerenderValue);
+          setAnchorEl(null);
         }
       })
       .catch((err) => {

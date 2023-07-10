@@ -34,7 +34,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -136,10 +136,17 @@ function AssignmentList(props) {
     }
   });
   console.log("tasks in AssignmentList: ", tasks);
-  filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data);
-
-  // const [dates, setDates] = useState(filteredDatesWithConvertedDates);
-  let dates = filteredDatesWithConvertedDates;
+  console.log(props.coursePageRerenderValue)
+  const [dates, setDates] = useState([]);
+  useEffect(() => {
+    if(areDatesDescending){
+      setDates(filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data));
+    } else {
+      setDates(filteredDatesWithConvertedDates.sort((a, b) => a.data - b.data));
+    }
+  
+  }, [props.coursePageRerenderValue])
+  //let dates = filteredDatesWithConvertedDates;
   console.log("dates in AssignmentList: ", dates);
 
   const filterDates = () => {

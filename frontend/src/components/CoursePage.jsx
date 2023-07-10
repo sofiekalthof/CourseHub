@@ -311,11 +311,13 @@ function CoursePage() {
           alert(res1.msg);
           setUserSession(false);
           navigate("/");
+          setGetDataAfterPost(false);
         } else {
           console.log("getting new data");
           setDataOfAllUsersForThisCourse(res1.subscribers);
           setSelectedCourse(res2);
           setLoading(false);
+          setGetDataAfterPost(false);
         }
       })
       .catch((err) => {

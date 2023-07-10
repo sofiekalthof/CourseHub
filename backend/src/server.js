@@ -158,8 +158,8 @@ app
     }
     let newTask;
     let subscriberTimelines = req.body.subscriberTimelines.split(",");
-    // console.log("req.files: ", req.files);
-    // console.log("req.body: ", req.body);
+    console.log("req.files: ", req.files);
+    console.log("req.body: ", req.body);
     // console.log("taskData: ", taskData);
     // console.log("req.body.answers: ", req.body.answers);
     // var test = req.body.answers.map((answer) => {
