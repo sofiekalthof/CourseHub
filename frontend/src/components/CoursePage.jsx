@@ -395,15 +395,15 @@ function CoursePage() {
             <Grid item xs={12}>
               <Navbar></Navbar>
             </Grid>
-            <Grid item xs={10.5}>
+            <Grid item xs={10.25}>
               <Button variant="text" onClick={handleNavigateBack}><ArrowBackIcon/>Back to Homepage</Button>
             </Grid>
             {/* Show name of selected course */}
-            <Grid item xs={8.75}>
+            <Grid item xs={5.25} sm={7.8} md={8} lg={8.7}>
               <Typography variant="h5">{selectedCourse.name}</Typography>
             </Grid>
             {/* Take Cozrse button if user is not owner or already subscriber */}
-            <Grid item xs={1.5}>
+            <Grid item xs={4.75} sm={2.2} md={2} lg={1.3}>
               {/* <ShowTakeCourse isOwner={isOwner} isSubscriber={isSubscriber} /> */}
               {!isOwner && !isSubscriber && (
                 <>

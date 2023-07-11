@@ -187,10 +187,10 @@ function HomePage() {
         <Grid item xs={10}>
           <Grid container>
             {/* Grid for showing the title of the page */}
-            <Grid item xs={10.7}>
+            <Grid item xs={7} sm={9.7} md={9.85} lg={10.7}>
               <Typography variant="h5">All Courses</Typography>
             </Grid>
-            <Grid item xs={1.3}>
+            <Grid item xs={5} sm={2.3} md={2.15} lg={1.3}>
               <Button variant="contained" onClick={handleClickOpen}>
                 Create New
               </Button>

@@ -39,11 +39,11 @@ function GeneralView(props) {
   return (
     <>
       <Grid container sx={{ justifyContent: "center" }} spacing={2}>
-        <Grid item xs={10.25}>
+        <Grid item xs={6.25} sm={9} md={9.85} lg={10.25}>
           <Typography variant="h6">Timeline</Typography>
         </Grid>
         {/* Button for adding a milestone */}
-        <Grid item xs={1.75}>
+        <Grid item xs={5.75} sm={3} md={2.15} lg={1.75}>
           <CreateMileStone
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
@@ -63,11 +63,11 @@ function GeneralView(props) {
             ></ApexTimelineScatter>
           </Card>
         </Grid>
-        <Grid item xs={10.25}>
+        <Grid item xs={6.25} sm={9} md={9.85} lg={10.25}>
           <Typography variant="h6">Assignments and Quizzes</Typography>
         </Grid>
         {/* Button for creating a new task */}
-        <Grid item xs={1.75}>
+        <Grid item item xs={5.75} sm={3} md={2.15} lg={1.75}>
           <CreateTask
             dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
