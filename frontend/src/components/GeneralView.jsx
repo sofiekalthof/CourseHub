@@ -67,7 +67,7 @@ function GeneralView(props) {
           <Typography variant="h6">Assignments and Quizzes</Typography>
         </Grid>
         {/* Button for creating a new task */}
-        <Grid item item xs={5.75} sm={3} md={2.15} lg={1.75}>
+        <Grid item xs={5.75} sm={3} md={2.15} lg={1.75}>
           <CreateTask
             dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
