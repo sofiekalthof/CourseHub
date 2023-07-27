@@ -22,6 +22,8 @@ import { UserContext } from "../App";
 // TODO: move url to .env
 const API_URL = "http://localhost:3600";
 
+/* The `Navbar` function is a React component that represents the navigation bar of a web application.
+It renders a responsive app bar with a logo, a search icon, and an avatar icon. */
 export default function Navbar() {
   const navigate = useNavigate();
   const handleOnClick = () => {

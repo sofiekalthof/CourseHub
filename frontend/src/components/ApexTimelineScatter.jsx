@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
-import { courseUser } from "../data/coursesMongoose";
 
+/**
+ * The function `ApexTimelineScatter` takes in tasks and milestones as props, converts the dates from
+ * the database into values for the chart, and renders a scatter chart using the ApexCharts library.
+ * @returns a JSX element that renders a Chart component. The Chart component is configured with
+ * options and series data, and it is of type "scatter". The height of the chart is set to 200.
+ */
 export default function ApexTimelineScatter(props) {
   const tasks = props.tasks;
   const milestones = props.milestones;

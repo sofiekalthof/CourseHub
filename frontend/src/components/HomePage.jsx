@@ -24,9 +24,12 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { courses } from "../data/courses";
 
-// Function to create a course in database (parsed for frontend)
+/**
+ * The function `CreateCourse` makes an API call to create a new course with the given name,
+ * description, and owner ID, and returns the response from the API.
+ * @returns different objects based on the response from the API:
+ */
 async function CreateCourse(courseName, courseDescription, ownerID) {
   // make API call to get all courses
   try {
@@ -61,7 +64,12 @@ async function CreateCourse(courseName, courseDescription, ownerID) {
   }
 }
 
-// Function to return all courses in database (parsed for frontend)
+/**
+ * The function `GetAllCourseIdDescs` makes an API call to retrieve all course IDs and descriptions,
+ * and returns the response data or an error message.
+ * @returns a Promise that resolves to an object. The object can have different properties depending on
+ * the response from the API:
+ */
 async function GetAllCourseIdDescs() {
   // make API call to get all courses
   try {
@@ -90,6 +98,8 @@ async function GetAllCourseIdDescs() {
   }
 }
 
+/* The above code is a React component called `HomePage`. It is responsible for rendering the homepage
+of a web application. */
 function HomePage() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
@@ -195,9 +205,9 @@ function HomePage() {
                 Create New
               </Button>
               {/* Dialog for creating a new course */}
-              <Dialog open={open} >
-                <DialogContent sx={{ m : 2 }}>
-                  <Grid container spacing={2} >
+              <Dialog open={open}>
+                <DialogContent sx={{ m: 2 }}>
+                  <Grid container spacing={2}>
                     <DialogContentText>Create a new course</DialogContentText>
                     <Grid item xs={12}>
                       <TextField
@@ -223,7 +233,9 @@ function HomePage() {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClickCancel}>Cancel</Button>
-                  <Button variant="contained" onClick={handleClickSave}>Save</Button>
+                  <Button variant="contained" onClick={handleClickSave}>
+                    Save
+                  </Button>
                 </DialogActions>
               </Dialog>
             </Grid>

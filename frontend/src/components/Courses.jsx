@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+/* The `Courses` function is a React component that renders a list of courses. */
 function Courses(props) {
   const courseIdDescs = props.courseIdDescs;
   const userData = props.user;

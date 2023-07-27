@@ -6,14 +6,13 @@ import { Tabs, Tab, Grid, Typography, Button, Card } from "@mui/material";
 import { TabPanel, TabContext } from "@mui/lab";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-// import { courseUser } from "../data/coursesMongoose";
 import { useState } from "react";
 import Analytics from "./Analytics";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 // Function to
 async function TakeTask(courseTimelineId, taskId, score, formData) {
@@ -396,7 +395,10 @@ function CoursePage() {
               <Navbar></Navbar>
             </Grid>
             <Grid item xs={10.25}>
-              <Button variant="text" onClick={handleNavigateBack}><ArrowBackIcon/>Back to Homepage</Button>
+              <Button variant="text" onClick={handleNavigateBack}>
+                <ArrowBackIcon />
+                Back to Homepage
+              </Button>
             </Grid>
             {/* Show name of selected course */}
             <Grid item xs={5.25} sm={7.8} md={8} lg={8.7}>

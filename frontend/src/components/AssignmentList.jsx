@@ -44,6 +44,9 @@ import AssignmentTaking from "./AssignmentTaking";
 dayjs.extend(localizedFormat);
 
 // Determine status of one task
+/* The `ShowTaskStatus` function is a helper function that determines the status of a task based on the
+`taskStatus` parameter. It checks the value of `taskStatus.taskStatus` and returns a corresponding
+icon component wrapped in a tooltip component. */
 function ShowTaskStatus(taskStatus) {
   // console.log(taskStatus);
   if (taskStatus.taskStatus == undefined) {
@@ -78,6 +81,8 @@ function ShowTaskStatus(taskStatus) {
   }
 }
 
+/* The below code is a React component called `AssignmentList`. It receives props such as `tasks`,
+`userDataForCourse`, and `coursePageRerenderValue`. */
 function AssignmentList(props) {
   const today = new Date();
   const tasks = props.tasks;
@@ -136,16 +141,15 @@ function AssignmentList(props) {
     }
   });
   console.log("tasks in AssignmentList: ", tasks);
-  console.log(props.coursePageRerenderValue)
+  console.log(props.coursePageRerenderValue);
   const [dates, setDates] = useState([]);
   useEffect(() => {
-    if(areDatesDescending){
+    if (areDatesDescending) {
       setDates(filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data));
     } else {
       setDates(filteredDatesWithConvertedDates.sort((a, b) => a.data - b.data));
     }
-  
-  }, [props.coursePageRerenderValue])
+  }, [props.coursePageRerenderValue]);
   //let dates = filteredDatesWithConvertedDates;
   console.log("dates in AssignmentList: ", dates);
 

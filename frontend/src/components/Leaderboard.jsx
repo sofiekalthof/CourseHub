@@ -9,6 +9,12 @@ import {
   Alert,
 } from "@mui/material";
 
+/**
+ * The function creates a sorted list of users with their scores based on the completion status of
+ * their tasks.
+ * @returns an array of objects, where each object represents a user with their name, id, and score.
+ * The array is sorted in descending order based on the score.
+ */
 function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   let usersWithScore = [];
   dataOfAllUsersForThisCourse.map((user) => {
@@ -30,6 +36,10 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   return usersWithScore;
 }
 
+/**
+ * The function calculates the user's score based on their task status.
+ * @returns the total score of the user, which is the number of tasks that have a status of "done".
+ */
 function SetScore({ userTaskStatus }) {
   let userscore = 0;
   userTaskStatus.map((status) => {
@@ -40,6 +50,8 @@ function SetScore({ userTaskStatus }) {
   return userscore;
 }
 
+/* The `Leaderboard` function is a React component that displays a leaderboard table. It takes in a
+`props` object as a parameter, which contains the `dataOfAllUsersForThisCourse` array. */
 function Leaderboard(props) {
   const dataOfAllUsersForThisCourse = props.dataOfAllUsersForThisCourse;
   const usersWithScore = createSortedListWithScore(dataOfAllUsersForThisCourse);

@@ -4,7 +4,11 @@ import { useState } from "react";
 import Leaderboard from "./Leaderboard";
 import Activity from "./Activity";
 
-// Show Activity Graph when user takes the course and a warning message when user not takes course
+/**
+ * The ShowActivity function checks if the user has data for a course and displays an error message if
+ * not, otherwise it displays the user's activity graph.
+ * @returns either an error message or an Activity component.
+ */
 function ShowActivity({ userDataForCourse, tasks }) {
   if (userDataForCourse.length == 0) {
     return (
@@ -22,6 +26,12 @@ function ShowActivity({ userDataForCourse, tasks }) {
   }
 }
 
+/**
+ * The Analytics component displays the user's activity and a leaderboard for a selected course.
+ * @returns The Analytics component is returning a JSX fragment that contains a Grid container with
+ * multiple Grid items. Each Grid item contains different components such as Typography, Card,
+ * ShowActivity, and Leaderboard.
+ */
 function Analytics(props) {
   // Get the data for logged in user for this course
   const userDataForThisCourse = props.userDataForCourse;

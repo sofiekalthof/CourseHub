@@ -1,7 +1,10 @@
 import * as React from "react";
 import Chart from "react-apexcharts";
 
-// Dtermine the taskScore of a user per month
+/**
+ * The function determines the score per month for a given set of tasks and user data.
+ * @returns an array of objects. Each object represents a month and its corresponding task score.
+ */
 function determineTaskScorePerMonth(tasks, userDataForCourse) {
   let taskScoreList = [];
   let janScore = 0;
@@ -114,6 +117,12 @@ function determineTaskScorePerMonth(tasks, userDataForCourse) {
   return taskScoreList;
 }
 
+/**
+ * The `Activity` function renders a line chart component using data from `props.userDataForCourse` and
+ * `props.tasks`.
+ * @returns The `Activity` component is returning a `Chart` component with the specified options,
+ * series, type, and height.
+ */
 function Activity(props) {
   const userDataForCourse = props.userDataForCourse;
   const tasks = props.tasks;

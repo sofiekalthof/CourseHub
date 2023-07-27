@@ -33,6 +33,13 @@ import { v4 as uuidv4 } from "uuid";
 import CreateTask from "./CreateTask";
 import CreateMileStone from "./CreateMilestone";
 
+/**
+ * The GeneralView component renders a timeline and a list of assignments and quizzes, with the ability
+ * to add milestones and tasks if the user is the owner.
+ * @returns The GeneralView component is returning a JSX structure that includes a Grid container with
+ * multiple Grid items. Inside each Grid item, there are various components being rendered, such as
+ * Typography, CreateMileStone, ApexTimelineScatter, CreateTask, and AssignmentList.
+ */
 function GeneralView(props) {
   const [isOwner, setIsOwner] = useState(props.isOwner);
 

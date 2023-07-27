@@ -36,7 +36,11 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-// Function for Showing the Add Milestone button
+/**
+ * The `CreateMileStone` function is a React component that renders a button to add a milestone, and a
+ * dialog to input the milestone type and date, and save it.
+ * @returns JSX elements, specifically a Button component and a Dialog component.
+ */
 function CreateMileStone(props) {
   const navigate = useNavigate();
   // use existing session
