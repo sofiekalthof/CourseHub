@@ -38,7 +38,18 @@ export default function Navbar() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = async () => {
+
+  // Function for closing dropdown
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+/**
+ * The handleLogout function logs the user out by resetting the anchor element, destroying the session
+ * in the backend, resetting the user session in the frontend, and displaying an alert message.
+ */
+  const handleLogout = async () => {
     // reset anchor
     setAnchorEl(null);
 
@@ -91,7 +102,7 @@ export default function Navbar() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Log out</MenuItem>
+        <MenuItem onClick={handleLogout}>Log out</MenuItem>
       </Menu>
     </>
   );
