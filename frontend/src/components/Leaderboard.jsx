@@ -20,12 +20,8 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   dataOfAllUsersForThisCourse.map((user) => {
     let userscore = 0;
     // extract useful information first
-    let taskStatusData = user.usertimeline.usertimeline;
-    taskStatusData.userTasksStats.map((status) => {
-      if (status.userTaskSatus.includes("done")) {
-        userscore += 1;
-      }
-    });
+    let taskStatusData = user.usertimeline.usertimeline.userTasksStats;
+    userscore = determineScoreOfUser(taskStatusData)
     usersWithScore.push({
       name: user.username,
       id: user.subscriber,
@@ -40,10 +36,10 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
  * The function calculates the user's score based on their task status.
  * @returns the total score of the user, which is the number of tasks that have a status of "done".
  */
-function SetScore({ userTaskStatus }) {
+function determineScoreOfUser(userTaskStatus) {
   let userscore = 0;
   userTaskStatus.map((status) => {
-    if (status.includes("done")) {
+    if (status.userTaskSatus.includes("done")) {
       userscore += 1;
     }
   });
