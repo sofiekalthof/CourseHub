@@ -1,13 +1,12 @@
 import * as React from "react";
 import Navbar from "./Navbar";
 import GeneralView from "./GeneralView";
-import HomePage from "./HomePage";
+import Analytics from "./Analytics";
 import { Tabs, Tab, Grid, Typography, Button, Card } from "@mui/material";
 import { TabPanel, TabContext } from "@mui/lab";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import Analytics from "./Analytics";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";

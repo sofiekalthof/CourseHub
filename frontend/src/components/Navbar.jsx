@@ -2,9 +2,7 @@ import React from "react";
 import {
   AppBar,
   Box,
-  Grid,
   IconButton,
-  Paper,
   Toolbar,
   Typography,
   Button,
@@ -13,7 +11,6 @@ import {
   Tooltip,
   MenuItem,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import courseHubLogo from "../assets/CourseHubLogo.png";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";

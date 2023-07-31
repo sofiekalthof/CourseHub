@@ -1,8 +1,6 @@
 import * as React from "react";
-import ApexTimelineScatter from "./ApexTimelineScatter";
 import {
   Grid,
-  Box,
   Button,
   Menu,
   MenuItem,
@@ -10,28 +8,16 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   FormControl,
-  FormControlLabel,
   InputLabel,
   Select,
-  TextField,
-  Checkbox,
-  Typography,
-  Card,
-  FormLabel,
 } from "@mui/material";
-import AssignmentList from "./AssignmentList";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
-import CreateTask from "./CreateTask";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";

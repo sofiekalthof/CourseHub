@@ -24,7 +24,9 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+
 dayjs.extend(localizedFormat);
+
 // Function to return all courses in database (parsed for frontend)
 async function GetTask(taskId) {
   // make API call to get all courses

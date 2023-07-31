@@ -2,23 +2,14 @@ import Courses from "./Courses";
 import Navbar from "./Navbar";
 import {
   TextField,
-  Card,
-  CardContent,
   Grid,
   Typography,
-  Paper,
-  Box,
   Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
 } from "@mui/material";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../App";
@@ -130,7 +121,6 @@ function HomePage() {
         setError(true);
       });
   }, []);
-  // console.log("courseIdDescs in homepage: ", courseIdDescs);
 
   // take user information from global context
   // TODO: remove the prop, since userSession is global OR make it all one prop

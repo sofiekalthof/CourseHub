@@ -1,37 +1,16 @@
 import * as React from "react";
 import ApexTimelineScatter from "./ApexTimelineScatter";
+import AssignmentList from "./AssignmentList";
+import CreateTask from "./CreateTask";
+import CreateMileStone from "./CreateMilestone";
 import {
   Grid,
-  Box,
   Button,
-  Menu,
-  MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  FormControl,
-  FormControlLabel,
-  InputLabel,
-  Select,
-  TextField,
-  Checkbox,
   Typography,
   Card,
 } from "@mui/material";
-import AssignmentList from "./AssignmentList";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
-import CreateTask from "./CreateTask";
-import CreateMileStone from "./CreateMilestone";
+
 
 /**
  * The GeneralView component renders a timeline and a list of assignments and quizzes, with the ability

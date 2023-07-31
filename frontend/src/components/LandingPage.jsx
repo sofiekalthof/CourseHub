@@ -1,4 +1,3 @@
-import LandingPageDesign from "../assets/LandingPage.png";
 import LandingPageBackground from "../assets/LandingPageBackground.png";
 import { Button, Grid, Typography, Box } from "@mui/material";
 import Navbar from "./Navbar";

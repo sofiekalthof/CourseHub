@@ -15,6 +15,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+
 dayjs.extend(localizedFormat);
 
 // Function to return all courses in database (parsed for frontend)

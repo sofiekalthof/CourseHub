@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
 import Login from "./Login";
 import Register from "./Register";
-import { Box, Tabs, Tab, Grid, TextField, Button } from "@mui/material";
+import { Box, Tabs, Tab, Grid } from "@mui/material";
 import { TabPanel, TabContext } from "@mui/lab";
 
 export default function RegisterLogInPage() {
@@ -31,7 +31,14 @@ export default function RegisterLogInPage() {
             <img src={CourseHubLogo} width="200vw" height="200vh" />
           </Grid>
           {/* register form */}
-          <Box sx={{ bgcolor: "#ffffff", minWidth: "40vw", boxShadow: 3,  borderRadius: 1 }}>
+          <Box
+            sx={{
+              bgcolor: "#ffffff",
+              minWidth: "40vw",
+              boxShadow: 3,
+              borderRadius: 1,
+            }}
+          >
             {/* grid for navigation to Register and LogIn component */}
             <Grid
               container

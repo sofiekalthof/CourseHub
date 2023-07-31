@@ -1,9 +1,6 @@
 // Log-In Form component
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import { Button, TextField, Grid, Box } from "@mui/material";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";

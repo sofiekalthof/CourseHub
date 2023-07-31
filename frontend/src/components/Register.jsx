@@ -1,6 +1,6 @@
 // Register Form component
 import React, { useState } from "react";
-import { Box, Tabs, Tab, Grid, TextField, Button } from "@mui/material";
+import { Box, Grid, TextField, Button } from "@mui/material";
 
 const API_URL = "http://localhost:3600";
 
