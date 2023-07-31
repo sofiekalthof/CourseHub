@@ -3,14 +3,8 @@ import ApexTimelineScatter from "./ApexTimelineScatter";
 import AssignmentList from "./AssignmentList";
 import CreateTask from "./CreateTask";
 import CreateMileStone from "./CreateMilestone";
-import {
-  Grid,
-  Button,
-  Typography,
-  Card,
-} from "@mui/material";
+import { Grid, Button, Typography, Card } from "@mui/material";
 import { useState } from "react";
-
 
 /**
  * The GeneralView component renders a timeline and a list of assignments and quizzes, with the ability
