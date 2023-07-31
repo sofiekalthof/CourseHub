@@ -18,10 +18,9 @@ import {
 function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   let usersWithScore = [];
   dataOfAllUsersForThisCourse.map((user) => {
-    let userscore = 0;
     // extract useful information first
     let taskStatusData = user.usertimeline.usertimeline.userTasksStats;
-    userscore = determineScoreOfUser(taskStatusData)
+    const userscore = determineScoreOfUser(taskStatusData)
     usersWithScore.push({
       name: user.username,
       id: user.subscriber,
