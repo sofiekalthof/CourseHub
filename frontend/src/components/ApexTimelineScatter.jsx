@@ -1,20 +1,9 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
 
-/**
- * The function `ApexTimelineScatter` takes in tasks and milestones as props, converts the dates from
- * the database into values for the chart, and renders a scatter chart using the ApexCharts library.
- * @returns a JSX element that renders a Chart component. The Chart component is configured with
- * options and series data, and it is of type "scatter". The height of the chart is set to 200.
- */
-export default function ApexTimelineScatter(props) {
-  const tasks = props.tasks;
-  const milestones = props.milestones;
 
-  // Convert dates from database into values for the chart
-  // First for all tasks
-  const today = new Date();
-  let dataForChart = [];
+function convertTaskDates(tasks, today){
+  let taskDates = [];
   let assignmentDates = [];
   let quizDates = [];
   tasks.map((task) => {
@@ -38,10 +27,13 @@ export default function ApexTimelineScatter(props) {
       assignmentDates.push({ x: taskTime.getTime(), y: -2 });
     }
   });
-  dataForChart.push({ name: "Assignment", data: assignmentDates });
-  dataForChart.push({ name: "Quiz", data: quizDates });
+  taskDates.push({ name: "Assignment", data: assignmentDates });
+  taskDates.push({ name: "Quiz", data: quizDates });
+  return taskDates;
+}
 
-  // Second for all milestones
+function convertMilestoneDates(milestones, today){
+  let milestoneDates = [];
   let lectureDates = [];
   let examDates = [];
   //let exerciseDates = [];
@@ -77,27 +69,29 @@ export default function ApexTimelineScatter(props) {
     ) {
       examDates.push({ x: milestoneTime.getTime(), y: 2 });
     }
-    /*if (
-      milestone.type == "Exercise" &&
-      milestoneTime.getTime() <= today.getTime()
-    ) {
-      exerciseDates.push({ x: milestoneTime.getTime(), y: 3 });
-    }
-    if (
-      milestone.type == "Exercise" &&
-      milestoneTime.getTime() > today.getTime()
-    ) {
-      exerciseDates.push({
-        x: milestoneTime.getTime(),
-        y: 3,
-        fillColor: "#D3D3D3",
-      });
-    }*/
   });
-  // push all conveted data to dataForChart Array
-  dataForChart.push({ name: "Lecture", data: lectureDates });
-  //dataForChart.push({ name: "Exercise", data: exerciseDates });
-  dataForChart.push({ name: "Exam", data: examDates });
+  milestoneDates.push({ name: "Lecture", data: lectureDates });
+  milestoneDates.push({ name: "Exam", data: examDates });
+  return milestoneDates;
+}
+/**
+ * The function `ApexTimelineScatter` takes in tasks and milestones as props, converts the dates from
+ * the database into values for the chart, and renders a scatter chart using the ApexCharts library.
+ * @returns a JSX element that renders a Chart component. The Chart component is configured with
+ * options and series data, and it is of type "scatter". The height of the chart is set to 200.
+ */
+export default function ApexTimelineScatter(props) {
+  const tasks = props.tasks;
+  const milestones = props.milestones;
+
+  // Convert dates from database into values for the chart
+  // First for all tasks
+  const today = new Date();
+  const taskDates = convertTaskDates(tasks, today);
+  const milestoneDates = convertMilestoneDates(milestones, today);
+
+  const dataForChart = taskDates.concat(milestoneDates);
+  
   // add a point for today to chart
   dataForChart.push({
     name: "Today",
