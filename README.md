@@ -17,14 +17,27 @@
   - Introduces user into website
   - List of features of website
 
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/5925232e-7873-4381-b521-ca7f8740046f">
+</p>
+
 - ### Register Login Page
   - Registration of new users
   - Login for existing users
+
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/a1438668-99ca-4d40-a7b2-b11d30cd396b">
+</p>
 
 - ### Home Page
   - List of all courses and their description available on CourseHub
   - Searchbar to search for courses
   - Create new courses
+
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/4f0a27de-98b7-4539-a894-3f2fe53b3468">
+</p>
+
 
 - ### Course Page
   Consists out of two subpages:
@@ -35,10 +48,19 @@
     - List of tasks (assignments/quizzes)
     - Create new tasks
     - Take tasks
-  
-  - #### Analytics:
+    
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/117d2f98-39a3-451d-b133-16914da4ca7f">
+</p>
+
+
+ - #### Analytics:
     - Chart for users' activity 
     - Leaderboard
+      
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/29fc9f68-d27e-4dbe-b336-e55d51eaf7c2">
+</p>  
 
 ## How to run
 Download and install [NodeJS](https://nodejs.org/de/download/)
