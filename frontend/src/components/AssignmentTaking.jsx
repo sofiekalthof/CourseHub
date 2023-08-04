@@ -149,7 +149,7 @@ function AssignmentTaking(props) {
           Description: {description}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          File: {file && file.name}
+           Answer File: {answerFile && answerFile.name}
         </Typography>
         <Box mt={2}>
           <Button variant="contained" onClick={handleBackToAssignmentList}>
