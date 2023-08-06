@@ -34,12 +34,26 @@ dayjs.extend(localizedFormat);
 /* The `ShowTaskStatus` function is a helper function that determines the status of a task based on the
 `taskStatus` parameter. It checks the value of `taskStatus.taskStatus` and returns a corresponding
 icon component wrapped in a tooltip component. */
-function ShowTaskStatus(taskStatus) {
-  // console.log(taskStatus);
-  if (taskStatus.taskStatus == undefined) {
+function ShowTaskStatus({taskStatus, taskDate}) {
+  console.log(taskStatus)
+  console.log(taskStatus != "done");
+  console.log(taskDate);
+  const today = new Date();
+  console.log(taskDate<today);
+  console.log(taskDate<today && taskStatus != "done")
+  if (taskStatus == undefined) {
     return;
   }
-  if (taskStatus.taskStatus.includes("due")) {
+  if (taskStatus != "done" && taskDate < today) {
+    return (
+      <>
+        <Tooltip title="Missed">
+          <CancelIcon sx={{ fontSize: 15, color: "red" }} />
+        </Tooltip>
+      </>
+    );
+  }
+  if (taskStatus == "due") {
     return (
       <>
         <Tooltip title="Due">
@@ -48,20 +62,11 @@ function ShowTaskStatus(taskStatus) {
       </>
     );
   }
-  if (taskStatus.taskStatus.includes("done")) {
+  if (taskStatus== "done") {
     return (
       <>
         <Tooltip title="Done">
           <CheckCircleIcon sx={{ fontSize: 15, color: "#5CDB95" }} />
-        </Tooltip>
-      </>
-    );
-  }
-  if (taskStatus.taskStatus.includes("missed")) {
-    return (
-      <>
-        <Tooltip title="Missed">
-          <CancelIcon sx={{ fontSize: 15, color: "red" }} />
         </Tooltip>
       </>
     );
@@ -236,7 +241,7 @@ function AssignmentList(props) {
                     .map((task, index) => (
                       <TableRow key={task.id}>
                         <TableCell>
-                          <ShowTaskStatus taskStatus={task.taskstatus} />
+                          <ShowTaskStatus taskStatus={task.taskstatus} taskDate={task.data}/>
                         </TableCell>
                         <TableCell>{task.dateToString}</TableCell>
                         <TableCell>{task.type}</TableCell>
