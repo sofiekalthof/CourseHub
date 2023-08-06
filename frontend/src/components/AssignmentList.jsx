@@ -35,13 +35,8 @@ dayjs.extend(localizedFormat);
 `taskStatus` parameter. It checks the value of `taskStatus.taskStatus` and returns a corresponding
 icon component wrapped in a tooltip component. */
 function ShowTaskStatus({taskStatus, taskDate}) {
-  console.log(taskStatus)
-  console.log(taskStatus != "done");
-  console.log(taskDate);
   const today = new Date();
-  console.log(taskDate<today);
-  console.log(taskDate<today && taskStatus != "done")
-  if (taskStatus == undefined) {
+  if (taskStatus.length == 0) {
     return;
   }
   if (taskStatus != "done" && taskDate < today) {
