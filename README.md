@@ -95,12 +95,13 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
   4. Open `http://localhost:5173` to view it in the browser
 
 ## Technologies
-- [MongoDB with Mongoose]
-- [Express]
-- [express-sessions]
-- [connect-mongodb-session]
-- [Multer]
-- [FS]
+- [MongoDB](https://www.npmjs.com/package/mongodb)
+- [Mongoose](https://www.npmjs.com/package/mongoose)
+- [Express](https://www.npmjs.com/package/express)
+- [express-sessions](https://www.npmjs.com/package/express-session)
+- [connect-mongodb-session](https://www.npmjs.com/package/connect-mongodb-session)
+- [Multer](https://www.npmjs.com/package/multer)
+- [FS](https://www.npmjs.com/package/fs)
 - [NodeJS](https://nodejs.org/de/download/)
 - [React](https://reactjs.org/docs/getting-started.html)
 - [Material UI](https://material-ui.com/getting-started/installation/)
