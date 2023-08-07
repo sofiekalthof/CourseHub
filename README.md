@@ -92,7 +92,7 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
   ```
   $ npm run dev
   ```
-  4. Open `http://localhost:5173` to view it in the browser
+  4. Open `http://localhost:5173` to view it in the browser (best working with Chrome)
 
 ## Technologies
 - [MongoDB](https://www.npmjs.com/package/mongodb)
