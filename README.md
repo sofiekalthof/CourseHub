@@ -40,7 +40,7 @@
 
 
 - ### Course Page
-  Consists out of two subpages:
+  Consists of two subpages:
   
   - #### General View
     - Timeline of the course (milestones/tasks)
