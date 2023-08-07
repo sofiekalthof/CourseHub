@@ -5,6 +5,7 @@ import CreateTask from "./CreateTask";
 import CreateMileStone from "./CreateMilestone";
 import { Grid, Button, Typography, Card } from "@mui/material";
 import { useState } from "react";
+import CreateTask2 from "./CreateTask2";
 
 /**
  * The GeneralView component renders a timeline and a list of assignments and quizzes, with the ability
@@ -48,7 +49,7 @@ export default function GeneralView(props) {
         </Grid>
         {/* Button for creating a new task */}
         <Grid item xs={5.75} sm={3} md={2.15} lg={1.75}>
-          <CreateTask
+          {/* <CreateTask
             dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}
             selectedCourseTimelineId={props.selectedCourse.timeline._id}
             subscriberTimelines={props.subscriberTimelines}
@@ -56,7 +57,16 @@ export default function GeneralView(props) {
             coursePageRerenderValue={props.coursePageRerenderValue}
             coursePageRerender={props.coursePageRerender}
             isOwner={isOwner}
-          ></CreateTask>
+          ></CreateTask> */}
+          <CreateTask2
+            dataOfAllUsersForThisCourse={props.dataOfAllUsersForThisCourse}
+            selectedCourseTimelineId={props.selectedCourse.timeline._id}
+            subscriberTimelines={props.subscriberTimelines}
+            createAndSaveTask={props.createAndSaveTask}
+            coursePageRerenderValue={props.coursePageRerenderValue}
+            coursePageRerender={props.coursePageRerender}
+            isOwner={isOwner}
+          ></CreateTask2>
         </Grid>
         {/* Showing Assignmentlist */}
         <Grid item xs={12}>

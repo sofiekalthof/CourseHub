@@ -124,10 +124,6 @@ export default function HomePage() {
       });
   }, []);
 
-  // take user information from global context
-  // TODO: remove the prop, since userSession is global OR make it all one prop
-  const user = userSession;
-
   const [open, setOpen] = useState(false);
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
@@ -255,7 +251,10 @@ export default function HomePage() {
           {error && <></>}
           {courseIdDescs && (
             <>
-              <Courses user={user} courseIdDescs={courseIdDescs}></Courses>
+              <Courses
+                user={userSession}
+                courseIdDescs={courseIdDescs}
+              ></Courses>
             </>
           )}
         </Grid>
