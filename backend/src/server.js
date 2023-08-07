@@ -53,7 +53,7 @@ app.use(
       sameSite: false, // same-site and cross-site(diff. schemes, domain or sub-domain) requests
       secure: parseInt(process.env.PROD) === 0 ? false : true, // need an HTTPS enabled browser (true-> in prod.)
     },
-    resave: true, // !!! true - force session to be saved in session store, even if it was not modified during a request
+    resave: false, // !!! true - force session to be saved in session store, even if it was not modified during a request
     saveUninitialized: false, // dont save session if it was not modified (i.e. no login yet)
     unset: "destroy", // delete cookie from db when it is null(completes task in a few minutes)
   })

@@ -27,10 +27,6 @@ exports.login = async (req, res) => {
       req.session.user = userSession;
 
       console.log("current session: ", req.session.user);
-      console.log(
-        "parseInt(process.env.PROD) === 0 ? false : true ",
-        parseInt(process.env.PROD) === 0 ? false : true
-      );
 
       // status, message and new session (as a cookie) sent to frontend
       return res.status(200).json({
