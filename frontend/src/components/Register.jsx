@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Grid, TextField, Button } from "@mui/material";
 import { useContext } from "react";
 import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The `Register` function is a React component that renders a form for user registration and handles
@@ -18,6 +19,9 @@ export default function Register() {
   const handleHome = () => {
     navigate("/home");
   };
+
+  // use existing session
+  const [userSession, setUserSession] = useContext(UserContext);
 
   /**
    * The handleSubmit function is used to handle the form submission, including
@@ -55,59 +59,61 @@ export default function Register() {
         }),
         // header neccessary for correct sending of information
         headers: {
-          "Content-type": "application/json; charset=UTF-8",
+          "Content-type": "application/json",
         },
       });
       // parse return statement from backend
       let resJson = await res.json();
-
+      console.log(resJson.msg);
       if (res.status === 200) {
         // some debug commands
         console.log("Form done.");
         //alert("User added");
-        // send GET request to REST API with email
-        let res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-          method: "POST",
-          // all information being sent
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-          // header neccessary for correct sending of information
-          headers: {
-            "Content-type": "application/json",
-          },
-          credentials: "include",
-        });
-        // parse return statement from backend
-        let resJson = await res.json();
-        console.log(resJson);
-        if (res.status === 200) {
-          // if response is successful, reset states
-          setEmail("");
-          setPassword("");
-          // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
-          await setUserSession(resJson.userInfo);
-          console.log("Login form done.");
-          // alert(resJson.msg);
-          // route to homepage
-          handleHome();
-        } else if (res.status === 400) {
-          // alert(resJson.msg);
-          console.log(resJson.msg);
-        } else {
-          // some debug commands
-          console.log("Form returned error from backend.");
+        try {
+          console.log("email: ", email);
+          console.log("password: ", password);
+          // send GET request to REST API with email
+          let res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+            method: "POST",
+            // all information being sent
+            body: JSON.stringify({
+              email: email,
+              password: password,
+            }),
+            // header neccessary for correct sending of information
+            headers: {
+              "Content-type": "application/json",
+            },
+            credentials: "include",
+          });
+          // parse return statement from backend
+          let resJson = await res.json();
           console.log(resJson);
-          // alert(resJson.msg);
+          if (res.status === 200) {
+            // if response is successful, reset states
+            setEmail("");
+            setPassword("");
+            // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
+            await setUserSession(resJson.userInfo);
+            console.log("Login form done.");
+            // alert(resJson.msg);
+            // route to homepage
+            handleHome();
+          } else if (res.status === 400) {
+            // alert(resJson.msg);
+            console.log(resJson.msg);
+          } else {
+            // some debug commands
+            console.log("Form returned error from backend.");
+            console.log(resJson);
+            // alert(resJson.msg);
+          }
+        } catch (err) {
+          console.log(err);
+          console.log(
+            "Frontend error. Post request could not be sent. Check API!"
+          );
         }
-      } else if (res.status === 400) {
-        //alert(resJson.msg);
-        console.log(resJson.msg);
-      } else {
-        // some debug commands
-        console.log("Form returned error from backend.");
-        console.log(resJson);
       }
     } catch (err) {
       console.log("Frontend error. Post request could not be sent. Check API!");
