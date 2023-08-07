@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Box, Grid, TextField, Button } from "@mui/material";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 /**
  * The `Register` function is a React component that renders a form for user registration and handles
@@ -11,6 +13,11 @@ export default function Register() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+  const handleHome = () => {
+    navigate("/home");
+  };
 
   /**
    * The handleSubmit function is used to handle the form submission, including
@@ -62,6 +69,42 @@ export default function Register() {
         // some debug commands
         console.log("Form done.");
         //alert("User added");
+        // send GET request to REST API with email
+        let res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+          method: "POST",
+          // all information being sent
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+          // header neccessary for correct sending of information
+          headers: {
+            "Content-type": "application/json",
+          },
+          credentials: "include",
+        });
+        // parse return statement from backend
+        let resJson = await res.json();
+        console.log(resJson);
+        if (res.status === 200) {
+          // if response is successful, reset states
+          setEmail("");
+          setPassword("");
+          // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
+          await setUserSession(resJson.userInfo);
+          console.log("Login form done.");
+          // alert(resJson.msg);
+          // route to homepage
+          handleHome();
+        } else if (res.status === 400) {
+          // alert(resJson.msg);
+          console.log(resJson.msg);
+        } else {
+          // some debug commands
+          console.log("Form returned error from backend.");
+          console.log(resJson);
+          // alert(resJson.msg);
+        }
       } else if (res.status === 400) {
         //alert(resJson.msg);
         console.log(resJson.msg);
