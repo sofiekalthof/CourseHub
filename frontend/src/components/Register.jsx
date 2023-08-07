@@ -62,10 +62,6 @@ export default function Register() {
       let resJson = await res.json();
 
       if (res.status === 200) {
-        // if response is successful, reset states
-        setUserName("");
-        setEmail("");
-        setPassword("");
         // some debug commands
         console.log("Form done.");
         //alert("User added");
