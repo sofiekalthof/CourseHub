@@ -26,6 +26,8 @@ exports.login = async (req, res) => {
       // attach new session to express-session
       req.session.user = userSession;
 
+      console.log("current session: ", req.session.user);
+
       // status, message and new session (as a cookie) sent to frontend
       return res.status(200).json({
         msg: "login done",
