@@ -11,6 +11,9 @@ const port = 3600;
 // Create Express app
 const app = express();
 
+// magic?
+app.set("trust proxy", 1);
+
 // CORS configuration
 const corsOptions = {
   origin: "http://localhost:5173",
