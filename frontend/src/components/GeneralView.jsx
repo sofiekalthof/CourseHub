@@ -1,5 +1,5 @@
 import * as React from "react";
-import ApexTimelineScatter from "./ApexTimelineScatter";
+import Timeline from "./Timeline";
 import AssignmentList from "./AssignmentList";
 import CreateTask from "./CreateTask";
 import CreateMileStone from "./CreateMilestone";
@@ -11,9 +11,9 @@ import { useState } from "react";
  * to add milestones and tasks if the user is the owner.
  * @returns The GeneralView component is returning a JSX structure that includes a Grid container with
  * multiple Grid items. Inside each Grid item, there are various components being rendered, such as
- * Typography, CreateMileStone, ApexTimelineScatter, CreateTask, and AssignmentList.
+ * Typography, CreateMileStone, Timeline, CreateTask, and AssignmentList.
  */
-function GeneralView(props) {
+export default function GeneralView(props) {
   const [isOwner, setIsOwner] = useState(props.isOwner);
 
   return (
@@ -36,11 +36,11 @@ function GeneralView(props) {
         {/* Showing timeline */}
         <Grid item xs={12}>
           <Card variant="outlined" sx={{ justifyContent: "center" }}>
-            <ApexTimelineScatter
+            <Timeline
               tasks={props.selectedCourse.timeline.tasks}
               milestones={props.selectedCourse.timeline.milestones}
               user={props.user}
-            ></ApexTimelineScatter>
+            ></Timeline>
           </Card>
         </Grid>
         <Grid item xs={6.25} sm={9} md={9.85} lg={10.25}>
@@ -78,5 +78,3 @@ function GeneralView(props) {
     </>
   );
 }
-
-export default GeneralView;

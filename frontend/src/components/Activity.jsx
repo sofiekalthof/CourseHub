@@ -123,7 +123,7 @@ function determineTaskScorePerMonth(tasks, userDataForCourse) {
  * @returns The `Activity` component is returning a `Chart` component with the specified options,
  * series, type, and height.
  */
-function Activity(props) {
+export default function Activity(props) {
   const userDataForCourse = props.userDataForCourse;
   const tasks = props.tasks;
   const taskScoreList = determineTaskScorePerMonth(tasks, userDataForCourse);
@@ -174,4 +174,3 @@ function Activity(props) {
     </>
   );
 }
-export default Activity;

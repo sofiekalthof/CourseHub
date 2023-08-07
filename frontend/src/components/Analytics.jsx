@@ -32,7 +32,7 @@ function ShowActivity({ userDataForCourse, tasks }) {
  * multiple Grid items. Each Grid item contains different components such as Typography, Card,
  * ShowActivity, and Leaderboard.
  */
-function Analytics(props) {
+export default function Analytics(props) {
   // Get the data for logged in user for this course
   const userDataForThisCourse = props.userDataForCourse;
 
@@ -73,5 +73,3 @@ function Analytics(props) {
     </>
   );
 }
-
-export default Analytics;

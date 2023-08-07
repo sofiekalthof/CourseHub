@@ -1,8 +1,15 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
 
-
-function convertTaskDates(tasks, today){
+/**
+ * The function `convertTaskDates` takes in an array of tasks and today's date, and converts the task
+ * dates to a specific format for rendering in a chart.
+ * @returns an array of objects. Each object represents a type of task (either "Assignment" or "Quiz")
+ * and contains an array of task dates. Each task date is represented by an object with properties "x"
+ * (the date in milliseconds), "y" (a marker value), and "fillColor" (optional, used to set the color
+ * of the marker).
+ */
+function convertTaskDates(tasks, today) {
   let taskDates = [];
   let assignmentDates = [];
   let quizDates = [];
@@ -32,7 +39,15 @@ function convertTaskDates(tasks, today){
   return taskDates;
 }
 
-function convertMilestoneDates(milestones, today){
+/**
+ * The function `convertMilestoneDates` takes in an array of milestones and today's date, and converts
+ * the milestone dates into a format suitable for rendering in a chart.
+ * @returns an array of milestone dates. Each milestone date is an object with a name and data
+ * property. The data property contains an array of lecture dates and exam dates. Each lecture date and
+ * exam date is an object with x and y properties. The x property represents the date in milliseconds
+ * since January 1, 1970, and the y property represents the type of milestone.
+ */
+function convertMilestoneDates(milestones, today) {
   let milestoneDates = [];
   let lectureDates = [];
   let examDates = [];
@@ -75,12 +90,12 @@ function convertMilestoneDates(milestones, today){
   return milestoneDates;
 }
 /**
- * The function `ApexTimelineScatter` takes in tasks and milestones as props, converts the dates from
+ * The function `Timeline` takes in tasks and milestones as props, converts the dates from
  * the database into values for the chart, and renders a scatter chart using the ApexCharts library.
  * @returns a JSX element that renders a Chart component. The Chart component is configured with
  * options and series data, and it is of type "scatter". The height of the chart is set to 200.
  */
-export default function ApexTimelineScatter(props) {
+export default function Timeline(props) {
   const tasks = props.tasks;
   const milestones = props.milestones;
 
@@ -91,7 +106,7 @@ export default function ApexTimelineScatter(props) {
   const milestoneDates = convertMilestoneDates(milestones, today);
 
   const dataForChart = taskDates.concat(milestoneDates);
-  
+
   // add a point for today to chart
   dataForChart.push({
     name: "Today",
@@ -155,24 +170,9 @@ export default function ApexTimelineScatter(props) {
       },
       legend: {
         markers: {
-          fillColors: [
-            "#1E90FF",
-            "#00e4f0", //"#FFD700",
-            "#f000d0", // "#00EE76",
-            "#fa5502", // "#FF3030",
-            "#000000",
-          ],
+          fillColors: ["#1E90FF", "#00e4f0", "#f000d0", "#fa5502", "#000000"],
         },
       },
-      /*fill: {
-       type: 'image',
-       image:{
-           src: [l],
-           width: 20,
-           height: 20
-        }
-      },
-      */
     },
   };
 

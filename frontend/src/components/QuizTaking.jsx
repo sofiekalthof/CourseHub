@@ -18,7 +18,13 @@ import { useNavigate } from "react-router-dom";
 
 dayjs.extend(localizedFormat);
 
-// Function to return all courses in database (parsed for frontend)
+/**
+ * The function `GetTask` makes an API call to retrieve a specific task based on its ID.
+ * @returns a Promise that resolves to the response JSON if the status is 200 (OK), an object with
+ * status 401 and msg "Unauthorized" if the status is 401 (Unauthorized) and the response JSON msg is
+ * "Unauthorized", or an object with status 500 and msg "Not successful and authorized" for any other
+ * status code.
+ */
 async function GetTask(taskId) {
   // make API call to get all courses
   try {
@@ -50,9 +56,9 @@ async function GetTask(taskId) {
   }
 }
 
-function QuizTaking(props) {
-  // const testRerender = props.dataOfAllUsersForThisCourse;
-  // console.log("QuizTaking called wit Id: ", props.quizId);
+/* The React component called "QuizTaking" handles the functionality of taking a
+quiz. */
+export default function QuizTaking(props) {
   const navigate = useNavigate();
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
@@ -64,18 +70,11 @@ function QuizTaking(props) {
   const [open, setOpen] = useState(false);
 
   const quizId = props.quizId;
-  // console.log("quizId in QuizTaking: ", quizId);
   const [quiz, setQuiz] = useState();
 
   useEffect(() => {
-    // console.log("inUseEffect of QuizTaking");
     GetTask(quizId)
       .then((res) => {
-        console.log("res in QuizTaking: ", res);
-        // console.log(
-        //   "Array(quiz.questions.length).fill([]) in QuizTaking: ",
-        //   Array(quiz.questions.length).fill([])
-        // );
         setQuiz(res.task);
         setUserAnswers(Array(res.task.questions.length).fill([]));
       })
@@ -84,12 +83,13 @@ function QuizTaking(props) {
       });
   }, []);
 
+  /**
+   * The function handles changes in the user's selected answers by adding or removing the answer index
+   * based on whether the checkbox is checked or unchecked.
+   */
   const handleAnswerChange = (event) => {
-    // console.log("handleAnswerChange called");
     const answerIndex = parseInt(event.target.value);
     const isChecked = event.target.checked;
-    // console.log("answerIndex: ", answerIndex);
-    // console.log("isChecked: ", isChecked);
 
     setUserAnswers((prevUserAnswers) => {
       const updatedUserAnswers = prevUserAnswers.map((userAnswer, index) => {
@@ -112,6 +112,10 @@ function QuizTaking(props) {
     });
   };
 
+  /**
+   * The function `handleNextQuestion` updates the current question index and shows the summary if it is
+   * the last question.
+   */
   const handleNextQuestion = () => {
     if (currentQuestionIndex === quiz.questions.length - 1) {
       setShowSummary(true);
@@ -120,16 +124,23 @@ function QuizTaking(props) {
     }
   };
 
+  /**
+   * The function `handlePreviousQuestion` decreases the value of `currentQuestionIndex` by 1 if it is
+   * greater than 0.
+   */
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
+  /**
+   * The function `handleBackToQuizList` takes a score as a parameter and calls a function `takeTask`
+   * with the selected course timeline ID, quiz ID, score, and null value. It then checks the response
+   * status and message, and if unauthorized, alerts the user, logs them out, and navigates to the home
+   * page. Otherwise, it closes a modal and triggers a rerender of the course page.
+   */
   const handleBackToQuizList = (score) => {
-    console.log("handleBackToQuizList in QuizTaking called");
-    // console.log("score: ", score);
-    // console.log("inUseEffect of QuizTaking");
     props
       .takeTask(props.selectedCourseTimelineId, props.quizId, score, null)
       .then((res) => {
@@ -139,9 +150,7 @@ function QuizTaking(props) {
           setUserSession(false);
           navigate("/");
         } else {
-          console.log("closing the modal: ");
           setOpen(false);
-          console.log("re-rendering");
           props.coursePageRerender(!props.coursePageRerenderValue);
         }
       })
@@ -150,12 +159,12 @@ function QuizTaking(props) {
       });
   };
 
+  /**
+   * The function calculates the score of a user's answers by comparing them to the correct answers in a
+   * quiz.
+   * @returns The function `calculateScore` returns the score, which is the number of correct answers.
+   */
   const calculateScore = () => {
-    // console.log("calculateScore");
-    // console.log("userAnswers: ", userAnswers);
-    // console.log("quiz: ", quiz);
-    // console.log("quiz.questions: ", quiz.questions);
-
     let score = 0;
     userAnswers.forEach((userAnswer, index) => {
       if (
@@ -169,18 +178,18 @@ function QuizTaking(props) {
     return score;
   };
 
+  /**
+   * The handleStartQuiz function sets the quizStarted state to true.
+   */
   const handleStartQuiz = () => {
     setQuizStarted(true);
   };
 
+  /* The function called `renderQuizQuestions` returns JSX elements to render all quiz
+question. */
   const renderQuizQuestions = () => {
-    // console.log("quiz: ", quiz);
-    // console.log("currentQuestionIndex: ", currentQuestionIndex);
-    // console.log("userAnswers: ", userAnswers);
     const currentQuestion = quiz.questions[currentQuestionIndex];
-    console.log("currentQuestion: ", currentQuestion);
 
-    // console.log("currentQuestion: ", currentQuestion);
     const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
     const isFirstQuestion = currentQuestionIndex === 0;
 
@@ -243,8 +252,8 @@ function QuizTaking(props) {
     );
   };
 
+  /* The function called `renderQuizSummary` is responsible for rendering a summary of a completed quiz. */
   const renderQuizSummary = () => {
-    console.log("renderQuizSummary");
     const score = calculateScore();
 
     return (
@@ -321,16 +330,22 @@ function QuizTaking(props) {
     );
   };
 
+  /**
+   * The handleClick function sets the state variable "open" to true.
+   */
   const handleClick = () => {
     setOpen(true);
   };
 
+  /**
+   * The function handleClose sets the value of the variable "open" to false.
+   */
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <div>
+    <>
       <Button variant="text" onClick={handleClick}>
         Take Quiz
       </Button>
@@ -387,8 +402,6 @@ function QuizTaking(props) {
           </Fade>
         </Modal>
       )}
-    </div>
+    </>
   );
 }
-
-export default QuizTaking;

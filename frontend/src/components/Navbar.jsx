@@ -20,7 +20,7 @@ import { UserContext } from "../App";
 const API_URL = "http://localhost:3600";
 
 /* The `Navbar` function is a React component that represents the navigation bar of a web application.
-It renders a responsive app bar with a logo, a search icon, and an avatar icon. */
+It renders a responsive app bar with a logo and an avatar icon. */
 export default function Navbar() {
   const navigate = useNavigate();
   const handleOnClick = () => {
@@ -44,11 +44,10 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-
-/**
- * The handleLogout function logs the user out by resetting the anchor element, destroying the session
- * in the backend, resetting the user session in the frontend, and displaying an alert message.
- */
+  /**
+   * The handleLogout function logs the user out by resetting the anchor element, destroying the session
+   * in the backend, resetting the user session in the frontend, and displaying an alert message.
+   */
   const handleLogout = async () => {
     // reset anchor
     setAnchorEl(null);

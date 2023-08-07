@@ -1,4 +1,3 @@
-// Log-In Form component
 import React, { useState } from "react";
 import { Button, TextField, Grid, Box } from "@mui/material";
 import CourseHubLogo from "../assets/CourseHubLogo.png";
@@ -6,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
+/**
+ * The `Login` function is a React component that renders a form for user login and handles
+ * form submission by making an API call to login the user.
+ * @returns The function `Login` returns a JSX element that represents a form for user login.
+ */
 export default function Login() {
   // define states
   const [email, setEmail] = useState("");
@@ -19,7 +23,12 @@ export default function Login() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
 
-  // function to handle submitting the form
+  /**
+   * The handleSubmit function is used to handle form submission, validate the email format, send a POST
+   * request to a REST API with the email and password, handle the response, and perform necessary
+   * actions based on the response status.
+   * @returns The code is returning a Promise that resolves to the response from the API.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 

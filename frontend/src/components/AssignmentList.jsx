@@ -30,11 +30,10 @@ import QuizTaking from "./QuizTaking";
 import AssignmentTaking from "./AssignmentTaking";
 dayjs.extend(localizedFormat);
 
-// Determine status of one task
 /* The `ShowTaskStatus` function is a helper function that determines the status of a task based on the
 `taskStatus` parameter. It checks the value of `taskStatus.taskStatus` and returns a corresponding
 icon component wrapped in a tooltip component. */
-function ShowTaskStatus({taskStatus, taskDate}) {
+function ShowTaskStatus({ taskStatus, taskDate }) {
   const today = new Date();
   if (taskStatus.length == 0) {
     return;
@@ -57,7 +56,7 @@ function ShowTaskStatus({taskStatus, taskDate}) {
       </>
     );
   }
-  if (taskStatus== "done") {
+  if (taskStatus == "done") {
     return (
       <>
         <Tooltip title="Done">
@@ -68,19 +67,26 @@ function ShowTaskStatus({taskStatus, taskDate}) {
   }
 }
 
-/* The below code is a React component called `AssignmentList`. It receives props such as `tasks`,
+/* A React component called `AssignmentList`. It receives props such as `tasks`,
 `userDataForCourse`, and `coursePageRerenderValue`. */
-function AssignmentList(props) {
+export default function AssignmentList(props) {
   const today = new Date();
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
   const taskStatusData =
     userData.length > 0 ? userData[0].usertimeline.usertimeline : [];
   const [areDatesDescending, setAreStatesDescending] = useState(true);
-
+  const [dates, setDates] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   // State to store the filter type
   const [filterType, setFilterType] = useState("");
-  // Filter function to filter tasks based on type (quiz/assignment)
+  /**
+   * The function `filterTasks` filters tasks based on a specified filter type (quiz/assignment).
+   * @returns a boolean value. If no filter type is selected (filterType is an empty string), it will
+   * return true. Otherwise, it will compare the task's type (converted to lowercase) with the filterType
+   * (also converted to lowercase) and return true if they match, and false otherwise.
+   */
   const filterTasks = (task) => {
     if (filterType === "") {
       return true; // If no filter type is selected, show all tasks
@@ -109,7 +115,6 @@ function AssignmentList(props) {
         quizstatus: task.quizstatus,
         taskstatus: taskStatusData,
       });
-      console.log("taskstatus1: ", taskStatusData);
     } else {
       filteredDatesWithConvertedDates.push({
         type: task.type,
@@ -120,16 +125,12 @@ function AssignmentList(props) {
         quizstatus: task.quizstatus,
         taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
       });
-
-      console.log(
-        "taskstatus2: ",
-        taskStatusData.userTasksStats[index].userTaskSatus
-      );
     }
   });
-  console.log("tasks in AssignmentList: ", tasks);
-  console.log(props.coursePageRerenderValue);
-  const [dates, setDates] = useState([]);
+
+  /* The `useEffect` hook is used to perform side effects in a React component. In this case, the
+`useEffect` hook is used to update the `dates` state variable whenever the
+`props.coursePageRerenderValue` changes. */
   useEffect(() => {
     if (areDatesDescending) {
       setDates(filteredDatesWithConvertedDates.sort((a, b) => b.data - a.data));
@@ -137,9 +138,11 @@ function AssignmentList(props) {
       setDates(filteredDatesWithConvertedDates.sort((a, b) => a.data - b.data));
     }
   }, [props.coursePageRerenderValue]);
-  //let dates = filteredDatesWithConvertedDates;
-  console.log("dates in AssignmentList: ", dates);
 
+  /**
+   * The function `filterDates` sorts an array of dates in either ascending or descending order based
+   * on a boolean flag.
+   */
   const filterDates = () => {
     if (areDatesDescending) {
       setAreStatesDescending(false);
@@ -152,15 +155,16 @@ function AssignmentList(props) {
     }
   };
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
-  // Function for showing the dropdown list for creating new task
+  /**
+   * The handleClick function sets the anchor element to the current target of the event.
+   */
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // Function for closing dropdown
+  /**
+   * The function handleClose sets the anchor element to null, effectively closing the dropdown.
+   */
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -236,7 +240,10 @@ function AssignmentList(props) {
                     .map((task, index) => (
                       <TableRow key={task.id}>
                         <TableCell>
-                          <ShowTaskStatus taskStatus={task.taskstatus} taskDate={task.data}/>
+                          <ShowTaskStatus
+                            taskStatus={task.taskstatus}
+                            taskDate={task.data}
+                          />
                         </TableCell>
                         <TableCell>{task.dateToString}</TableCell>
                         <TableCell>{task.type}</TableCell>
@@ -293,5 +300,3 @@ function AssignmentList(props) {
     </>
   );
 }
-
-export default AssignmentList;
