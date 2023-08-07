@@ -16,7 +16,11 @@ app.set("trust proxy", 1);
 
 // CORS configuration
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://64d0afd3f1f1824bc2e8aa63--guileless-souffle-4833ce.netlify.app",
+    "https://main--guileless-souffle-4833ce.netlify.app",
+  ],
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
   credentials: true, // needed to allow cookies to be sent between frontend/backend
 };
