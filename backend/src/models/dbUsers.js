@@ -1,4 +1,4 @@
-const mongoose = require("../dbConnection.js");
+const mongoose = require("./dbConnection.js");
 
 // Initialize parameters
 const collectionName = process.env.DB_COLLECTION_USERS;
@@ -18,7 +18,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // TODO: other user-analytics?
 });
 
 // create model from schema

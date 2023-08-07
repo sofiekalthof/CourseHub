@@ -1,5 +1,4 @@
-const dbModule = require("../dbConnection.js");
-const mongoose = dbModule.mongoose;
+const mongoose = require("../models/dbConnection.js");
 
 const fileSchema = new mongoose.Schema({
   originalFileName: {

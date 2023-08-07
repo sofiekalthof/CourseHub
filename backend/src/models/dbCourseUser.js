@@ -1,5 +1,5 @@
 // Many-to-Many relation between a course and its subscribers
-const mongoose = require("../dbConnection.js");
+const mongoose = require("./dbConnection.js");
 
 // Initialize parameters
 const collectionName = process.env.DB_COLLECTION_COURSEUSERS;

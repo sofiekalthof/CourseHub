@@ -1,5 +1,4 @@
-const dbModule = require("../dbConnection.js");
-const mongoose = dbModule.mongoose;
+const mongoose = require("../models/dbConnection.js");
 
 // create mongoose schema
 const userMilestoneSatusSchema = new mongoose.Schema({
