@@ -38,7 +38,7 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
 function determineScoreOfUser(userTaskStatus) {
   let userscore = 0;
   userTaskStatus.map((status) => {
-    if (status.userTaskSatus.includes("done")) {
+    if (status.userTaskStatus.includes("done")) {
       userscore += 1;
     }
   });
@@ -108,4 +108,3 @@ export default function Leaderboard(props) {
     </>
   );
 }
-

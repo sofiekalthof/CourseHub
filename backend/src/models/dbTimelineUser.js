@@ -1,6 +1,6 @@
 const mongoose = require("./dbConnection.js");
-const userTaskSatusSchema = require("../schemas/dbUserTaskStatus.js");
-const userMilestoneSatusSchema = require("../schemas/dbUserMilestoneStatus.js");
+const userTaskStatusSchema = require("../schemas/dbUserTaskStatus.js");
+const userMilestoneStatusSchema = require("../schemas/dbUserMilestoneStatus.js");
 
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_TIMELINEUSERS;
@@ -20,13 +20,13 @@ const TimelineUserSchema = new mongoose.Schema({
   // tasks' status for a user
   userTasksStats: [
     {
-      type: userTaskSatusSchema,
+      type: userTaskStatusSchema,
     },
   ],
   // milestones' status for a user
   userMilestonesStats: [
     {
-      type: userMilestoneSatusSchema,
+      type: userMilestoneStatusSchema,
     },
   ],
 });

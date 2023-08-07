@@ -11,14 +11,14 @@ const fileSchema = new mongoose.Schema({
 });
 
 // create mongoose schema
-const userTaskSatusSchema = new mongoose.Schema({
+const userTaskStatusSchema = new mongoose.Schema({
   // reference to original task
   originalTaskId: {
     type: mongoose.Types.ObjectId,
     ref: "TaskModel",
   },
   // user's status for the task
-  userTaskSatus: {
+  userTaskStatus: {
     type: String,
     enum: ["due", "missed", "done"],
     default: "due",
@@ -36,4 +36,4 @@ const userTaskSatusSchema = new mongoose.Schema({
 });
 
 // export schema only, since it is needed for defining the TimelineUser
-module.exports = userTaskSatusSchema;
+module.exports = userTaskStatusSchema;

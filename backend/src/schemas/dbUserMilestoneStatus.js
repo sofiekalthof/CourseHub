@@ -1,14 +1,14 @@
 const mongoose = require("../models/dbConnection.js");
 
 // create mongoose schema
-const userMilestoneSatusSchema = new mongoose.Schema({
+const userMilestoneStatusSchema = new mongoose.Schema({
   // reference to original milestone
   originalMilestoneId: {
     type: mongoose.Types.ObjectId,
     ref: "MilestoneModel",
   },
   // user's status for the milestone
-  userMilestoneSatus: {
+  userMilestoneStatus: {
     type: String,
     enum: ["due", "missed", "done"],
     default: "due",
@@ -16,4 +16,4 @@ const userMilestoneSatusSchema = new mongoose.Schema({
 });
 
 // export schema only, since it is needed for defining the TimelineUser
-module.exports = userMilestoneSatusSchema;
+module.exports = userMilestoneStatusSchema;

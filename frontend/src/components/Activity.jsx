@@ -26,73 +26,73 @@ function determineTaskScorePerMonth(tasks, userDataForCourse) {
     let userTaskStatusData = userDataForCourse[0].usertimeline.usertimeline;
     if (
       taskTime.getMonth() + 1 == 1 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       janScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 2 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       febScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 3 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       marScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 4 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       aprScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 5 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       mayScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 6 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       junScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 7 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       julScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 8 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       augScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 9 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       sepScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 10 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       octScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 11 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       novScore += 1;
     }
     if (
       taskTime.getMonth() + 1 == 12 &&
-      userTaskStatusData.userTasksStats[index].userTaskSatus.includes("done")
+      userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")
     ) {
       decScore += 1;
     }
