@@ -6,8 +6,6 @@ import React, { createContext, useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Route, Routes } from "react-router-dom";
-// TODO: move url to .env
-const API_URL = "http://localhost:3600";
 
 // new MUI theme with the mock-up website colors
 const themeDarkGreen = createTheme({
@@ -50,7 +48,7 @@ export default function App() {
     }
     try {
       // check if user is authenticated
-      const res = await fetch(`${API_URL}/isAuth`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/isAuth`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",

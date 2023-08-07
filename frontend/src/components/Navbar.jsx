@@ -16,9 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-// TODO: move url to .env
-const API_URL = "http://localhost:3600";
-
 /* The `Navbar` function is a React component that represents the navigation bar of a web application.
 It renders a responsive app bar with a logo, a search icon, and an avatar icon. */
 export default function Navbar() {
@@ -44,17 +41,18 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-
-/**
- * The handleLogout function logs the user out by resetting the anchor element, destroying the session
- * in the backend, resetting the user session in the frontend, and displaying an alert message.
- */
+  /**
+   * The handleLogout function logs the user out by resetting the anchor element, destroying the session
+   * in the backend, resetting the user session in the frontend, and displaying an alert message.
+   */
   const handleLogout = async () => {
     // reset anchor
     setAnchorEl(null);
 
     // destroy the session in backend
-    const res = await fetch(`${API_URL}/logout`, { credentials: "include" });
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
+      credentials: "include",
+    });
 
     // parse return statement from backend
     let resJson = await res.json();
