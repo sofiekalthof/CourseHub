@@ -94,6 +94,22 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
   ```
   4. Open `http://localhost:5173` to view it in the browser (best working with Chrome)
 
+## How to deploy
+- ### Deploy backend
+- ### Deploy frontend
+
+## Technical architecture
+- MERN technology stack:
+  - MongoDB (with Mongoose)
+  - Express
+  - React
+  - Node.js
+
+- Client-server architecture
+  - Database (Mongo DB)
+  - Backend server (Express + Node.js)
+  - Frontend server (React)
+
 ## Technologies
 - [MongoDB](https://www.npmjs.com/package/mongodb)
 - [Mongoose](https://www.npmjs.com/package/mongoose)
@@ -112,7 +128,6 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
 - [Live Demo](https://youtu.be/w5ySgMsMuqw)
 - [Deployed Backend](https://backendtest-juq7.onrender.com/)
 - [Deployed Frontend](https://guileless-souffle-4833ce.netlify.app/)
- 
 
 ## Group members
 - [Mahsa Alavi](https://github.com/mhsalavi)
