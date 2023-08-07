@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Box, Grid, TextField, Button } from "@mui/material";
 
-const API_URL = "http://localhost:3600";
-
 export default function Register() {
   // define states
   const [userName, setUserName] = useState("");
@@ -31,7 +29,7 @@ export default function Register() {
     // make API call
     try {
       // send post request to REST API
-      let res = await fetch(`${API_URL}/register`, {
+      let res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
         method: "POST",
         // all information being sent
         body: JSON.stringify({
