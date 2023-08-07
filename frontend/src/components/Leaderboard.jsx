@@ -20,7 +20,7 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   dataOfAllUsersForThisCourse.map((user) => {
     // extract useful information first
     let taskStatusData = user.usertimeline.usertimeline.userTasksStats;
-    const userscore = determineScoreOfUser(taskStatusData)
+    const userscore = determineScoreOfUser(taskStatusData);
     usersWithScore.push({
       name: user.username,
       id: user.subscriber,
@@ -47,7 +47,7 @@ function determineScoreOfUser(userTaskStatus) {
 
 /* The `Leaderboard` function is a React component that displays a leaderboard table. It takes in a
 `props` object as a parameter, which contains the `dataOfAllUsersForThisCourse` array. */
-function Leaderboard(props) {
+export default function Leaderboard(props) {
   const dataOfAllUsersForThisCourse = props.dataOfAllUsersForThisCourse;
   const usersWithScore = createSortedListWithScore(dataOfAllUsersForThisCourse);
 
@@ -109,4 +109,3 @@ function Leaderboard(props) {
   );
 }
 
-export default Leaderboard;

@@ -89,9 +89,9 @@ async function GetAllCourseIdDescs() {
   }
 }
 
-/* The above code is a React component called `HomePage`. It is responsible for rendering the homepage
-of a web application. */
-function HomePage() {
+/* The React component called `HomePage` is responsible for rendering the homepage
+of the web application. */
+export default function HomePage() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
   const navigate = useNavigate();
@@ -101,7 +101,9 @@ function HomePage() {
   const [error, setError] = useState(false);
   const [courseIdDescs, setCourseIdDescs] = useState();
 
-  // useEffect first time it is rendering
+  /* The `useEffect` hook is used to perform side effects in a React component. In this case, it is used
+ to fetch all course IDs and descriptions from the API and update the state variables
+ `courseIdDescs`, `loading`, and `error` accordingly. */
   useEffect(() => {
     // get all courses
     GetAllCourseIdDescs()
@@ -130,29 +132,44 @@ function HomePage() {
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
 
-  // Function for setting the course title
+  /**
+   * The `handleNewCourse` function updates the `courseName` state variable with the value of the target
+   * element.
+   */
   const handleNewCourse = (e) => {
     setCourseName(e.target.value);
   };
 
-  // Function for setting the course description
+  /**
+   * The function `handleCourseDescription` updates the state variable `courseDescription` with the value
+   * of the target element.
+   */
   const handleCourseDescription = (e) => {
     setCourseDescription(e.target.value);
   };
 
-  // Function for opening the Dialog
+  /**
+   * The `handleClickOpen` function sets the `open` state to true.
+   */
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   // Function for canceling te creation of a new course
+  /**
+   * The `handleClickCancel` function sets the `open` state to false and clears the course name and
+   * description.
+   */
   const handleClickCancel = () => {
     setOpen(false);
     setCourseName("");
     setCourseDescription("");
   };
 
-  // Function for saving a new course
+  /**
+   * The `handleClickSave` function creates a new course in the database, updates the list of all courses,
+   * and resets the input fields and state variables.
+   */
   const handleClickSave = () => {
     // create new course in db
     CreateCourse(courseName, courseDescription, userSession.id)
@@ -246,4 +263,3 @@ function HomePage() {
     </>
   );
 }
-export default HomePage;

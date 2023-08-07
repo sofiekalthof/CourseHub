@@ -1,16 +1,25 @@
-// Register Form component
 import React, { useState } from "react";
 import { Box, Grid, TextField, Button } from "@mui/material";
 
 const API_URL = "http://localhost:3600";
 
+/**
+ * The `Register` function is a React component that renders a form for user registration and handles
+ * form submission by making an API call to register the user.
+ * @returns The function `Register` returns a JSX element that represents a form for user registration.
+ */
 export default function Register() {
   // define states
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // function to handle submitting the form
+  /**
+   * The handleSubmit function is used to handle the form submission, including
+   * validation of password and email fields, making an API call to register a user, and handling
+   * different response statuses.
+   * @returns The function `handleSubmit` does not explicitly return anything.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 

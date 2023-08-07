@@ -11,12 +11,17 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 /* The `Courses` function is a React component that renders a list of courses. */
-function Courses(props) {
+export default function Courses(props) {
   const courseIdDescs = props.courseIdDescs;
   const userData = props.user;
 
   // Navigate to the course page of selected course
   const navigate = useNavigate();
+
+  /**
+   * The handleOnClick function navigates to a specific course page with the course ID and user data as
+   * state.
+   */
   const handleOnClick = (course) => {
     navigate(`/course/${course._id}`, {
       state: { courseId: course._id, user: userData },
@@ -24,13 +29,15 @@ function Courses(props) {
     });
   };
 
-  // Function for searching a course
   const [searchInput, setSearchInput] = useState("");
+  /**
+   * The handleChange function updates the value of the search input based on the user's input.
+   */
   const handleChange = (e) => {
     setSearchInput(e.target.value);
   };
 
-  // Function for filtering the courses
+  /* The code is filtering the courses based on the user's search input. */
   const filteredData = Object.values(courseIdDescs).filter((el) => {
     //if no input the return the original
     if (searchInput === "") {
@@ -42,8 +49,6 @@ function Courses(props) {
       return el.name.toLowerCase().includes(searchInput.toLowerCase());
     }
   });
-
-  // console.log("filteredData in courses.jsx: ", filteredData);
 
   return (
     <>
@@ -114,5 +119,3 @@ function Courses(props) {
     </>
   );
 }
-
-export default Courses;

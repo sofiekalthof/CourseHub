@@ -5,10 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
+/* The code is defining a React functional component called `LandingPage`. This component represents
+the landing page of the application. */
 export default function LandingPage() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
   const navigate = useNavigate();
+  /**
+   * The handleRegister function checks if the user is logged in and navigates to the home page if they
+   * are, otherwise it navigates to the register/login page.
+   */
   const handleRegister = () => {
     if (userSession.id) navigate("/home");
     else navigate("/registerlogin");

@@ -5,9 +5,14 @@ import Register from "./Register";
 import { Box, Tabs, Tab, Grid } from "@mui/material";
 import { TabPanel, TabContext } from "@mui/lab";
 
+/* The code is defining a React functional component called `RegisterLogInPage`. This component renders
+a login and registration page with tabs for switching between the two forms. */
 export default function RegisterLogInPage() {
   // state related to using Tabs
   const [value, setValue] = useState("SignIn");
+  /**
+   * The handleChange function is used to update the value of a variable based on user input.
+   */
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

@@ -27,7 +27,13 @@ import { useNavigate } from "react-router-dom";
 
 dayjs.extend(localizedFormat);
 
-// Function to return all courses in database (parsed for frontend)
+/**
+ * The function `GetTask` makes an API call to retrieve a specific task based on its ID.
+ * @returns a Promise that resolves to the response JSON if the status is 200 (OK), an object with
+ * status 401 and msg "Unauthorized" if the status is 401 (Unauthorized) and the response JSON msg is
+ * "Unauthorized", or an object with status 500 and msg "Not successful and authorized" for any other
+ * status code.
+ */
 async function GetTask(taskId) {
   // make API call to get all courses
   try {
@@ -59,9 +65,14 @@ async function GetTask(taskId) {
   }
 }
 
-function AssignmentTaking(props) {
-  // const testRerender = props.dataOfAllUsersForThisCourse;
-  // console.log("QuizTaking called wit Id: ", props.quizId);
+/* A React component called "AssignmentTaking" responsible for rendering a
+button that allows the user to take an assignment. When the button is clicked, a modal is opened
+that displays the details of the assignment, including its title, deadline, description, and any
+uploaded files. The user can also provide a description for their answer and upload a file. Once the
+user finishes the assignment by clicking the "Finish Assignment" button, the assignment details and
+the uploaded answer file are sent to the backend for processing. If the submission is successful, a
+summary of the assignment submission is displayed. */
+export default function AssignmentTaking(props) {
   const navigate = useNavigate();
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
@@ -71,18 +82,14 @@ function AssignmentTaking(props) {
   const [showSummary, setShowSummary] = useState(false);
   const [answerFile, setAnswerFile] = useState(null);
   const assignmentId = props.assignmentId;
-  // console.log("quizId in QuizTaking: ", quizId);
   const [assignment, setAssignment] = useState();
 
+  /* The `useEffect` hook is used to perform side effects in a React component. In this case, the
+`useEffect` hook is used to make an API call to retrieve a specific task based on its ID
+(`assignmentId`). */
   useEffect(() => {
-    // console.log("inUseEffect of QuizTaking");
     GetTask(assignmentId)
       .then((res) => {
-        console.log("res in AssignmentTaking: ", res);
-        // console.log(
-        //   "Array(quiz.questions.length).fill([]) in QuizTaking: ",
-        //   Array(quiz.questions.length).fill([])
-        // );
         setAssignment(res.task);
       })
       .catch((err) => {
@@ -90,19 +97,19 @@ function AssignmentTaking(props) {
       });
   }, []);
 
+  /**
+   * The function `handleDescriptionChange` updates the `description` state with the value of the event
+   * target.
+   */
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
 
-  // const handleFileChange = (event) => {
-  //   setFile(event.target.files[0]);
-  // };
-
+  /**
+   * The function `handleFinishAssignment` handles the submission of an assignment by sending the
+   * necessary data to the server.
+   */
   const handleFinishAssignment = () => {
-    console.log("handleFinishAssignment in AssignmentTaking called");
-    // console.log("score: ", score);
-    // console.log("inUseEffect of QuizTaking");
-    // create form data to give to backend (needed for uploading files)
     const formData = new FormData();
     formData.append("timelineId", props.selectedCourseTimelineId);
     formData.append("taskId", props.assignmentId);
@@ -113,7 +120,6 @@ function AssignmentTaking(props) {
     props
       .takeTask(props.selectedCourseTimelineId, props.assignmentId, 0, formData)
       .then((res) => {
-        console.log("res: ", res);
         if (res.status === 401 && res.msg === "Unauthorized") {
           alert(res.msg);
           setUserSession(false);
@@ -127,18 +133,27 @@ function AssignmentTaking(props) {
       });
   };
 
+  /**
+   * The function `handleAnswerFileChange` is used to handle the change event of a file input and update
+   * the state variable `answerFile` with the uploaded file.
+   */
   const handleAnswerFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setAnswerFile(uploadedFile);
   };
 
+  /**
+   * The function handles closing a modal and triggering a re-render of the course page.
+   */
   const handleBackToAssignmentList = () => {
-    console.log("closing the modal: ");
     setOpen(false);
-    console.log("re-rendering");
     props.coursePageRerender(!props.coursePageRerenderValue);
   };
 
+  /* The `renderAssignmentSummary` function is a helper function that returns JSX code for rendering a
+ summary of the assignment submission. It displays the assignment submission details, including the
+ description and the name of the uploaded answer file. It also includes a button to go back to the
+ assignment list. */
   const renderAssignmentSummary = () => {
     return (
       <Box sx={{ p: 2 }}>
@@ -149,7 +164,7 @@ function AssignmentTaking(props) {
           Description: {description}
         </Typography>
         <Typography variant="body1" gutterBottom>
-           Answer File: {answerFile && answerFile.name}
+          Answer File: {answerFile && answerFile.name}
         </Typography>
         <Box mt={2}>
           <Button variant="contained" onClick={handleBackToAssignmentList}>
@@ -160,16 +175,22 @@ function AssignmentTaking(props) {
     );
   };
 
+  /**
+   * The handleClick function sets the state variable "open" to true.
+   */
   const handleClick = () => {
     setOpen(true);
   };
 
+  /**
+   * The function handleClose sets the value of the variable "open" to false.
+   */
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <div>
+    <>
       <Button variant="text" onClick={handleClick}>
         Take Assignment
       </Button>
@@ -300,8 +321,6 @@ function AssignmentTaking(props) {
           </Fade>
         </Modal>
       )}
-    </div>
+    </>
   );
 }
-
-export default AssignmentTaking;

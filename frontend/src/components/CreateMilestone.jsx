@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
  * dialog to input the milestone type and date, and save it.
  * @returns JSX elements, specifically a Button component and a Dialog component.
  */
-function CreateMileStone(props) {
+export default function CreateMileStone(props) {
   const navigate = useNavigate();
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
@@ -35,19 +35,27 @@ function CreateMileStone(props) {
   const [milestoneType, setMilestoneType] = useState("");
   const [date, setDate] = useState(dayjs());
 
-  // Function for opening the dialog
+/**
+ * The `handleClickOpen` function sets the `open` state to true.
+ */
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // Function for canceling the milestone creation
+/**
+ * The `handleClickCancel` function sets the open state to false, clears the milestoneType state, and
+ * sets the date state to the current day.
+ */
   const handleClickCancel = () => {
     setOpen(false);
     setMilestoneType("");
     setDate(dayjs());
   };
 
-  // Function for saving the milestone
+/**
+ * The `handleClickSave` function is used to create and save a milestone, and then perform some actions
+ * based on the response.
+ */
   const handleClickSave = () => {
     props
       .createAndSaveMilestone(
@@ -77,7 +85,9 @@ function CreateMileStone(props) {
       });
   };
 
-  // Function for selecting milestone type
+/**
+ * The handleChange function updates the milestoneType state based on the value of the event target.
+ */
   const handleChange = (event) => {
     setMilestoneType(event.target.value);
   };
@@ -134,4 +144,3 @@ function CreateMileStone(props) {
   }
 }
 
-export default CreateMileStone;

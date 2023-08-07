@@ -8,15 +8,11 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   FormControl,
   FormControlLabel,
-  InputLabel,
-  Select,
   TextField,
   Checkbox,
   Typography,
-  Card,
   List,
   ListItem,
   ListItemText,
@@ -29,19 +25,18 @@ import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-// Function for showing the create new button
-function CreateTask(props) {
+/* A React component called "CreateTask" that allows the user to create new tasks,
+specifically quizzes and assignments. */
+export default function CreateTask(props) {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
   const navigate = useNavigate();
-  // Quizz Creation start
+  // Quiz Creation start
   // State variables
   const [openQuiz, setQuizOpen] = useState(false);
   const [quizTitle, setQuizTitle] = useState("");
@@ -57,12 +52,17 @@ function CreateTask(props) {
   const [errorQuiz, setQuizError] = useState("");
   const [deadlineQuiz, setQuizDeadline] = useState(null);
 
-  // Function to open the dialog
+  /**
+   * The function `handleQuizOpen` sets the state variable `quizOpen` to `true`.
+   */
   const handleQuizOpen = () => {
     setQuizOpen(true);
   };
 
-  // Function to close the dialog
+  /**
+   * The function `handleQuizClose` is used to reset the state variables related to a quiz and close the
+   * quiz.
+   */
   const handleQuizClose = () => {
     setQuizOpen(false);
     setQuizTitle("");
@@ -79,15 +79,24 @@ function CreateTask(props) {
     setAnchorEl(null); // close drop-down
   };
 
-  // Function to handle quiz title change
+  /**
+   * The function `handleQuizTitleChange` updates the state variable `quizTitle` with the value of the
+   * input field.
+   */
   const handleQuizTitleChange = (event) => {
     setQuizTitle(event.target.value);
   };
+  /**
+   * The function `handleQuizDeadlineChange` sets the quiz deadline to the provided date.
+   */
   const handleQuizDeadlineChange = (date) => {
     setQuizDeadline(date);
   };
 
-  // Function to handle question text change
+  /**
+   * The function `handleQuestionTextChange` updates the text of a specific question in an array of
+   * questions.
+   */
   const handleQuestionTextChange = (value, questionId) => {
     // Update the text of the specific question
     const updatedQuestions = questions.map((question) => {
@@ -99,7 +108,9 @@ function CreateTask(props) {
     setQuestions(updatedQuestions);
   };
 
-  // Function to handle answer text change
+  /**
+   * The function handles the change in answer text for a specific question in a React component.
+   */
   const handleAnswerTextChange = (event, questionId, answerIndex) => {
     // Update the answer text of the specific question
     const updatedQuestions = questions.map((question) => {
@@ -113,7 +124,9 @@ function CreateTask(props) {
     setQuestions(updatedQuestions);
   };
 
-  // Function to handle correct answer change
+  /**
+   * The function handles the change of the correct answer for a specific question in a React component.
+   */
   const handleCorrectAnswerChange = (event, questionId, answerIndex) => {
     // Update the correct answer indices of the specific question
     const updatedQuestions = questions.map((question) => {
@@ -133,31 +146,19 @@ function CreateTask(props) {
     setQuestions(updatedQuestions);
   };
 
-  // Function to handle question file change
+  /**
+   * The function handles the change event when a file is uploaded for a specific question, checks the
+   * file conditions (type and size), and updates the state with the uploaded file.
+   * @returns The function `handleQuestionFileChange` returns nothing (undefined).
+   */
   const handleQuestionFileChange = (event, questionId) => {
-    // Read and update the image file of the specific question
-    // const file = event.target.files[0];
-    // const reader = new FileReader();
-    // reader.onload = (e) => {
-    //   const updatedQuestions = questions.map((question) => {
-    //     if (question.id === questionId) {
-    //       return { ...question, image: e.target.result };
-    //     }
-    //     return question;
-    //   });
-    //   setQuestions(updatedQuestions);
-    // };
-    // reader.readAsDataURL(file);
-    // console.log(event.target.files);
     const uploadedFile = event.target.files[0];
-    // console.log(uploadedFiles);
 
     // Check the file conditions before adding to the state
     // Check the file type
     const fileType = uploadedFile.type;
     const allowedFileTypes = ["image/jpg", "image/jpeg", "image/png"];
     if (!allowedFileTypes.includes(fileType)) {
-      console.log(`Invalid file type: ${fileType}`);
       setQuizError(`Invalid file type: ${fileType}`);
       return;
     }
@@ -166,7 +167,6 @@ function CreateTask(props) {
     const fileSize = uploadedFile.size;
     const maxFileSize = 10 * 1024 * 1024; // 10MB
     if (fileSize > maxFileSize) {
-      console.log(`File size exceeds the limit: ${fileSize}`);
       setQuizError(`File size exceeds the limit: ${fileSize}`);
       return;
     }
@@ -179,11 +179,11 @@ function CreateTask(props) {
       return question;
     });
     setQuestions(updatedQuestions);
-    console.log(updatedQuestions);
-    console.log(updatedQuestions[0].image);
   };
 
-  // Function to add a new question
+  /**
+   * The `addQuestion` function adds a new question object to an array of questions.
+   */
   const addQuestion = () => {
     const newQuestion = {
       id: uuidv4(),
@@ -195,7 +195,9 @@ function CreateTask(props) {
     setQuestions([...questions, newQuestion]);
   };
 
-  // Function to remove a question
+  /**
+   * The `removeQuestion` function removes a question from an array of questions based on its ID.
+   */
   const removeQuestion = (questionId) => {
     // Filter out the question with the specified ID
     const updatedQuestions = questions.filter(
@@ -204,11 +206,12 @@ function CreateTask(props) {
     setQuestions(updatedQuestions);
   };
 
-  // Function to handle quiz creation
+  /**
+   * The function `handleCreateQuiz` is used to validate and create a quiz, and then reset the form
+   * fields and error messages.
+   * @returns The function `handleCreateQuiz` does not explicitly return anything.
+   */
   const handleCreateQuiz = () => {
-    console.log("handleCreateQuiz called");
-    // console.log(quizTitle.trim() === "");
-    // console.log(deadlineQuiz === null);
     // Validate quiz data before creating
     if (quizTitle.trim() === "") {
       setQuizError("Please enter a quiz title");
@@ -220,7 +223,6 @@ function CreateTask(props) {
     }
 
     for (const question of questions) {
-      // console.log(question.text.trim() === "");
       if (question.text.trim() === "") {
         setQuizError("Please fill in all the question fields");
         return;
@@ -239,35 +241,13 @@ function CreateTask(props) {
       }
     }
 
-    // Create the quiz object
-    // const quiz = {
-    //   title: quizTitle,
-    //   questions: questions.map(
-    //     ({ id, text, answers, correctAnswerIndices, image, deadline }) => ({
-    //       id,
-    //       text,
-    //       answers,
-    //       correctAnswerIndices,
-    //       image,
-    //       deadline,
-    //     })
-    //   ),
-    // };
-    // console.log("formData being formed: ");
-    // Pass the created quiz to the parent component
-    // onQuizCreated(quiz);
-
     // create form data to give to backend (needed for uploading files)
     const formData = new FormData();
     formData.append("type", "Quiz");
     formData.append("title", quizTitle);
     formData.append("data", deadlineQuiz);
-    // console.log(questions);
     for (const question of questions) {
-      // console.log(question);
       formData.append("text", question.text);
-      // question.answers.forEach((answer) => formData.append("answers", answer));
-      // formData.append("answers", question.answers);
       formData.append("answers", JSON.stringify(question.answers));
       formData.append(
         "correctAnswerIndices",
@@ -277,15 +257,9 @@ function CreateTask(props) {
     }
     formData.append("timeline", props.selectedCourseTimelineId);
     formData.append("subscriberTimelines", props.subscriberTimelines);
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
     props
       .createAndSaveTask(props.selectedCourseTimelineId, formData)
       .then((res) => {
-        console.log(res);
-        console.log(res.status);
-        console.log(res.msg);
         if (res.status === 401 && res.msg === "Unauthorized") {
           alert(res.msg);
           setUserSession(false);
@@ -296,7 +270,6 @@ function CreateTask(props) {
         }
       })
       .catch((err) => {
-        console.log("A");
         console.log(err);
         // alert(err);
       });
@@ -319,8 +292,9 @@ function CreateTask(props) {
     handleQuizClose();
   };
 
-  // Quizz creation end
-  // AssignmentCreation start
+  // Quiz creation end
+
+  // Assignment Creation start
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
@@ -328,18 +302,28 @@ function CreateTask(props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState("");
 
+  /**
+   * The function `handleTitleChange` updates the value of the `title` state variable based on the value
+   * of an input field.
+   */
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
   };
 
+  /**
+   * The `handleDescriptionChange` function updates the description state with the value of the event
+   * target.
+   */
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
 
+  /**
+   * The function `handleFileChange` checks the file type and size before adding the valid files to the
+   * state.
+   */
   const handleFileChange = (event) => {
-    // console.log(event.target.files);
     const uploadedFiles = Array.from(event.target.files);
-    // console.log(uploadedFiles);
 
     // Check the file conditions before adding to the state
     const validFiles = uploadedFiles.filter((file) => {
@@ -363,17 +347,27 @@ function CreateTask(props) {
     });
 
     setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-    // console.log(files);
   };
 
+  /**
+   * The handleDeleteFile function removes a specific file from the files array.
+   */
   const handleDeleteFile = (file) => {
     setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
   };
 
+  /**
+   * The function `handleDeadlineChange` updates the `deadline` state with the provided `date` value.
+   */
   const handleDeadlineChange = (date) => {
     setDeadline(date);
   };
 
+  /**
+   * The handleSubmit function is used to handle form submission in a React component, performing
+   * validation checks and sending data to the backend server.
+   * @returns The function does not explicitly return anything.
+   */
   const handleSubmit = () => {
     if (title.trim() === "") {
       setError("Please enter a title");
@@ -410,9 +404,6 @@ function CreateTask(props) {
     }
     formData.append("timeline", props.selectedCourseTimelineId);
     formData.append("subscriberTimelines", props.subscriberTimelines);
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
     props
       .createAndSaveTask(props.selectedCourseTimelineId, formData)
       .then((res) => {
@@ -426,7 +417,6 @@ function CreateTask(props) {
         }
       })
       .catch((err) => {
-        console.log("B");
         console.log(err);
         // alert(err);
       });
@@ -439,10 +429,16 @@ function CreateTask(props) {
     setError(""); // Clear the error after successful submission
   };
 
+  /**
+   * The function `handleDialogOpen` sets the state variable `isDialogOpen` to `true`.
+   */
   const handleDialogOpen = () => {
     setIsDialogOpen(true);
   };
 
+  /**
+   * The function `handleDialogClose` is used to close the assignment dialog box and reset its state variables.
+   */
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setTitle("");
@@ -452,17 +448,22 @@ function CreateTask(props) {
     setError(""); // Clear the error when closing the dialog
     setAnchorEl(null); // close drop-down
   };
-  // AssignmentCreation end
+  // Assignment Creation end
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  // Function for showing the dropdown list for creating new task
-  const handleClick = (event) => {
+  /**
+   * The handleDropDownClick function sets the anchor element to the current target of the event and opens the dropdown.
+   */
+  const handleDropDownClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // Function for closing dropdown
-  const handleClose = () => {
+  /**
+   * The function `handleDropDownClose` sets the `anchorEl` state to `null` and closes the dropdown.
+   */
+  const handleDropDownClose = () => {
     setAnchorEl(null);
   };
 
@@ -476,7 +477,7 @@ function CreateTask(props) {
           aria-controls={open ? "basic-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
+          onClick={handleDropDownClick}
         >
           Create New
         </Button>
@@ -484,7 +485,7 @@ function CreateTask(props) {
           id="basic-menu"
           anchorEl={anchorEl}
           open={open}
-          onClose={handleClose}
+          onClose={handleDropDownClose}
           MenuListProps={{
             "aria-labelledby": "basic-button",
           }}
@@ -740,5 +741,3 @@ function CreateTask(props) {
     );
   }
 }
-
-export default CreateTask;

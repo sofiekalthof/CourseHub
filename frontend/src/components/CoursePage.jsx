@@ -13,14 +13,14 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-// Function to
+/**
+ * The function `TakeTask` is an asynchronous function that makes an API call to subscribe a user to a
+ * course task and returns the response status and message.
+ * @returns an object with two properties: "status" and "msg". The "status" property indicates the
+ * status of the API call (200, 401, or 500), and the "msg" property contains a message associated with
+ * the status.
+ */
 async function TakeTask(courseTimelineId, taskId, score, formData) {
-  console.log("TakeTask in coursePage called: ");
-  // console.log("courseTimelineId: ", courseTimelineId);
-  // console.log("taskId: ", taskId);
-  // console.log("score: ", score);
-  // if formData -> takeAssignment (with uploaded file)
-  // else -> takeQuiz (with normal data)
   let apiCallParameters =
     formData !== null
       ? {
@@ -40,7 +40,6 @@ async function TakeTask(courseTimelineId, taskId, score, formData) {
           },
           credentials: "include",
         };
-  console.log("apiCallParameters: ", apiCallParameters);
   // make API call to subscribe user to the course
   try {
     // send POST request to REST API
@@ -65,7 +64,13 @@ async function TakeTask(courseTimelineId, taskId, score, formData) {
   }
 }
 
-// Function to take a course
+/**
+ * The function `CreateAndSaveTask` makes an API call to add a task to a course timeline and returns
+ * the response status and message.
+ * @returns an object with two properties: "status" and "msg". The "status" property indicates the
+ * status of the API call (200, 401, or 500), and the "msg" property contains a message associated with
+ * the status.
+ */
 async function CreateAndSaveTask(courseTimelineId, formData) {
   // make API call to subscribe user to the course
   try {
@@ -95,7 +100,11 @@ async function CreateAndSaveTask(courseTimelineId, formData) {
   }
 }
 
-// Function to save a milestone in DB
+/**
+ * The function `CreateAndSaveMileStone` makes an API call to add a milestone to a course timeline and
+ * returns the response from the backend.
+ * @returns different values based on the conditions:
+ */
 async function CreateAndSaveMileStone(
   courseTimelieId,
   type,
@@ -138,7 +147,14 @@ async function CreateAndSaveMileStone(
   }
 }
 
-// Function to take a course
+/**
+ * The function `TakeCourse` makes an API call to subscribe a user to a course and returns a message
+ * indicating the success or failure of the operation.
+ * @returns a promise that resolves to the message received from the backend API. If the API call is
+ * successful and the response status is 200, the function returns the message from the response JSON.
+ * If the response status is 401 and the message is "Unauthorized", the function returns an object with
+ * status 401 and the message "Unauthorized". If the API call is not successful or not authorized,
+ */
 async function TakeCourse(courseId, userId) {
   // make API call to subscribe user to the course
   try {
@@ -174,9 +190,15 @@ async function TakeCourse(courseId, userId) {
   }
 }
 
-// Function to get all course info
+/**
+ * The function `GetAllCourseInfo` makes an API call to retrieve all information about a specific
+ * course.
+ * @returns a Promise that resolves to the response JSON object if the status code is 200. If the
+ * status code is 401 and the response message is "Unauthorized", it returns an object with status 401
+ * and message "Unauthorized". If the status code is not 200 or 401, it returns an object with status
+ * 500 and message "Not successful and authorized".
+ */
 async function GetAllCourseInfo(courseId) {
-  // console.log("function GetAllCourseInfo called in CoursePage");
   // make API call to get all courses
   try {
     // send get request to REST API
@@ -196,7 +218,6 @@ async function GetAllCourseInfo(courseId) {
     let resJson = await res.json();
 
     if (res.status === 200) {
-      // console.log("resJson in GetAllCourseInfo: ", resJson);
       return resJson;
     }
     if (res.status === 401 && resJson.msg === "Unauthorized") {
@@ -208,7 +229,13 @@ async function GetAllCourseInfo(courseId) {
   }
 }
 
-// Function to get all subscriber data from backend for the course
+/**
+ * The function `GetAllCourseSubscriberData` makes an API call to retrieve all subscriber data for a
+ * given course.
+ * @returns a Promise that resolves to an object. The object contains the status and message
+ * properties. The status property indicates the status of the API call (200, 401, or 500), and the
+ * message property provides additional information about the status.
+ */
 async function GetAllCourseSubscriberData(courseId) {
   // make API call to get all subscriber data for a course
   try {
@@ -228,8 +255,6 @@ async function GetAllCourseSubscriberData(courseId) {
     // parse return statement from backend
     let resJson = await res.json();
 
-    // console.log("resJson: ", resJson);
-
     if (res.status === 200) {
       return resJson;
     }
@@ -242,22 +267,15 @@ async function GetAllCourseSubscriberData(courseId) {
   }
 }
 
-// // Show Button for taking course only when user is not owner and not already taking course
-// function ShowTakeCourse({ isOwner, isSubscriber }) {
-//   if (!isOwner && !isSubscriber) {
-//     return <Button variant="contained">Take Course </Button>;
-//   }
-// }
-
-function CoursePage() {
+/* A React component called CoursePage responsible for rendering the course page for
+a specific course. */
+export default function CoursePage() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
-  // console.log("rendered coursepage");
   const navigate = useNavigate();
   // Get user and selected course from route parameters
   const location = useLocation();
   const user = location.state.user;
-  // const selectedCourseId = location.state.courseId;
 
   // Get course id from route
   let courseId = useParams().id;
@@ -276,28 +294,9 @@ function CoursePage() {
   let userDataForCourse;
   let subscriberTimelines = [];
 
+  /* Two asynchronous requests using the Promise.all method. The requests are made to the functions
+ GetAllCourseSubscriberData and GetAllCourseInfo, passing in the courseId as an argument. */
   useEffect(() => {
-    // // get all subscribers of the course
-    // GetAllCourseSubscriberData(courseId)
-    //   .then((res) => {
-    //     // use promise to set subscriber data
-    //     setDataOfAllUsersForThisCourse(res.subscribers);
-    //   })
-    //   .catch((err) => {
-    //     setError(true);
-    //   });
-
-    // // get all course data
-    // GetAllCourseInfo(courseId)
-    //   .then((res) => {
-    //     // use promise to set selected course data
-    //     setSelectedCourse(res);
-    //     setLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     setError(true);
-    //   });
-    console.log("re-rendering?");
     Promise.all([
       GetAllCourseSubscriberData(courseId),
       GetAllCourseInfo(courseId),
@@ -312,7 +311,6 @@ function CoursePage() {
           navigate("/");
           setGetDataAfterPost(false);
         } else {
-          console.log("getting new data");
           setDataOfAllUsersForThisCourse(res1.subscribers);
           setSelectedCourse(res2);
           setLoading(false);
@@ -324,6 +322,8 @@ function CoursePage() {
       });
   }, [getDataAfterPost]);
 
+  /* Checks if the loading variable is false. If it is
+ not loading, it performs some actions. */
   if (!loading) {
     // Check if user is owner of course
     if (user.id == selectedCourse.owner) {
@@ -347,20 +347,19 @@ function CoursePage() {
     });
   }
 
-  console.log("all course data in coursepage: ", selectedCourse);
-  // console.log("all sub data in coursepage: ", dataOfAllUsersForThisCourse);
-  // console.log("userDataForCourse in CoursePage: ", userDataForCourse);
-  // console.log("courseId: ", courseId);
-  // console.log("first: ", dataOfAllUsersForThisCourse[0].course);
-  // console.log("userId: ", user.id);
-  // console.log("loading: ", loading);
-  // console.log("isSubscriber: ", isSubscriber);
-
-  // HandleChange function for tabContext
+  /**
+   * The handleChange function updates the tab value based on the new value passed in.
+   */
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
+  /**
+   * The function `handleTakeCourse` takes a courseId and userId as parameters, calls the `TakeCourse`
+   * function with those parameters, and handles the response by either displaying an alert and
+   * navigating to the home page if the response is unauthorized, or setting a state variable to trigger
+   * an update of information.
+   */
   const handleTakeCourse = (courseId, userId) => {
     TakeCourse(courseId, userId)
       .then((res) => {
@@ -378,6 +377,9 @@ function CoursePage() {
       });
   };
 
+  /**
+   * The function handleNavigateBack navigates the user back to the home page.
+   */
   const handleNavigateBack = () => {
     navigate("/home");
   };
@@ -403,9 +405,8 @@ function CoursePage() {
             <Grid item xs={5.25} sm={7.8} md={8} lg={8.7}>
               <Typography variant="h5">{selectedCourse.name}</Typography>
             </Grid>
-            {/* Take Cozrse button if user is not owner or already subscriber */}
+            {/* Take Course button if user is not owner or already subscriber */}
             <Grid item xs={4.75} sm={2.2} md={2} lg={1.3}>
-              {/* <ShowTakeCourse isOwner={isOwner} isSubscriber={isSubscriber} /> */}
               {!isOwner && !isSubscriber && (
                 <>
                   <Button
@@ -461,5 +462,3 @@ function CoursePage() {
     </>
   );
 }
-
-export default CoursePage;
