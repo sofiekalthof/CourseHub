@@ -109,7 +109,8 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
 ## Links
 - [Advertisement Video](https://youtu.be/4Y8YGkVlAvQ)
 - [Live Demo](https://youtu.be/w5ySgMsMuqw)
-- [Deployed Project]
+- [Deployed Backend](https://backendtest-juq7.onrender.com/)
+- [Deployed Frontend](https://guileless-souffle-4833ce.netlify.app/)
  
 
 ## Group members
