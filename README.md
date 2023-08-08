@@ -45,7 +45,7 @@
   - #### General View
     - Timeline of the course (milestones/tasks)
     - Create new milestones
-    - List of tasks (assignments/quizzes)
+    - List of tasks (assignments/quizzes) and see status of task
     - Create new tasks
     - Take tasks
     
