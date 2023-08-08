@@ -96,8 +96,13 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
 
 ## How to deploy
 - ### Deploy backend
+  The backend was deployed using Render. Here, it should be noted that the `PROD` environment variable is added with the value `1` for the deployment to be successful.
 - ### Deploy frontend
-
+  The frontend was deployed with Netlify. For a successful deployment, it is vital to set the build command as below. Normally, due to the ApexCharts library being bigger than 500kB, the building of the React application throws a warning, which causes the deployment with Netlify to fail. The below command, allows Netlify to ignore any build warnings and finish the deployment.
+  ```
+  $ CI= npm run build
+  ```
+  
 ## Technical architecture
 - MERN technology stack:
   - MongoDB (with Mongoose)
