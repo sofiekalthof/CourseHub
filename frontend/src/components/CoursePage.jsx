@@ -18,7 +18,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
  * course task and returns the response status and message.
  * @returns an object with two properties: "status" and "msg". The "status" property indicates the
  * status of the API call (200, 401, or 500), and the "msg" property contains a message associated with
- * the status.
+ * the status. The status 200 indicates successful API call, 401 indicates unauthorized acces and logs
+ * user off, and status 500 indicates any other error and logs the error.
  */
 async function TakeTask(courseTimelineId, taskId, score, formData) {
   let apiCallParameters =
@@ -60,7 +61,11 @@ async function TakeTask(courseTimelineId, taskId, score, formData) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 
@@ -69,7 +74,8 @@ async function TakeTask(courseTimelineId, taskId, score, formData) {
  * the response status and message.
  * @returns an object with two properties: "status" and "msg". The "status" property indicates the
  * status of the API call (200, 401, or 500), and the "msg" property contains a message associated with
- * the status.
+ * the status. The status 200 indicates successful API call, 401 indicates unauthorized acces and logs
+ * user off, and status 500 indicates any other error and logs the error.
  */
 async function CreateAndSaveTask(courseTimelineId, formData) {
   // make API call to subscribe user to the course
@@ -96,14 +102,21 @@ async function CreateAndSaveTask(courseTimelineId, formData) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 
 /**
  * The function `CreateAndSaveMileStone` makes an API call to add a milestone to a course timeline and
  * returns the response from the backend.
- * @returns different values based on the conditions:
+ * @returns an object with two properties: "status" and "msg". The "status" property indicates the
+ * status of the API call (200, 401, or 500), and the "msg" property contains a message associated with
+ * the status. The status 200 indicates successful API call, 401 indicates unauthorized acces and logs
+ * user off, and status 500 indicates any other error and logs the error.
  */
 async function CreateAndSaveMileStone(
   courseTimelieId,
@@ -143,7 +156,11 @@ async function CreateAndSaveMileStone(
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 
@@ -153,7 +170,8 @@ async function CreateAndSaveMileStone(
  * @returns a promise that resolves to the message received from the backend API. If the API call is
  * successful and the response status is 200, the function returns the message from the response JSON.
  * If the response status is 401 and the message is "Unauthorized", the function returns an object with
- * status 401 and the message "Unauthorized". If the API call is not successful or not authorized,
+ * status 401 and the message "Unauthorized". If the API call is not successful or any other error occurs,
+ * status 500 is sent and error is logged.
  */
 async function TakeCourse(courseId, userId) {
   // make API call to subscribe user to the course
@@ -186,7 +204,11 @@ async function TakeCourse(courseId, userId) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 
@@ -225,7 +247,17 @@ async function GetAllCourseInfo(courseId) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      if (typeof console === "undefined") {
+        console = { log: function () {} };
+      } else {
+        console.log(
+          "Frontend error. Get request could not be sent. Check API!"
+        );
+      }
+    }
   }
 }
 
@@ -234,7 +266,9 @@ async function GetAllCourseInfo(courseId) {
  * given course.
  * @returns a Promise that resolves to an object. The object contains the status and message
  * properties. The status property indicates the status of the API call (200, 401, or 500), and the
- * message property provides additional information about the status.
+ * message property provides additional information about the status. The status 200 indicates
+ * successful API call, 401 indicates unauthorized acces and logs user off, and status 500 indicates
+ * any other error and logs the error.
  */
 async function GetAllCourseSubscriberData(courseId) {
   // make API call to get all subscriber data for a course
@@ -263,7 +297,17 @@ async function GetAllCourseSubscriberData(courseId) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      if (typeof console === "undefined") {
+        console = { log: function () {} };
+      } else {
+        console.log(
+          "Frontend error. Get request could not be sent. Check API!"
+        );
+      }
+    }
   }
 }
 
@@ -322,8 +366,8 @@ export default function CoursePage() {
       });
   }, [getDataAfterPost]);
 
-  /* Checks if the loading variable is false. If it is
- not loading, it performs some actions. */
+  /* Checks if the loading variable is false. If loading is done, user data 
+  is extractedit is. */
   if (!loading) {
     // Check if user is owner of course
     if (user.id == selectedCourse.owner) {
@@ -342,7 +386,7 @@ export default function CoursePage() {
     dataOfAllUsersForThisCourse.forEach((subscriber) => {
       subscriberTimelines = [
         ...subscriberTimelines,
-        subscriber.usertimeline.usertimeline._id,
+        subscriber.userTimeline.userTimeline._id,
       ];
     });
   }
@@ -386,9 +430,6 @@ export default function CoursePage() {
 
   return (
     <>
-      {/* allow backend to do its magic */}
-      {/* {loading && <></>}
-      {error && <></>} */}
       {dataOfAllUsersForThisCourse && selectedCourse && (
         <>
           <Grid container spacing={2} sx={{ justifyContent: "center" }}>

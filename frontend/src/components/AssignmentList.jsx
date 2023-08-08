@@ -11,21 +11,15 @@ import {
   MenuItem,
   Alert,
 } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DescriptionIcon from "@mui/icons-material/Description";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import GetAppIcon from "@mui/icons-material/GetApp";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { useEffect, useState } from "react";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import CreateTask from "./CreateTask";
 import QuizTaking from "./QuizTaking";
 import AssignmentTaking from "./AssignmentTaking";
 dayjs.extend(localizedFormat);
@@ -74,7 +68,7 @@ export default function AssignmentList(props) {
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
   const taskStatusData =
-    userData.length > 0 ? userData[0].usertimeline.usertimeline : [];
+    userData.length > 0 ? userData[0].userTimeline.userTimeline : [];
   const [areDatesDescending, setAreStatesDescending] = useState(true);
   const [dates, setDates] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);

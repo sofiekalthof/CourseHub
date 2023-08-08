@@ -43,7 +43,7 @@ export default function Courses(props) {
     if (searchInput === "") {
       return el;
     }
-    //return the item which contains the user input
+    // else, return the item which contains the user input
     else {
       // case insensitive filtering
       return el.name.toLowerCase().includes(searchInput.toLowerCase());

@@ -19,8 +19,10 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   let usersWithScore = [];
   dataOfAllUsersForThisCourse.map((user) => {
     // extract useful information first
-    let taskStatusData = user.usertimeline.usertimeline.userTasksStats;
+    let taskStatusData = user.userTimeline.userTimeline.userTasksStats;
     const userscore = determineScoreOfUser(taskStatusData);
+
+    // add new entry to list
     usersWithScore.push({
       name: user.username,
       id: user.subscriber,
@@ -38,7 +40,7 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
 function determineScoreOfUser(userTaskStatus) {
   let userscore = 0;
   userTaskStatus.map((status) => {
-    if (status.userTaskSatus.includes("done")) {
+    if (status.userTaskStatus.includes("done")) {
       userscore += 1;
     }
   });
@@ -108,4 +110,3 @@ export default function Leaderboard(props) {
     </>
   );
 }
-

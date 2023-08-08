@@ -17,7 +17,7 @@ const CourseUserSchema = new mongoose.Schema({
     ref: "CourseModel",
   },
   // reduced timeline for each subscriber of any course with information on scores, completion status etc.
-  usertimeline: {
+  userTimeline: {
     type: mongoose.Types.ObjectId,
     ref: "TimelineUserModel",
   },

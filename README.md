@@ -1,8 +1,8 @@
 # CourseHub
-<p align="center">
-  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/bbc9ee2f-2ef8-42ca-8254-fac1c39efdaa">
-</p>
 
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/1b3334ea-6b11-490b-97b1-74325091daa6">
+</p>
 
 ## Project Idea
 - Learning Management System (LMS) 
@@ -45,7 +45,7 @@
   - #### General View
     - Timeline of the course (milestones/tasks)
     - Create new milestones
-    - List of tasks (assignments/quizzes)
+    - List of tasks (assignments/quizzes) and see status of task
     - Create new tasks
     - Take tasks
     
@@ -56,7 +56,7 @@
 
  - #### Analytics:
     - Chart for users' activity 
-    - Leaderboard
+    - Leaderboard of all users of the course
       
 <p align="center">
   <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/29fc9f68-d27e-4dbe-b336-e55d51eaf7c2">
@@ -92,15 +92,37 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
   ```
   $ npm run dev
   ```
-  4. Open `http://localhost:5173` to view it in the browser
+  4. Open `http://localhost:5173` to view it in the browser (best working with Chrome)
+
+## How to deploy
+- ### Deploy backend
+  The backend was deployed using Render. Here, it should be noted that the `PROD` environment variable is added with the value `1` for the deployment to be successful.
+- ### Deploy frontend
+  The frontend was deployed with Netlify. For a successful deployment, it is vital to set the build command as below. Normally, due to the ApexCharts library being bigger than 500kB, the building of the React application throws a warning, which causes the deployment with Netlify to fail. The below command, allows Netlify to ignore any build warnings and finish the deployment.
+  ```
+  $ CI= npm run build
+  ```
+  
+## Technical architecture
+- MERN technology stack:
+  - MongoDB (with Mongoose)
+  - Express
+  - React
+  - Node.js
+
+- Client-server architecture
+  - Database (Mongo DB)
+  - Backend server (Express + Node.js)
+  - Frontend server (React)
 
 ## Technologies
-- [MongoDB with Mongoose]
-- [Express]
-- [express-sessions]
-- [connect-mongodb-session]
-- [Multer]
-- [FS]
+- [MongoDB](https://www.npmjs.com/package/mongodb)
+- [Mongoose](https://www.npmjs.com/package/mongoose)
+- [Express](https://www.npmjs.com/package/express)
+- [express-sessions](https://www.npmjs.com/package/express-session)
+- [connect-mongodb-session](https://www.npmjs.com/package/connect-mongodb-session)
+- [Multer](https://www.npmjs.com/package/multer)
+- [FS](https://www.npmjs.com/package/fs)
 - [NodeJS](https://nodejs.org/de/download/)
 - [React](https://reactjs.org/docs/getting-started.html)
 - [Material UI](https://material-ui.com/getting-started/installation/)
@@ -109,8 +131,8 @@ Download and install [NodeJS](https://nodejs.org/de/download/)
 ## Links
 - [Advertisement Video](https://youtu.be/4Y8YGkVlAvQ)
 - [Live Demo](https://youtu.be/w5ySgMsMuqw)
-- [Deployed Project]
- 
+- [Deployed Backend](https://backendtest-juq7.onrender.com/)
+- [Deployed Frontend](https://guileless-souffle-4833ce.netlify.app/)
 
 ## Group members
 - [Mahsa Alavi](https://github.com/mhsalavi)

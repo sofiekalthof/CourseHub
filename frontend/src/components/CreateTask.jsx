@@ -36,6 +36,7 @@ export default function CreateTask(props) {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
   const navigate = useNavigate();
+
   // Quiz Creation start
   // State variables
   const [openQuiz, setQuizOpen] = useState(false);
@@ -270,8 +271,11 @@ export default function CreateTask(props) {
         }
       })
       .catch((err) => {
-        console.log(err);
-        // alert(err);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(err);
+        }
       });
 
     // Reset form fields and error
@@ -331,7 +335,11 @@ export default function CreateTask(props) {
       const fileType = file.type;
       const allowedFileTypes = ["application/pdf", "image/jpeg", "image/png"];
       if (!allowedFileTypes.includes(fileType)) {
-        console.log(`Invalid file type: ${fileType}`);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(`Invalid file type: ${fileType}`);
+        }
         return false;
       }
 
@@ -339,7 +347,11 @@ export default function CreateTask(props) {
       const fileSize = file.size;
       const maxFileSize = 10 * 1024 * 1024; // 10MB
       if (fileSize > maxFileSize) {
-        console.log(`File size exceeds the limit: ${fileSize}`);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(`File size exceeds the limit: ${fileSize}`);
+        }
         return false;
       }
 
@@ -417,8 +429,11 @@ export default function CreateTask(props) {
         }
       })
       .catch((err) => {
-        console.log(err);
-        // alert(err);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(err);
+        }
       });
 
     setTitle("");

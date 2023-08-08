@@ -61,7 +61,11 @@ async function GetTask(taskId) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 
@@ -93,7 +97,11 @@ export default function AssignmentTaking(props) {
         setAssignment(res.task);
       })
       .catch((err) => {
-        console.log(err);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(err);
+        }
       });
   }, []);
 
@@ -115,7 +123,6 @@ export default function AssignmentTaking(props) {
     formData.append("taskId", props.assignmentId);
     formData.append("uploadedAssignmentDescription", description);
     formData.append("score", 0);
-    // The following loop was the solution
     formData.append("allFiles", answerFile);
     props
       .takeTask(props.selectedCourseTimelineId, props.assignmentId, 0, formData)
@@ -129,7 +136,11 @@ export default function AssignmentTaking(props) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(err);
+        }
       });
   };
 

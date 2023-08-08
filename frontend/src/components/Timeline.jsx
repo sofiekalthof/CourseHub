@@ -10,12 +10,16 @@ import Chart from "react-apexcharts";
  * of the marker).
  */
 function convertTaskDates(tasks, today) {
+  // initialize variables to hold dates
   let taskDates = [];
   let assignmentDates = [];
   let quizDates = [];
+
+  // itererate over all tasks
   tasks.map((task) => {
     // convert mongodb data string to date
     let taskTime = new Date(task.data);
+
     // give marker grey color if date is in future
     if (task.type == "Quiz" && taskTime.getTime() > today.getTime()) {
       quizDates.push({ x: taskTime.getTime(), y: -1, fillColor: "#D3D3D3" });
@@ -36,6 +40,7 @@ function convertTaskDates(tasks, today) {
   });
   taskDates.push({ name: "Assignment", data: assignmentDates });
   taskDates.push({ name: "Quiz", data: quizDates });
+
   return taskDates;
 }
 
@@ -48,13 +53,17 @@ function convertTaskDates(tasks, today) {
  * since January 1, 1970, and the y property represents the type of milestone.
  */
 function convertMilestoneDates(milestones, today) {
+  // initialize variables to hold dates
   let milestoneDates = [];
   let lectureDates = [];
   let examDates = [];
-  //let exerciseDates = [];
+
+  // itearete over each milestone
   milestones.map((milestone) => {
     // convert mongodb data string to date
     let milestoneTime = new Date(milestone.data);
+
+    // give marker grey color if milestone is in future
     if (
       milestone.type == "Lecture" &&
       milestoneTime.getTime() <= today.getTime()

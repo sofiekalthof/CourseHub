@@ -5,13 +5,13 @@ const path = require("path");
 const session = require("express-session");
 const MongoDBstore = require("connect-mongodb-session")(session);
 
-// Define port
+// define port
 const port = 3600;
 
 // Create Express app
 const app = express();
 
-// magic?
+// allow proxies (relevant for production)
 app.set("trust proxy", 1);
 
 // CORS configuration
@@ -56,9 +56,9 @@ app.use(
     cookie: {
       maxAge: parseInt(process.env.SESSION_MAX_LENGTH), // Max. session length
       sameSite: parseInt(process.env.PROD) === 0 ? false : "none", // same-site and cross-site(diff. schemes, domain or sub-domain) requests
-      secure: parseInt(process.env.PROD) === 0 ? false : true, // need an HTTPS enabled browser (true-> in prod.)
+      secure: parseInt(process.env.PROD) === 0 ? false : true,
     },
-    resave: false, // !!! true - force session to be saved in session store, even if it was not modified during a request
+    resave: false,
     saveUninitialized: false, // dont save session if it was not modified (i.e. no login yet)
     unset: "destroy", // delete cookie from db when it is null(completes task in a few minutes)
   })

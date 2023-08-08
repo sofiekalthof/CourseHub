@@ -52,7 +52,11 @@ async function GetTask(taskId) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Post request could not be sent. Check API!");
+    }
   }
 }
 
@@ -144,7 +148,6 @@ export default function QuizTaking(props) {
     props
       .takeTask(props.selectedCourseTimelineId, props.quizId, score, null)
       .then((res) => {
-        console.log("res: ", res);
         if (res.status === 401 && res.msg === "Unauthorized") {
           alert(res.msg);
           setUserSession(false);

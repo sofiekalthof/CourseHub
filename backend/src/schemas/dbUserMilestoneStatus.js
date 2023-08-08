@@ -1,14 +1,15 @@
 const mongoose = require("../models/dbConnection.js");
 
-// create mongoose schema
-const userMilestoneSatusSchema = new mongoose.Schema({
+/* The schema `userMilestoneStatusSchema` is used to define the structure and validation rules for 
+status of any milestone that user is assigned to. */
+const userMilestoneStatusSchema = new mongoose.Schema({
   // reference to original milestone
   originalMilestoneId: {
     type: mongoose.Types.ObjectId,
     ref: "MilestoneModel",
   },
   // user's status for the milestone
-  userMilestoneSatus: {
+  userMilestoneStatus: {
     type: String,
     enum: ["due", "missed", "done"],
     default: "due",
@@ -16,4 +17,4 @@ const userMilestoneSatusSchema = new mongoose.Schema({
 });
 
 // export schema only, since it is needed for defining the TimelineUser
-module.exports = userMilestoneSatusSchema;
+module.exports = userMilestoneStatusSchema;

@@ -3,22 +3,24 @@ const mongoose = require("./dbConnection.js");
 // initialize parameters
 collectionName = process.env.DB_COLLECTION_TASKS;
 
+/* The schema `fileSchema` is used to define the structure and validation rules for 
+files uploaded to backend. */
 const fileSchema = new mongoose.Schema({
+  // original name of the file (used to give the same name to the downloaded file)
   originalFileName: {
     type: String,
   },
+  // name of the file in the backend 'public' folder
   fileName: {
     type: String,
     required: true,
   },
 });
 
-const correctAnswerSchema = new mongoose.Schema({
-  type: Number,
-});
-
-// create mongoose schema
+/* The schema `TaskSchema` is used to store information for a task. A task can either be
+a Quiz or Assignment. */
 const TaskSchema = new mongoose.Schema({
+  // type of the task
   type: {
     type: String,
     enum: ["Quiz", "Assignment"],
@@ -33,27 +35,29 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // due date of the task
   data: {
     type: Date,
     required: true,
   },
+  // current status of the task
   status: {
     type: String,
     enum: ["due", "missed", "done"],
     default: "due",
   },
+  // all files related to the task
   files: [fileSchema],
-  // belonging timeline
+  // reference to timeline of the course the task is in
   timeline: {
     type: mongoose.Types.ObjectId,
     ref: "TimelineModel",
   },
-  // From here on, only related to Quizz
+  // quiz related fields below
   questions: {
     type: [String],
   },
   answers: {
-    //type: [{ String, String, String, String }],
     type: [[String]],
   },
   // array of correct answers for each question
