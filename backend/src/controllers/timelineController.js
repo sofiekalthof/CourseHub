@@ -47,9 +47,9 @@ const fs = require("fs");
  *
  * @param res {Object} The response object with a status and JSON object with a message field.
  * If function is successful, the status is 200 alongside an appropriate message. If as a result of an
- * update operation, no object is changed, the status is 400 with an appropriate message.
- * If any DB operation fails to execute, the status is set to 500, and the default error
- * message "Server error. Request could not be fulfilled." is set.
+ * update operation, no object is changed or there is an error in file handling, the status is 400 with
+ * an appropriate message. If any DB operation fails to execute, the status is set to 500, and the default
+ * error message "Server error. Request could not be fulfilled." is set.
  */
 exports.createTask = async (req, res) => {
   // prepare general task data
@@ -125,7 +125,10 @@ exports.createTask = async (req, res) => {
         `./public/${fileName}`,
         `./public/${resultNewTask._id}_${oldFileNameArr[1]}`,
         function (err) {
-          if (err) console.log("ERROR: " + err);
+          if (err) {
+            res.status(400).json({ msg: "File could not be renamed." });
+            return;
+          }
         }
       );
     });
@@ -229,9 +232,9 @@ exports.createTask = async (req, res) => {
  *
  * @param res {Object} The response object with a status and JSON object with a message field.
  * If function is successful, the status is 200 alongside an appropriate message. If as a result of an
- * update operation, no object is changed, the status is 400 with an appropriate message.
- * If any DB operation fails to execute, the status is set to 500, and the default error
- * message "Server error. Request could not be fulfilled." is set.
+ * update operation, no object is changed or there is an error in file handling, the status is 400 with
+ * an appropriate message. If any DB operation fails to execute, the status is set to 500, and the default
+ * error message "Server error. Request could not be fulfilled." is set.
  */
 exports.createMilestone = async (req, res) => {
   // prepare milestone data
@@ -346,7 +349,10 @@ exports.takeTask = async (req, res) => {
         req.files[0].filename.split("_")[1].split(".")[0]
       }_uploaded`, // files uploaded when answering a task contain '_uploaded' substring
       function (err) {
-        if (err) console.log("ERROR: " + err);
+        if (err) {
+          res.status(400).json({ msg: "File could not be renamed." });
+          return;
+        }
       }
     );
   }
