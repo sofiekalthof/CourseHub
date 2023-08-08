@@ -55,7 +55,7 @@ exports.takeCourse = async (req, res) => {
         ...currTaskStats,
         {
           originalTaskId: task._id,
-          userTaskSatus: task.status,
+          userTaskStatus: task.status,
           userTaskScore: 0,
         },
       ];
@@ -73,7 +73,7 @@ exports.takeCourse = async (req, res) => {
         ...currMilestioneStats,
         {
           originalMilestoneId: milestone._id,
-          userMilestoneSatus: milestone.status,
+          userMilestoneStatus: milestone.status,
         },
       ];
     });
