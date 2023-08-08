@@ -176,7 +176,6 @@ exports.createTask = async (req, res) => {
       if (subscriberTimelineId === "") {
         break;
       }
-      // console.log("subscriberTimelineId: ", subscriberTimelineId);
 
       // add new task with its status to the user's timeline
       const result = await TimelineUserModel.findByIdAndUpdate(
