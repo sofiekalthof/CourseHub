@@ -4,11 +4,8 @@ import {
   Box,
   IconButton,
   Toolbar,
-  Typography,
-  Button,
   Avatar,
   Menu,
-  Tooltip,
   MenuItem,
 } from "@mui/material";
 import courseHubLogo from "../assets/CourseHubLogo.png";
@@ -16,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-/* The `Navbar` function is a React component that represents the navigation bar of a web application.
+/* The `Navbar` function is a React component that represents the navigation bar of the web application.
 It renders a responsive app bar with a logo and an avatar icon. */
 export default function Navbar() {
   const navigate = useNavigate();
@@ -30,6 +27,7 @@ export default function Navbar() {
   // anchor for checking if icon button pressed or not
   // is either a function or HTML element
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   // corresponding open boolean value
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -61,6 +59,14 @@ export default function Navbar() {
       // reset user session in frontend
       setUserSession(false);
       alert(resJson.msg);
+    } else {
+      if (typeof console === "undefined") {
+        console = { log: function () {} };
+      } else {
+        console.log(
+          "Frontend error. Post request could not be sent. Check API!"
+        );
+      }
     }
   };
 
@@ -81,7 +87,6 @@ export default function Navbar() {
               onClick={handleClick}
               size="small"
               sx={{ ml: 2 }}
-              // ARIA - Accessible Rich Internet Applications -> used mostly for interactive pop-up elements
               aria-controls={open ? "basic-menu" : undefined} // element whose content are controlled by icon button
               aria-haspopup="true" // indicates popup is a menu
               aria-expanded={open ? "true" : undefined} // check if element is expanded or collapsed

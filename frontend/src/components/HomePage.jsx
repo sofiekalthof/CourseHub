@@ -19,9 +19,12 @@ import { useNavigate } from "react-router-dom";
 /**
  * The function `CreateCourse` makes an API call to create a new course with the given name,
  * description, and owner ID, and returns the response from the API.
- * @returns different objects based on the response from the API:
+ * @returns an object with two properties: "status" and "msg". The "status" property indicates the
+ * status of the API call (200, 401, or 500), and the "msg" property contains a message associated with
+ * the status. The status 200 indicates successful API call, 401 indicates unauthorized acces and logs
+ * user off, and status 500 indicates any other error and logs the error.
  */
-async function CreateCourse(courseName, courseDescription, ownerID) {
+async function CreateCourse(courseName, courseDescription, ownerId) {
   // make API call to get all courses
   try {
     // send get request to REST API
@@ -30,7 +33,7 @@ async function CreateCourse(courseName, courseDescription, ownerID) {
       body: JSON.stringify({
         name: courseName,
         description: courseDescription,
-        owner: ownerID,
+        owner: ownerId,
       }),
       // header neccessary for correct sending of information
       headers: {
@@ -51,15 +54,22 @@ async function CreateCourse(courseName, courseDescription, ownerID) {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 
 /**
  * The function `GetAllCourseIdDescs` makes an API call to retrieve all course IDs and descriptions,
  * and returns the response data or an error message.
- * @returns a Promise that resolves to an object. The object can have different properties depending on
- * the response from the API:
+ * @returns a Promise that resolves to an object. The object has two properties: "status" and "msg".
+ * The "status" property indicates the status of the API call (200, 401, or 500), and the "msg" property
+ * contains a message associated with the status. The status 200 indicates successful API call, 401
+ * indicates unauthorized acces and logs user off, and status 500 indicates any other error and logs
+ * the error.
  */
 async function GetAllCourseIdDescs() {
   // make API call to get all courses
@@ -85,7 +95,11 @@ async function GetAllCourseIdDescs() {
     }
     return { status: 500, msg: "Not successful and authorized" };
   } catch (err) {
-    console.log("Frontend error. Get request could not be sent. Check API!");
+    if (typeof console === "undefined") {
+      console = { log: function () {} };
+    } else {
+      console.log("Frontend error. Get request could not be sent. Check API!");
+    }
   }
 }
 

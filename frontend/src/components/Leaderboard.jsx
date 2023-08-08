@@ -21,6 +21,8 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
     // extract useful information first
     let taskStatusData = user.usertimeline.usertimeline.userTasksStats;
     const userscore = determineScoreOfUser(taskStatusData);
+
+    // add new entry to list
     usersWithScore.push({
       name: user.username,
       id: user.subscriber,

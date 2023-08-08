@@ -37,6 +37,7 @@ export default function Register() {
       alert("Passwords don't match! API call will not be made.");
       return;
     }
+
     // RegEx for checking a valid e-mail format
     let re = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
 
@@ -62,17 +63,14 @@ export default function Register() {
           "Content-type": "application/json",
         },
       });
+
       // parse return statement from backend
-      let resJson = await res.json();
-      console.log(resJson.msg);
+      let resJsonRegister = await res.json();
+
+      // if registration was successful, immediately log-in
       if (res.status === 200) {
-        // some debug commands
-        console.log("Form done.");
-        //alert("User added");
         try {
-          console.log("email: ", email);
-          console.log("password: ", password);
-          // send GET request to REST API with email
+          // send GET request to REST API with email and password
           let res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
             method: "POST",
             // all information being sent
@@ -86,37 +84,60 @@ export default function Register() {
             },
             credentials: "include",
           });
+
           // parse return statement from backend
-          let resJson = await res.json();
-          console.log(resJson);
+          let resJsonLogIn = await res.json();
+
           if (res.status === 200) {
             // if response is successful, reset states
             setEmail("");
             setPassword("");
-            // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
-            await setUserSession(resJson.userInfo);
-            console.log("Login form done.");
-            // alert(resJson.msg);
+
+            // set session accodingly
+            await setUserSession(resJsonLogIn.userInfo);
+
             // route to homepage
             handleHome();
           } else if (res.status === 400) {
-            // alert(resJson.msg);
-            console.log(resJson.msg);
+            // console.logs for identifying errors
+            // stubs to ensure no-op , if there is no console
+            if (typeof console === "undefined") {
+              console = { log: function () {} };
+            } else {
+              console.log(resJsonLogIn.msg);
+            }
           } else {
-            // some debug commands
-            console.log("Form returned error from backend.");
-            console.log(resJson);
-            // alert(resJson.msg);
+            if (typeof console === "undefined") {
+              console = { log: function () {} };
+            } else {
+              console.log("Form returned error from backend.");
+              console.log(resJsonLogIn.msg);
+            }
           }
         } catch (err) {
-          console.log(err);
-          console.log(
-            "Frontend error. Post request could not be sent. Check API!"
-          );
+          if (typeof console === "undefined") {
+            console = { log: function () {} };
+          } else {
+            console.log(
+              "Frontend error. Post request could not be sent. Check API!"
+            );
+          }
+        }
+      } else {
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(resJsonRegister.msg);
         }
       }
     } catch (err) {
-      console.log("Frontend error. Post request could not be sent. Check API!");
+      if (typeof console === "undefined") {
+        console = { log: function () {} };
+      } else {
+        console.log(
+          "Frontend error. Post request could not be sent. Check API!"
+        );
+      }
     }
   };
 

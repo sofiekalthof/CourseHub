@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, TextField, Grid, Box } from "@mui/material";
-import CourseHubLogo from "../assets/CourseHubLogo.png";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
@@ -56,30 +55,44 @@ export default function Login() {
         },
         credentials: "include",
       });
+
       // parse return statement from backend
       let resJson = await res.json();
-      console.log(resJson);
+
       if (res.status === 200) {
         // if response is successful, reset states
         setEmail("");
         setPassword("");
-        // set session accodingly (note: when console.logging userSession is still "unathorized", but loading works as usual)
+
+        // set session accodingly
         await setUserSession(resJson.userInfo);
-        console.log("Login form done.");
-        // alert(resJson.msg);
+
         // route to homepage
         handleHome();
       } else if (res.status === 400) {
-        // alert(resJson.msg);
-        console.log(resJson.msg);
+        // console.logs for identifying errors
+        // stubs to ensure no-op , if there is no console
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(resJsonLogIn.msg);
+        }
       } else {
-        // some debug commands
-        console.log("Form returned error from backend.");
-        console.log(resJson);
-        // alert(resJson.msg);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log("Form returned error from backend.");
+          console.log(resJson.msg);
+        }
       }
     } catch (err) {
-      console.log("Frontend error. Post request could not be sent. Check API!");
+      if (typeof console === "undefined") {
+        console = { log: function () {} };
+      } else {
+        console.log(
+          "Frontend error. Post request could not be sent. Check API!"
+        );
+      }
     }
   };
 

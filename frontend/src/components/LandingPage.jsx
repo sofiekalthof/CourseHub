@@ -11,6 +11,7 @@ export default function LandingPage() {
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
   const navigate = useNavigate();
+
   /**
    * The handleRegister function checks if the user is logged in and navigates to the home page if they
    * are, otherwise it navigates to the register/login page.

@@ -29,33 +29,36 @@ import { useNavigate } from "react-router-dom";
  */
 export default function CreateMileStone(props) {
   const navigate = useNavigate();
+
   // use existing session
   const [userSession, setUserSession] = useContext(UserContext);
+
+  // initialize states
   const [open, setOpen] = useState(false);
   const [milestoneType, setMilestoneType] = useState("");
   const [date, setDate] = useState(dayjs());
 
-/**
- * The `handleClickOpen` function sets the `open` state to true.
- */
+  /**
+   * The `handleClickOpen` function sets the `open` state to true.
+   */
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-/**
- * The `handleClickCancel` function sets the open state to false, clears the milestoneType state, and
- * sets the date state to the current day.
- */
+  /**
+   * The `handleClickCancel` function sets the open state to false, clears the milestoneType state, and
+   * sets the date state to the current day.
+   */
   const handleClickCancel = () => {
     setOpen(false);
     setMilestoneType("");
     setDate(dayjs());
   };
 
-/**
- * The `handleClickSave` function is used to create and save a milestone, and then perform some actions
- * based on the response.
- */
+  /**
+   * The `handleClickSave` function is used to create and save a milestone, and then perform some actions
+   * based on the response.
+   */
   const handleClickSave = () => {
     props
       .createAndSaveMilestone(
@@ -65,13 +68,11 @@ export default function CreateMileStone(props) {
         props.subscriberTimelines
       )
       .then((res) => {
-        console.log(res);
         if (res.status === 401 && res.msg === "Unauthorized") {
           alert(res.msg);
           setUserSession(false);
           navigate("/");
         } else {
-          console.log("I landed here");
           props.coursePageRerender(!props.coursePageRerenderValue);
           setOpen(false);
         }
@@ -79,15 +80,17 @@ export default function CreateMileStone(props) {
         setDate(dayjs());
       })
       .catch((err) => {
-        console.log("C");
-        console.log(err);
-        //alert(err);
+        if (typeof console === "undefined") {
+          console = { log: function () {} };
+        } else {
+          console.log(err);
+        }
       });
   };
 
-/**
- * The handleChange function updates the milestoneType state based on the value of the event target.
- */
+  /**
+   * The handleChange function updates the milestoneType state based on the value of the event target.
+   */
   const handleChange = (event) => {
     setMilestoneType(event.target.value);
   };
@@ -143,4 +146,3 @@ export default function CreateMileStone(props) {
     );
   }
 }
-
