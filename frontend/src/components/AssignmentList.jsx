@@ -68,7 +68,7 @@ export default function AssignmentList(props) {
   const tasks = props.tasks;
   const userData = props.userDataForCourse;
   const taskStatusData =
-    userData.length > 0 ? userData[0].usertimeline.usertimeline : [];
+    userData.length > 0 ? userData[0].userTimeline.userTimeline : [];
   const [areDatesDescending, setAreStatesDescending] = useState(true);
   const [dates, setDates] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);

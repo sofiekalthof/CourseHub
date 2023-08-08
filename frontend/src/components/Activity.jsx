@@ -23,7 +23,7 @@ function determineTaskScorePerMonth(tasks, userDataForCourse) {
     // convert mongodb data string to date
     let taskTime = new Date(task.data);
     // extract relevant information from array first
-    let userTaskStatusData = userDataForCourse[0].usertimeline.usertimeline;
+    let userTaskStatusData = userDataForCourse[0].userTimeline.userTimeline;
     if (
       taskTime.getMonth() + 1 == 1 &&
       userTaskStatusData.userTasksStats[index].userTaskStatus.includes("done")

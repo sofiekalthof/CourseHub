@@ -64,8 +64,11 @@ export default function App() {
       // set state with user/cookie data
       setUserSession(resJson);
     } catch (error) {
-      console.error("There was an error fetch auth", error);
-      return;
+      if (typeof console === "undefined") {
+        console = { log: function () {} };
+      } else {
+        console.log("Error fetchint isAuth, check backend!");
+      }
     }
   };
 

@@ -386,7 +386,7 @@ export default function CoursePage() {
     dataOfAllUsersForThisCourse.forEach((subscriber) => {
       subscriberTimelines = [
         ...subscriberTimelines,
-        subscriber.usertimeline.usertimeline._id,
+        subscriber.userTimeline.userTimeline._id,
       ];
     });
   }

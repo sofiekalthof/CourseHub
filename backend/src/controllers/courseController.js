@@ -320,7 +320,7 @@ exports.getCourseAllInfo = async (req, res) => {
     }
 
     // replace timeline field with tasks
-    course.timeline = { _id: timelineID, tasks: tasks, milestones: milestones };
+    course.timeline = { _id: timelineId, tasks: tasks, milestones: milestones };
 
     res.status(200).json(course);
   } catch (err) {

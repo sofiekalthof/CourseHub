@@ -19,7 +19,7 @@ function createSortedListWithScore(dataOfAllUsersForThisCourse) {
   let usersWithScore = [];
   dataOfAllUsersForThisCourse.map((user) => {
     // extract useful information first
-    let taskStatusData = user.usertimeline.usertimeline.userTasksStats;
+    let taskStatusData = user.userTimeline.userTimeline.userTasksStats;
     const userscore = determineScoreOfUser(taskStatusData);
 
     // add new entry to list
