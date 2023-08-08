@@ -1,8 +1,8 @@
 # CourseHub
-<p align="center">
-  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/bbc9ee2f-2ef8-42ca-8254-fac1c39efdaa">
-</p>
 
+<p align="center">
+  <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/1b3334ea-6b11-490b-97b1-74325091daa6">
+</p>
 
 ## Project Idea
 - Learning Management System (LMS) 
