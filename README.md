@@ -56,7 +56,7 @@
 
  - #### Analytics:
     - Chart for users' activity 
-    - Leaderboard
+    - Leaderboard of all users of the course
       
 <p align="center">
   <img height="250px" src="https://github.com/sofiekalthof/CourseHub/assets/82824083/29fc9f68-d27e-4dbe-b336-e55d51eaf7c2">
