@@ -1,6 +1,7 @@
 const mongoose = require("../models/dbConnection.js");
 
-// create mongoose schema
+/* The schema `userMilestoneStatusSchema` is used to define the structure and validation rules for 
+status of any milestone that user is assigned to. */
 const userMilestoneStatusSchema = new mongoose.Schema({
   // reference to original milestone
   originalMilestoneId: {

@@ -5,9 +5,9 @@ const userMilestoneStatusSchema = require("../schemas/dbUserMilestoneStatus.js")
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_TIMELINEUSERS;
 
-// create mongoose schema
+/* The schema `TimelineUserSchema` is used to store status of tasks and milestones for a user. */
 const TimelineUserSchema = new mongoose.Schema({
-  // original timeline
+  // reference to original timeline
   origin: {
     type: mongoose.Types.ObjectId,
     ref: "TimelineModel",

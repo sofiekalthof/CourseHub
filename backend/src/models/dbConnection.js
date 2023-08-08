@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// Initialize parameters
+// initialize parameters
 const dbName = process.env.DB_NAME;
-
-// database connection string
 const dbUrl = process.env.MONGODB_URL;
 
 // create database connection

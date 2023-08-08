@@ -3,7 +3,8 @@ const mongoose = require("./dbConnection.js");
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_MILESTONES;
 
-// create mongoose schema
+/* The schema `MilestoneSchema` is used to store information for a milestone. A task can either be
+a Lecture or Exam. */
 const MilestoneSchema = new mongoose.Schema({
   type: {
     type: String,
@@ -15,12 +16,13 @@ const MilestoneSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  // current status of the milestone
   status: {
     type: String,
     enum: ["due", "missed", "done"],
     default: "due",
   },
-  // belonging timeline
+  // reference to timeline of the course the milestone is in
   timeline: {
     type: mongoose.Types.ObjectId,
     ref: "TimelineModel",

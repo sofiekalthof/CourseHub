@@ -1,9 +1,9 @@
 const mongoose = require("./dbConnection.js");
 
-// Initialize parameters
+// initialize parameters
 const collectionName = process.env.DB_COLLECTION_COURSES;
 
-// create mongoose schema
+/* The schema `CourseSchema` is used to store information for each course. */
 const CourseSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -24,9 +24,6 @@ const CourseSchema = new mongoose.Schema({
     ref: "UserModel",
   },
 });
-
-// // define index to allow full-text search over name and description fields
-// CourseSchema.index({name: "text", desc: "text"});
 
 // create model from schema
 let CourseModel = mongoose.model(collectionName, (schema = CourseSchema));

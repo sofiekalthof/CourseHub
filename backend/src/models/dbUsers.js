@@ -1,9 +1,9 @@
 const mongoose = require("./dbConnection.js");
 
-// Initialize parameters
+// initialize parameters
 const collectionName = process.env.DB_COLLECTION_USERS;
 
-// create mongoose schema
+/* The schema `UserSchema` is used to store information for each user. */
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  // password (saved as encrypted string)
   password: {
     type: String,
     required: true,

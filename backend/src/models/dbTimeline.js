@@ -3,7 +3,7 @@ const mongoose = require("./dbConnection.js");
 // initialize parameters
 const collectionName = process.env.DB_COLLECTION_TIMELINES;
 
-// create mongoose schema
+/* The schema `TimelineSchema` is used to store tasks and milestones of a course. */
 const TimelineSchema = new mongoose.Schema({
   // list of tasks
   tasks: [
