@@ -187,7 +187,7 @@ exports.createTask = async (req, res) => {
           $push: {
             userTasksStats: {
               originalTaskId: newTask._id,
-              userTaskSatus: newTask.status,
+              userTaskStatus: newTask.status,
               userTaskScore: 0,
             },
           },
@@ -293,7 +293,7 @@ exports.createMilestone = async (req, res) => {
           $push: {
             userMilestonesStats: {
               originalMilestoneId: newMilestone._id,
-              userMilestoneSatus: newMilestone.status,
+              userMilestoneStatus: newMilestone.status,
             },
           },
         }
@@ -361,7 +361,7 @@ exports.takeTask = async (req, res) => {
   // '$' used to update field in an array of objects in a document
   const setParams = req.files
     ? {
-        "userTasksStats.$.userTaskSatus": "done",
+        "userTasksStats.$.userTaskStatus": "done",
         "userTasksStats.$.userTaskScore": req.body.score,
         // if there is an uploaded file, create object with its original and saved name
         "userTasksStats.$.uploadedFile": {
@@ -378,7 +378,7 @@ exports.takeTask = async (req, res) => {
           req.body.uploadedAssignmentDescription,
       }
     : {
-        "userTasksStats.$.userTaskSatus": "done",
+        "userTasksStats.$.userTaskStatus": "done",
         "userTasksStats.$.userTaskScore": req.body.score,
       };
 

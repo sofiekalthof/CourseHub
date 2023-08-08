@@ -117,7 +117,7 @@ export default function AssignmentList(props) {
         dateToString: convertedDate,
         assignmentStatus: task.assignmentStatus,
         quizstatus: task.quizstatus,
-        taskstatus: taskStatusData.userTasksStats[index].userTaskSatus,
+        taskstatus: taskStatusData.userTasksStats[index].userTaskStatus,
       });
     }
   });
